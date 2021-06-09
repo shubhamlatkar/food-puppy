@@ -17,7 +17,7 @@ public class UserServiceApplication {
 
     @GetMapping("/")
     public ResponseEntity<String> defaultGet() {
-        return new ResponseEntity<>("Hello", HttpStatus.OK);
+        return new ResponseEntity<>("User Service", HttpStatus.OK);
     }
 
 }
