@@ -5,6 +5,6 @@ spring:
     name: RESTAURANT_SERVICE
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_DATABASE}
+      uri: ${SPRING_DATASOURCE_URL}
   repositories:
     enabled: true
