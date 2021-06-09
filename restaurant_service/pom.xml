@@ -8,12 +8,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>com.foodPuppy</groupId>
-    <artifactId>user_service</artifactId>
+    <artifactId>restaurant_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user_service</name>
+    <name>restaurant_service</name>
 
     <packaging>jar</packaging>
-    <description>FoodPuppy: food delivery backend user service</description>
+    <description>FoodPuppy: food delivery backend restaurant service</description>
 
     <properties>
         <java.version>11</java.version>
@@ -23,6 +23,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

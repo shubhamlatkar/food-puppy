@@ -1,0 +1,10 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: RESTAURANT_SERVICE
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_DATABASE}
+  repositories:
+    enabled: true
