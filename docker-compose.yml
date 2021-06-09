@@ -13,8 +13,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: mongodb://db:27017/mod-course
     restart: always
-    
-  mongo_db:
+
+  db:
     image: "mongo:latest"
     restart: always
     ports:
