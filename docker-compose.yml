@@ -1,18 +1,33 @@
 version: '3.7'
 
 services:
-  app-server:
+
+  user_service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: FoodPuppy
+      target: user_service
+    container_name: food_puppy_user_service
     ports:
       - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: mongodb://db:27017/food-puppy-user-service
+    restart: always
+
+  restaurant_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: restaurant_service
+    container_name: food_puppy_restaurant_service
+    ports:
       - "8082:8082"
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: mongodb://db:27017/mod-course
+      SPRING_DATASOURCE_URL: mongodb://db:27017/food-puppy-user-service
     restart: always
 
   db:
