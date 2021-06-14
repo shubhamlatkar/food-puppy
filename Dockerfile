@@ -12,6 +12,9 @@ COPY .mvn .mvn
 COPY pom.xml .
 
 # Copy the project source
+COPY eureka_server/src eureka_server/src
+COPY eureka_server/pom.xml eureka_server/pom.xml
+
 COPY user_service/src user_service/src
 COPY user_service/pom.xml user_service/pom.xml
 
@@ -28,9 +31,24 @@ RUN ./mvnw dependency:go-offline -B
 # Package the application
 RUN ./mvnw package -DskipTests
 
+RUN mkdir -p eureka_server/target/dependency && (cd eureka_server/target/dependency; jar -xf ../*.jar)
+
 RUN mkdir -p user_service/target/dependency && (cd user_service/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p restaurant_service/target/dependency && (cd restaurant_service/target/dependency; jar -xf ../*.jar)
+
+
+#### Stage 2: A  docker image with command to run the user_service
+FROM openjdk:16-jdk-alpine as eureka_server
+
+ARG DEPENDENCY=/app/eureka_server/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.eureka_server.EurekaServerApplication"]
 
 
 #### Stage 2: A  docker image with command to run the user_service
