@@ -7,7 +7,6 @@
         <artifactId>FoodPuppy</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.foodPuppy</groupId>
     <artifactId>restaurant_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>restaurant_service</name>

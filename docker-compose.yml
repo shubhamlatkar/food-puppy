@@ -7,8 +7,8 @@ services:
     container_name: food_puppy_food_db
     restart: always
     ports:
-      - 27017:27017
-    netowrks:
+      - "27017:27017"
+    networks:
       - foodpuppy
 
   eureka_server:
@@ -22,7 +22,7 @@ services:
     depends_on:
       - food_db
     restart: always
-    netowrks:
+    networks:
       - foodpuppy
 
   user_service:
@@ -40,7 +40,7 @@ services:
       SPRING_DATASOURCE_URL: mongodb://food_db:27017/food-puppy-user-service
       EUREKA_HOST: eureka_server
     restart: always
-    netowrks:
+    networks:
       - foodpuppy
 
   restaurant_service:
@@ -58,8 +58,8 @@ services:
       SPRING_DATASOURCE_URL: mongodb://food_db:27017/food-puppy-restaurant-service
       EUREKA_HOST: eureka_server
     restart: always
-    netowrks:
+    networks:
       - foodpuppy
 
-  networks:
-    foodpuppy:
+networks:
+  foodpuppy:
