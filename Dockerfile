@@ -86,4 +86,4 @@ EXPOSE 8082
 
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
 
-ENTRYPOINT ["/bin/sh","-c", "./wait-for-it.sh http://eureka:8761/ --timeout=30 -- echo 'eureka is up' && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "/app/wait-for-it.sh http://eureka:8761/ --timeout=30 -- echo 'eureka is up' && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
