@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
 
-  eureka_server:
+  eureka:
     build:
       context: .
       dockerfile: Dockerfile
-      target: eureka_server
-    container_name: food_puppy_eureka_server
+      target: eureka
+    container_name: eureka
     ports:
       - "8761:8761"
     restart: always
@@ -18,32 +18,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: user_service
-    container_name: food_puppy_user_service
+      target: user
+    container_name: user
     ports:
       - "8081:8081"
     depends_on:
-      - eureka_server
+      - eureka
     environment:
       SPRING_DATASOURCE_URL:
-      EUREKA_HOST: eureka_server
-    restart: always
-    networks:
-      - foodpuppy
-
-  restaurant_service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: restaurant_service
-    container_name: food_puppy_restaurant_service
-    ports:
-      - "8082:8082"
-    depends_on:
-      - eureka_server
-    environment:
-      SPRING_DATASOURCE_URL:
-      EUREKA_HOST: eureka_server
+      EUREKA_HOST: eureka
     restart: always
     networks:
       - foodpuppy
