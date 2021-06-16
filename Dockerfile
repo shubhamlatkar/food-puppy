@@ -21,6 +21,9 @@ COPY user_service/pom.xml user_service/pom.xml
 COPY restaurant_service/src restaurant_service/src
 COPY restaurant_service/pom.xml restaurant_service/pom.xml
 
+COPY gateway/src restaurant_service/src
+COPY gateway/pom.xml restaurant_service/pom.xml
+
 
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
@@ -37,8 +40,10 @@ RUN mkdir -p user_service/target/dependency && (cd user_service/target/dependenc
 
 RUN mkdir -p restaurant_service/target/dependency && (cd restaurant_service/target/dependency; jar -xf ../*.jar)
 
+RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
 
-#### Stage 2: A  docker image with command to run the user_service
+
+#### Stage 2: A  docker image with command to run the eureka_server
 FROM openjdk:16-jdk-alpine as eureka
 
 ARG DEPENDENCY=/app/eureka_server/target/dependency
@@ -51,6 +56,19 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8761
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.eureka_server.EurekaServerApplication"] eureka
 
+
+#### Stage 2: A  docker image with command to run the gateway
+FROM openjdk:16-jdk-alpine as gateway
+
+ARG DEPENDENCY=/app/gateway/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodPuppy.gateway.GatewayApplication"] gateway
 
 #### Stage 2: A  docker image with command to run the user_service
 FROM openjdk:16-jdk-alpine as user
@@ -67,7 +85,7 @@ EXPOSE 8081
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.user_service.UserServiceApplication"] user
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"
 
-ENTRYPOINT ["/bin/sh", "-c", "sleep 30 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
+ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant_service
 FROM openjdk:16-jdk-alpine as restaurant
@@ -83,4 +101,4 @@ EXPOSE 8082
 
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
 
-ENTRYPOINT ["/bin/sh","-c", "sleep 60 && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant

@@ -17,7 +17,7 @@ public class UserServiceApplication {
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
-    @GetMapping("/")
+    @GetMapping(value = {"/user/", "/"})
     public ResponseEntity<String> defaultGet() {
         return new ResponseEntity<>("User Service", HttpStatus.OK);
     }

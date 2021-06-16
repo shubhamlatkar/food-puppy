@@ -16,7 +16,7 @@ public class RestaurantServiceApplication {
         SpringApplication.run(RestaurantServiceApplication.class, args);
     }
 
-    @GetMapping("/")
+    @GetMapping(value = {"/restaurant/", "/"})
     public ResponseEntity<String> defaultGet() {
         return new ResponseEntity<>("Restaurant Service", HttpStatus.OK);
     }

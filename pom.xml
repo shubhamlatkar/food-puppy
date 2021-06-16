@@ -25,6 +25,7 @@
         <module>user_service</module>
         <module>restaurant_service</module>
         <module>eureka_server</module>
+        <module>gateway</module>
     </modules>
 
     <dependencies>

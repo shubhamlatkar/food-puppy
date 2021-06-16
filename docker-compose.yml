@@ -14,6 +14,22 @@ services:
     networks:
       - foodpuppy
 
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_HOST: eureka
+    restart: always
+    networks:
+      - foodpuppy
+
   user_service:
     build:
       context: .
