@@ -53,7 +53,7 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.eureka_server.EurekaServ
 
 
 #### Stage 2: A  docker image with command to run the user_service
-FROM openjdk:16-jdk-alpine as user_service
+FROM openjdk:16-jdk-alpine as user
 
 ARG DEPENDENCY=/app/user_service/target/dependency
 

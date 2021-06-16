@@ -1,6 +1,10 @@
 server:
   port: 8081
 
+spring:
+  application:
+    name: USER
+
 eureka:
   client:
     register-with-eureka: true
