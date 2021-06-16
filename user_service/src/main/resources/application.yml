@@ -1,13 +1,5 @@
 server:
   port: 8081
-spring:
-  application:
-    name: USER_SERVICE
-  data:
-    mongodb:
-      uri: ${SPRING_DATASOURCE_URL}
-  repositories:
-    enabled: true
 
 eureka:
   client:

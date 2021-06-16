@@ -1,13 +1,5 @@
 server:
   port: 8082
-spring:
-  application:
-    name: RESTAURANT_SERVICE
-  data:
-    mongodb:
-      uri: ${SPRING_DATASOURCE_URL}
-  repositories:
-    enabled: true
 
 eureka:
   client:

@@ -2,15 +2,6 @@ version: '3.7'
 
 services:
 
-  food_db:
-    image: "mongo:latest"
-    container_name: food_puppy_food_db
-    restart: always
-    ports:
-      - "27017:27017"
-    networks:
-      - foodpuppy
-
   eureka_server:
     build:
       context: .
@@ -19,8 +10,6 @@ services:
     container_name: food_puppy_eureka_server
     ports:
       - "8761:8761"
-    depends_on:
-      - food_db
     restart: always
     networks:
       - foodpuppy
@@ -34,10 +23,9 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - food_db
       - eureka_server
     environment:
-      SPRING_DATASOURCE_URL: mongodb://food_db:27017/food-puppy-user-service
+      SPRING_DATASOURCE_URL:
       EUREKA_HOST: eureka_server
     restart: always
     networks:
@@ -52,10 +40,9 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - food_db
       - eureka_server
     environment:
-      SPRING_DATASOURCE_URL: mongodb://food_db:27017/food-puppy-restaurant-service
+      SPRING_DATASOURCE_URL:
       EUREKA_HOST: eureka_server
     restart: always
     networks:
