@@ -63,13 +63,14 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 COPY /wait-for-it.sh /app/
+RUN chmod 755 /app/wait-for-it.sh
 
 EXPOSE 8081
 
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.user_service.UserServiceApplication"] user
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"
 
-ENTRYPOINT ["/bin/sh", "-c", "./wait-for-it.sh http://eureka:8761/ --timeout=30 -- echo 'eureka is up' && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
+ENTRYPOINT ["/bin/sh", "-c", "/app/wait-for-it.sh http://eureka:8761/ --timeout=30 -- echo 'eureka is up' && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant_service
 FROM openjdk:16-jdk-alpine as restaurant
@@ -81,6 +82,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 COPY /wait-for-it.sh /app/
+RUN chmod 755 /app/wait-for-it.sh
 
 EXPOSE 8082
 
