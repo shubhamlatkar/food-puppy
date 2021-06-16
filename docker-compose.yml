@@ -31,5 +31,22 @@ services:
     networks:
       - foodpuppy
 
+  restaurant_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: restaurant
+    container_name: restaurant
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka
+    environment:
+      SPRING_DATASOURCE_URL:
+      EUREKA_HOST: eureka
+    restart: always
+    networks:
+      - foodpuppy
+
 networks:
   foodpuppy:
