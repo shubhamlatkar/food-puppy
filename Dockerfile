@@ -56,20 +56,6 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8761
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.eureka_server.EurekaServerApplication"] eureka
 
-
-#### Stage 2: A  docker image with command to run the gateway
-FROM openjdk:16-jdk-alpine as gateway
-
-ARG DEPENDENCY=/app/gateway/target/dependency
-
-# Copy project dependencies from the build stage
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-
-EXPOSE 8080
-ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodPuppy.gateway.GatewayApplication"] gateway
-
 #### Stage 2: A  docker image with command to run the user_service
 FROM openjdk:16-jdk-alpine as user
 
@@ -81,11 +67,9 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8081
-
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.user_service.UserServiceApplication"] user
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"
-
-ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
+ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodPuppy.user_service.UserServiceApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant_service
 FROM openjdk:16-jdk-alpine as restaurant
@@ -98,7 +82,18 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8082
-
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
 
-ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodPuppy.restaurant_service.RestaurantServiceApplication"] restaurant
+#### Stage 2: A  docker image with command to run the gateway
+FROM openjdk:16-jdk-alpine as gateway
+
+ARG DEPENDENCY=/app/gateway/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodPuppy.gateway.GatewayApplication"] gateway
