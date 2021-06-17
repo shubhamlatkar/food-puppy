@@ -6,19 +6,25 @@ spring:
     name: GATEWAY
   cloud:
     gateway:
-      httpclient:
-        connect-timeout: 20000
-        response-timeout: 50000
       routes:
         - id: user
-          uri: http://user:8081
+          uri: lb://user
           predicates:
             - Path=/user/**
-
+          filters:
+            - StripPrefix=1
         - id: restaurant
-          uri: http://restaurant:8082
+          uri: lb://restaurant
           predicates:
             - Path=/restaurant/**
+          filters:
+            - StripPrefix=1
+        - id: eureka
+            uri: lb://eureka
+            predicates:
+              - Path=/eureka/**
+            filters:
+              - StripPrefix=1
 
 eureka:
   client:
