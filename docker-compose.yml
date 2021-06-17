@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
       target: configuration
     container_name: configuration
-    environment:
-      CONFIGURATION: configuration
     restart: always
     networks:
       - foodpuppy
@@ -20,6 +18,10 @@ services:
       dockerfile: Dockerfile
       target: eureka
     container_name: eureka
+    depends_on:
+      - configuration
+    environment:
+      CONFIGURATION: configuration
     restart: always
     networks:
       - foodpuppy
