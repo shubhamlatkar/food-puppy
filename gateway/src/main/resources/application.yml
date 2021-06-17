@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: GATEWAY
+    name: gateway
   cloud:
     gateway:
       httpclient:
@@ -11,7 +11,7 @@ spring:
         response-timeout: 50000
       routes:
         - id: user
-          uri: lb://USER
+          uri: lb://user
           predicates:
             - Path=/user/**
         - id: restaurant
@@ -19,7 +19,7 @@ spring:
           predicates:
             - Path=/restaurant/**
         - id: eureka
-          uri: lb://EUREKA
+          uri: lb://eureka
           predicates:
             - Path=/eureka/**
 

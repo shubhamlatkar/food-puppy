@@ -3,10 +3,10 @@ server:
 
 spring:
   application:
-    name: EUREKA
+    name: eureka
 
 eureka:
   client:
     register-with-eureka: true
-    fetch-registry: false
+    fetch-registry: true
 
