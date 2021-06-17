@@ -11,11 +11,11 @@ spring:
         response-timeout: 50000
       routes:
         - id: user
-          uri: lb://user
+          uri: http://user:8081
           predicates:
             - Path=/user/**
         - id: restaurant
-          uri: lb://RESTAURANT
+          uri: http://restaurant:8082
           predicates:
             - Path=/restaurant/**
         - id: eureka
