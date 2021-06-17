@@ -1,5 +1,10 @@
 server:
   port: 8761
+
+spring:
+  application:
+    name: EUREKA
+
 eureka:
   client:
     register-with-eureka: true
