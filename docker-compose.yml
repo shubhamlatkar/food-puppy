@@ -10,6 +10,8 @@ services:
     container_name: eureka
     ports:
       - "8761:8761"
+    expose:
+      - "8761"
     restart: always
 
   gateway:
@@ -32,6 +34,8 @@ services:
       dockerfile: Dockerfile
       target: user
     container_name: user
+    expose:
+      - "8081"
     depends_on:
       - eureka
     environment:
@@ -45,6 +49,8 @@ services:
       dockerfile: Dockerfile
       target: restaurant
     container_name: restaurant
+    expose:
+      - "8082"
     depends_on:
       - eureka
     environment:
