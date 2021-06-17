@@ -19,7 +19,7 @@ services:
       target: gateway
     container_name: gateway
     ports:
-      - "127.0.0.1:8080:8080"
+      - "8080:8080"
     depends_on:
       - eureka
     environment:
