@@ -2,6 +2,18 @@ version: '3.7'
 
 services:
 
+  configuration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: configuration
+    container_name: configuration
+    environment:
+      CONFIGURATION: configuration
+    restart: always
+    networks:
+      - foodpuppy
+
   eureka:
     build:
       context: .
@@ -24,6 +36,7 @@ services:
       - eureka
     environment:
       EUREKA_HOST: eureka
+      CONFIGURATION: configuration
     restart: always
     networks:
       - foodpuppy
@@ -39,6 +52,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL:
       EUREKA_HOST: eureka
+      CONFIGURATION: configuration
     restart: always
     networks:
       - foodpuppy
@@ -54,6 +68,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL:
       EUREKA_HOST: eureka
+      CONFIGURATION: configuration
     restart: always
     networks:
       - foodpuppy

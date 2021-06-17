@@ -20,6 +20,6 @@ public class RestaurantServiceApplication {
 
     @GetMapping(value = {"/restaurant/", "/"})
     public ResponseEntity<String> defaultGet() {
-        return new ResponseEntity<>("Restaurant Service", HttpStatus.OK);
+        return new ResponseEntity<>("Restaurant Service ", HttpStatus.OK);
     }
 }

@@ -4,9 +4,6 @@ server:
 spring:
   application:
     name: eureka
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-
+  cloud:
+    config:
+      uri: http://${CONFIGURATION:localhost}:8888
