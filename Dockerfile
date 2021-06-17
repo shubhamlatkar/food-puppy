@@ -21,8 +21,8 @@ COPY user_service/pom.xml user_service/pom.xml
 COPY restaurant_service/src restaurant_service/src
 COPY restaurant_service/pom.xml restaurant_service/pom.xml
 
-COPY gateway/src restaurant_service/src
-COPY gateway/pom.xml restaurant_service/pom.xml
+COPY gateway/src gateway/src
+COPY gateway/pom.xml gateway/pom.xml
 
 
 # Build all the dependencies in preparation to go offline.
