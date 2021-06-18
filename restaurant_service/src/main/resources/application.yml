@@ -6,4 +6,4 @@ spring:
     name: restaurant
   cloud:
     config:
-      uri: http://${configuration}:8888
+      uri: http://configuration:8888

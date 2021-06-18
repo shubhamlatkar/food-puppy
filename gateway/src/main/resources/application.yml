@@ -6,4 +6,4 @@ spring:
     name: gateway
   cloud:
     config:
-      uri: http://${CONFIGURATION}:8888
+      uri: http://configuration:8888
