@@ -10,7 +10,7 @@ services:
     container_name: configuration
     restart: always
     networks:
-      - foodpuppy
+      - foodgrid
 
   eureka:
     build:
@@ -24,7 +24,7 @@ services:
       PROFILE: docker
     restart: always
     networks:
-      - foodpuppy
+      - foodgrid
 
   gateway:
     build:
@@ -40,7 +40,7 @@ services:
       PROFILE: docker
     restart: always
     networks:
-      - foodpuppy
+      - foodgrid
 
   user_service:
     build:
