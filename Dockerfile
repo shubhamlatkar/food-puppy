@@ -43,7 +43,7 @@ RUN mkdir -p eureka/target/dependency && (cd eureka/target/dependency; jar -xf .
 
 RUN mkdir -p user/target/dependency && (cd user/target/dependency; jar -xf ../*.jar)
 
-RUN mkdir -p restaurant_service/target/dependency && (cd restaurant_service/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p restaurant/target/dependency && (cd restaurant/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
 

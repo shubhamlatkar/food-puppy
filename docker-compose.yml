@@ -52,8 +52,7 @@ services:
       - eureka
     environment:
       SPRING_DATASOURCE_URL:
-      EUREKA_HOST: eureka
-      CONFIGURATION: configuration
+      PROFILE: docker
     restart: always
     networks:
       - foodgrid
@@ -68,8 +67,7 @@ services:
       - eureka
     environment:
       SPRING_DATASOURCE_URL:
-      EUREKA_HOST: eureka
-      CONFIGURATION: configuration
+      PROFILE: docker
     restart: always
     networks:
       - foodgrid
