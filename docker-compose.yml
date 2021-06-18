@@ -21,7 +21,7 @@ services:
     depends_on:
       - configuration
     environment:
-      CONFIGURATION: configuration
+      PROFILE: docker
     restart: always
     networks:
       - foodpuppy
@@ -37,8 +37,7 @@ services:
     depends_on:
       - eureka
     environment:
-      EUREKA_HOST: eureka
-      CONFIGURATION: configuration
+      PROFILE: docker
     restart: always
     networks:
       - foodpuppy
