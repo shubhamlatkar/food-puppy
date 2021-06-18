@@ -8,11 +8,11 @@
         <version>2.5.0</version>
         <relativePath/>
     </parent>
-    <groupId>com.foodPuppy</groupId>
-    <artifactId>FoodPuppy</artifactId>
+    <groupId>com.foodgrid</groupId>
+    <artifactId>foodgrid</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>FoodPuppy</name>
-    <description>FoodPuppy: food delivery backend</description>
+    <name>foodgrid</name>
+    <description>FoodGrid: food delivery backend</description>
 
     <packaging>pom</packaging>
 
@@ -22,9 +22,9 @@
     </properties>
 
     <modules>
-        <module>user_service</module>
-        <module>restaurant_service</module>
-        <module>eureka_server</module>
+        <module>user</module>
+        <module>restaurant</module>
+        <module>eureka</module>
         <module>gateway</module>
         <module>configuration</module>
     </modules>

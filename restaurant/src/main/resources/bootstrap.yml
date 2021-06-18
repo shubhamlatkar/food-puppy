@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
   profiles:
     active: ${PROFILE}
   application:
-    name: gateway
+    name: restaurant
   cloud:
     config:
       uri: http://localhost:8888

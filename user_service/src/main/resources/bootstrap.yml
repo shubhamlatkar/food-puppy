@@ -1,9 +1,0 @@
-server:
-  port: 8081
-
-spring:
-  application:
-    name: user
-  cloud:
-    config:
-      uri: http://configuration:8888

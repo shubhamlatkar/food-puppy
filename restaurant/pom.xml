@@ -7,12 +7,12 @@
         <artifactId>foodgrid</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>configuration</artifactId>
+    <artifactId>restaurant</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>configuration</name>
+    <name>restaurant</name>
 
     <packaging>jar</packaging>
-    <description>FoodGrid: food delivery backend restaurant service configuration</description>
+    <description>FoodGrid: food delivery backend restaurant service</description>
 
     <properties>
         <java.version>11</java.version>
@@ -21,7 +21,15 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
     </dependencies>
 </project>

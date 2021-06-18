@@ -1,2 +1,2 @@
-# food-puppy
+# food-grid
 Food Delivery App

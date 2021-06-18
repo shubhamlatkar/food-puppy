@@ -56,7 +56,7 @@ services:
       CONFIGURATION: configuration
     restart: always
     networks:
-      - foodpuppy
+      - foodgrid
 
   restaurant_service:
     build:
@@ -72,7 +72,7 @@ services:
       CONFIGURATION: configuration
     restart: always
     networks:
-      - foodpuppy
+      - foodgrid
 
 networks:
-  foodpuppy:
+  foodgrid:

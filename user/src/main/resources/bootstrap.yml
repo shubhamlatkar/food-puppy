@@ -1,19 +1,16 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   profiles:
     active: ${PROFILE}
   application:
-    name: gateway
+    name: user
   cloud:
     config:
       uri: http://localhost:8888
 ---
 spring:
-  config:
-    activate:
-      on-profile: docker
   cloud:
     config:
       uri: http://configuration:8888
