@@ -2,8 +2,15 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: ${PROFILE}
   application:
     name: gateway
+  cloud:
+    config:
+      uri: http://localhost:8888
+---
+spring:
   cloud:
     config:
       uri: http://configuration:8888
