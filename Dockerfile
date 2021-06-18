@@ -39,7 +39,7 @@ RUN ./mvnw package -DskipTests
 
 RUN mkdir -p configuration/target/dependency && (cd configuration/target/dependency; jar -xf ../*.jar)
 
-RUN mkdir -p eureka_server/target/dependency && (cd eureka_server/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p eureka/target/dependency && (cd eureka/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p user/target/dependency && (cd user/target/dependency; jar -xf ../*.jar)
 
@@ -47,7 +47,7 @@ RUN mkdir -p restaurant_service/target/dependency && (cd restaurant_service/targ
 
 RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
 
-#### Stage 2: A  docker image with command to run the eureka_server
+#### Stage 2: A  docker image with command to run the eureka
 FROM openjdk:16-jdk-alpine as configuration
 
 ARG DEPENDENCY=/app/configuration/target/dependency
@@ -61,7 +61,7 @@ EXPOSE 8888
 ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.configuration.ConfigurationApplication"] configuration
 
 
-#### Stage 2: A  docker image with command to run the eureka_server
+#### Stage 2: A  docker image with command to run the eureka
 FROM openjdk:16-jdk-alpine as eureka
 
 ARG DEPENDENCY=/app/eureka/target/dependency
