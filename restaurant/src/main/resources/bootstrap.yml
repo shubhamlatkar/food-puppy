@@ -1,0 +1,19 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: ${PROFILE}
+  application:
+    name: restaurant
+  cloud:
+    config:
+      uri: http://localhost:8888
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  cloud:
+    config:
+      uri: http://configuration:8888

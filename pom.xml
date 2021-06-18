@@ -8,24 +8,32 @@
         <version>2.5.0</version>
         <relativePath/>
     </parent>
-    <groupId>com.foodPuppy</groupId>
-    <artifactId>FoodPuppy</artifactId>
+    <groupId>com.foodgrid</groupId>
+    <artifactId>foodgrid</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>FoodPuppy</name>
-    <description>FoodPuppy: food delivery backend</description>
+    <name>foodgrid</name>
+    <description>FoodGrid: food delivery backend</description>
 
     <packaging>pom</packaging>
 
     <properties>
         <java.version>11</java.version>
+        <spring-cloud.version>2020.0.3</spring-cloud.version>
     </properties>
 
     <modules>
-        <module>user_service</module>
-        <module>restaurant_service</module>
+        <module>user</module>
+        <module>restaurant</module>
+        <module>eureka</module>
+        <module>gateway</module>
+        <module>configuration</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -34,12 +42,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,6 +52,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

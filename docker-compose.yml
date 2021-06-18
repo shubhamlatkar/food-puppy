@@ -2,36 +2,75 @@ version: '3.7'
 
 services:
 
+  configuration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: configuration
+    container_name: configuration
+    restart: always
+    networks:
+      - foodgrid
+
+  eureka:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: eureka
+    container_name: eureka
+    depends_on:
+      - configuration
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
   user_service:
     build:
       context: .
       dockerfile: Dockerfile
-      target: user_service
-    container_name: food_puppy_user_service
-    ports:
-      - "8081:8081"
+      target: user
+    container_name: user
     depends_on:
-      - db
+      - eureka
     environment:
-      SPRING_DATASOURCE_URL: mongodb://db:27017/food-puppy-user-service
+      SPRING_DATASOURCE_URL:
+      PROFILE: docker
     restart: always
+    networks:
+      - foodgrid
 
   restaurant_service:
     build:
       context: .
       dockerfile: Dockerfile
-      target: restaurant_service
-    container_name: food_puppy_restaurant_service
-    ports:
-      - "8082:8082"
+      target: restaurant
+    container_name: restaurant
     depends_on:
-      - db
+      - eureka
     environment:
-      SPRING_DATASOURCE_URL: mongodb://db:27017/food-puppy-user-service
+      SPRING_DATASOURCE_URL:
+      PROFILE: docker
     restart: always
+    networks:
+      - foodgrid
 
-  db:
-    image: "mongo:latest"
-    restart: always
-    ports:
-      - 27017:27017
+networks:
+  foodgrid:

@@ -1,0 +1,19 @@
+server:
+  port: 8761
+
+spring:
+  profiles:
+    active: ${PROFILE}
+  application:
+    name: eureka
+  cloud:
+    config:
+      uri: http://localhost:8888
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  cloud:
+    config:
+      uri: http://configuration:8888

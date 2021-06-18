@@ -12,11 +12,20 @@ COPY .mvn .mvn
 COPY pom.xml .
 
 # Copy the project source
-COPY user_service/src user_service/src
-COPY user_service/pom.xml user_service/pom.xml
+COPY eureka/src eureka/src
+COPY eureka/pom.xml eureka/pom.xml
 
-COPY restaurant_service/src restaurant_service/src
-COPY restaurant_service/pom.xml restaurant_service/pom.xml
+COPY user/src user/src
+COPY user/pom.xml user/pom.xml
+
+COPY restaurant/src restaurant/src
+COPY restaurant/pom.xml restaurant/pom.xml
+
+COPY gateway/src gateway/src
+COPY gateway/pom.xml gateway/pom.xml
+
+COPY configuration/src configuration/src
+COPY configuration/pom.xml configuration/pom.xml
 
 
 # Build all the dependencies in preparation to go offline.
@@ -28,31 +37,81 @@ RUN ./mvnw dependency:go-offline -B
 # Package the application
 RUN ./mvnw package -DskipTests
 
-RUN mkdir -p user_service/target/dependency && (cd user_service/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p configuration/target/dependency && (cd configuration/target/dependency; jar -xf ../*.jar)
 
-RUN mkdir -p restaurant_service/target/dependency && (cd restaurant_service/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p eureka/target/dependency && (cd eureka/target/dependency; jar -xf ../*.jar)
 
+RUN mkdir -p user/target/dependency && (cd user/target/dependency; jar -xf ../*.jar)
 
-#### Stage 2: A  docker image with command to run the user_service
-FROM openjdk:16-jdk-alpine as user_service
+RUN mkdir -p restaurant/target/dependency && (cd restaurant/target/dependency; jar -xf ../*.jar)
 
-ARG DEPENDENCY=/app/user_service/target/dependency
+RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
+
+#### Stage 2: A  docker image with command to run the eureka
+FROM openjdk:16-jdk-alpine as configuration
+
+ARG DEPENDENCY=/app/configuration/target/dependency
 
 # Copy project dependencies from the build stage
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.user_service.UserServiceApplication"]
+EXPOSE 8888
+ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.configuration.ConfigurationApplication"] configuration
+
+
+#### Stage 2: A  docker image with command to run the eureka
+FROM openjdk:16-jdk-alpine as eureka
+
+ARG DEPENDENCY=/app/eureka/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8761
+ENTRYPOINT ["/bin/sh", "-c", "sleep 60 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
+
+#### Stage 2: A  docker image with command to run the user
+FROM openjdk:16-jdk-alpine as user
+
+ARG DEPENDENCY=/app/user/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8081
+# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.user.UserServiceApplication"] user
+# "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodgrid.user.UserServiceApplication"
+ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant_service
-FROM openjdk:16-jdk-alpine as restaurant_service
+FROM openjdk:16-jdk-alpine as restaurant
 
-ARG DEPENDENCY=/app/restaurant_service/target/dependency
+ARG DEPENDENCY=/app/restaurant/target/dependency
 
 # Copy project dependencies from the build stage
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodPuppy.restaurant_service.RestaurantServiceApplication"]
+EXPOSE 8082
+# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant_service.RestaurantServiceApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
+
+#### Stage 2: A  docker image with command to run the gateway
+FROM openjdk:16-jdk-alpine as gateway
+
+ARG DEPENDENCY=/app/gateway/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
