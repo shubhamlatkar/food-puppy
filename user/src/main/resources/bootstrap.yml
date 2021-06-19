@@ -11,6 +11,9 @@ spring:
       uri: http://localhost:8888
 ---
 spring:
+  config:
+    activate:
+      on-profile: docker
   cloud:
     config:
       uri: http://configuration:8888
