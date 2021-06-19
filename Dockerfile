@@ -30,6 +30,9 @@ COPY configuration/pom.xml configuration/pom.xml
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
 
+COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid/
+COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid/
+
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
@@ -102,10 +105,8 @@ ARG DEPENDENCY=/app/restaurant/target/dependency
 
 # Copy project dependencies from the build stage
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes/com/foodgrid/common/ /app/com/foodgrid/common/
 
 EXPOSE 8082
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant.RestaurantServiceApplication"] restaurant
@@ -118,11 +119,8 @@ ARG DEPENDENCY=/app/gateway/target/dependency
 
 # Copy project dependencies from the build stage
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes /app/
-COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes/com/foodgrid/common /app/com/foodgrid/common/
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
