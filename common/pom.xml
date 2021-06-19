@@ -12,13 +12,17 @@
     <name>common</name>
 
     <packaging>jar</packaging>
-    <description>FoodGrid: food delivery backend common classes</description>
+    <description>FoodGrid: food delivery backend common packages</description>
 
     <properties>
         <java.version>11</java.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

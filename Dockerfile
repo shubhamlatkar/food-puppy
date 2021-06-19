@@ -30,10 +30,11 @@ COPY configuration/pom.xml configuration/pom.xml
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
 
-COPY common/src/main/java/com/foodgrid/common/security user/src/main/java/com/foodgrid/security
-COPY common/src/main/java/com/foodgrid/common/utils user/src/main/java/com/foodgrid/utils
-COPY common/src/main/java/com/foodgrid/common/security restaurant/src/main/java/com/foodgrid/security
-COPY common/src/main/java/com/foodgrid/common/utils restaurant/src/main/java/com/foodgrid/utils
+COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
+COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
+
+RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
 
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
