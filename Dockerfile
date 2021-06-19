@@ -27,6 +27,8 @@ COPY gateway/pom.xml gateway/pom.xml
 COPY configuration/src configuration/src
 COPY configuration/pom.xml configuration/pom.xml
 
+COPY common/src common/src
+COPY common/pom.xml common/pom.xml
 
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
@@ -46,6 +48,8 @@ RUN mkdir -p user/target/dependency && (cd user/target/dependency; jar -xf ../*.
 RUN mkdir -p restaurant/target/dependency && (cd restaurant/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
+
+RUN mkdir -p common/target/dependency && (cd common/target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A  docker image with command to run the eureka
 FROM openjdk:16-jdk-alpine as configuration
