@@ -51,6 +51,8 @@ RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf
 
 RUN mkdir -p common/target/dependency && (cd common/target/dependency; jar -xf ../*.jar)
 
+ARG COMMON_DEPENDENCY=/app/common/target/dependency
+
 #### Stage 2: A  docker image with command to run the eureka
 FROM openjdk:16-jdk-alpine as configuration
 
@@ -93,7 +95,7 @@ EXPOSE 8081
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodgrid.user.UserServiceApplication"
 ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
-#### Stage 2: A docker image with command to run the restaurant_service
+#### Stage 2: A docker image with command to run the restaurant
 FROM openjdk:16-jdk-alpine as restaurant
 
 ARG DEPENDENCY=/app/restaurant/target/dependency
@@ -102,9 +104,10 @@ ARG DEPENDENCY=/app/restaurant/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8082
-# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant_service.RestaurantServiceApplication"] restaurant
+# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant.RestaurantServiceApplication"] restaurant
 ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
 #### Stage 2: A  docker image with command to run the gateway
@@ -116,6 +119,8 @@ ARG DEPENDENCY=/app/gateway/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes /app/
+COPY --from=build ${COMMON_DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
