@@ -9,81 +9,19 @@ services:
     networks:
       - foodgrid
 
-  configuration:
+  services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: configuration
-    container_name: configuration
+      target: services
+    container_name: services
     depends_on:
       - database
     restart: always
     networks:
       - foodgrid
-
-  eureka:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: eureka
-    container_name: eureka
-    depends_on:
-      - configuration
-      - database
-    environment:
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
-
-  gateway:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: gateway
-    container_name: gateway
     ports:
-      - "8080:8080"
-    depends_on:
-      - eureka
-      - database
-    environment:
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
-
-  user:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: user
-    container_name: user
-    depends_on:
-      - eureka
-      - database
-    environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-user
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
-
-  restaurant:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: restaurant
-    container_name: restaurant
-    depends_on:
-      - eureka
-      - database
-    environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
+      - "8888:8888"
 
 networks:
   foodgrid:
