@@ -55,10 +55,6 @@ RUN mkdir -p restaurant/target/dependency && (cd restaurant/target/dependency; j
 
 RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
 
-RUN mkdir -p common/target/dependency && (cd common/target/dependency; jar -xf ../*.jar)
-
-ARG COMMON_DEPENDENCY=/app/common/target/dependency
-
 #### Stage 2: A  docker image with command to run the eureka
 FROM openjdk:16-jdk-alpine as configuration
 
