@@ -27,6 +27,14 @@ COPY gateway/pom.xml gateway/pom.xml
 COPY configuration/src configuration/src
 COPY configuration/pom.xml configuration/pom.xml
 
+COPY common/src common/src
+COPY common/pom.xml common/pom.xml
+
+COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
+COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
+
+RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
 
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
@@ -89,7 +97,7 @@ EXPOSE 8081
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodgrid.user.UserServiceApplication"
 ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
-#### Stage 2: A docker image with command to run the restaurant_service
+#### Stage 2: A docker image with command to run the restaurant
 FROM openjdk:16-jdk-alpine as restaurant
 
 ARG DEPENDENCY=/app/restaurant/target/dependency
@@ -100,7 +108,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8082
-# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant_service.RestaurantServiceApplication"] restaurant
+# ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant.RestaurantServiceApplication"] restaurant
 ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
 #### Stage 2: A  docker image with command to run the gateway

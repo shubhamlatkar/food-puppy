@@ -2,12 +2,21 @@ version: '3.7'
 
 services:
 
+  database:
+    image: "mongo:latest"
+    restart: always
+    container_name: database
+    networks:
+      - foodgrid
+
   configuration:
     build:
       context: .
       dockerfile: Dockerfile
       target: configuration
     container_name: configuration
+    depends_on:
+      - database
     restart: always
     networks:
       - foodgrid
@@ -20,6 +29,7 @@ services:
     container_name: eureka
     depends_on:
       - configuration
+      - database
     environment:
       PROFILE: docker
     restart: always
@@ -36,13 +46,14 @@ services:
       - "8080:8080"
     depends_on:
       - eureka
+      - database
     environment:
       PROFILE: docker
     restart: always
     networks:
       - foodgrid
 
-  user_service:
+  user:
     build:
       context: .
       dockerfile: Dockerfile
@@ -50,14 +61,15 @@ services:
     container_name: user
     depends_on:
       - eureka
+      - database
     environment:
-      MONGO_URI:
+      MONGO_URI: mongodb://database:27017/foodgrid-user
       PROFILE: docker
     restart: always
     networks:
       - foodgrid
 
-  restaurant_service:
+  restaurant:
     build:
       context: .
       dockerfile: Dockerfile
@@ -65,8 +77,9 @@ services:
     container_name: restaurant
     depends_on:
       - eureka
+      - database
     environment:
-      MONGO_URI:
+      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
       PROFILE: docker
     restart: always
     networks:

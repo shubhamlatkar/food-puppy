@@ -7,12 +7,12 @@
         <artifactId>foodgrid</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>user</artifactId>
+    <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user</name>
+    <name>common</name>
 
     <packaging>jar</packaging>
-    <description>FoodGrid: food delivery backend user service</description>
+    <description>FoodGrid: food delivery backend common packages</description>
 
     <properties>
         <java.version>11</java.version>
@@ -20,25 +20,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.foodgrid</groupId>
-            <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
     </dependencies>
 </project>
