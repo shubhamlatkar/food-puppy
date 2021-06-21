@@ -3,11 +3,27 @@ version: '3.7'
 services:
 
   database:
-    image: "mongo:latest"
+    image: mongo:latest
     restart: always
     container_name: database
     networks:
       - foodgrid
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=zookeeper
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "auth:1:1"
+    depends_on:
+      - zookeeper
 
   configuration:
     build:
