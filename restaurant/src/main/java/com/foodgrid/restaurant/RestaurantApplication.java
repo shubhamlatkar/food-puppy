@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @SpringBootApplication
 @RestController
 @EnableEurekaClient
@@ -35,7 +37,7 @@ public class RestaurantApplication {
     private UserRepository userRepository;
 
     @GetMapping(value = {"/restaurant/", "/"})
-    public ResponseEntity<String> defaultGet() {
-        return new ResponseEntity<>("Restaurant Service " + securityEntity + " " + userRepository.save(new User("restaurant")), HttpStatus.OK);
+    public ResponseEntity<List<User>> defaultGet() {
+        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 }
