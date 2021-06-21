@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @SpringBootApplication
 @RestController
 @EnableEurekaClient
@@ -37,7 +39,7 @@ public class UserApplication {
 
     @GetMapping(value = {"/user/", "/"})
     public ResponseEntity<String> defaultGet() {
-        return new ResponseEntity<>("User Service " + userEntity + " " + userRepository.save(new User("test")), HttpStatus.OK);
+        return new ResponseEntity<>("User Service " + userEntity + " " + userRepository.save(new User("test", new Date())), HttpStatus.OK);
     }
 
 }

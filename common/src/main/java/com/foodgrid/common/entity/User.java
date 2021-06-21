@@ -3,18 +3,27 @@ package com.foodgrid.common.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document
 public class User {
     @Id
     private String id;
     private String name;
+    private Date createdAt;
 
     public User() {
     }
 
-    public User(String id, String name) {
+    public User(String id, String name, Date createdAt) {
         this.id = id;
         this.name = name;
+        this.createdAt = createdAt;
+    }
+
+    public User(String name, Date createdAt) {
+        this.name = name;
+        this.createdAt = createdAt;
     }
 
     public User(String name) {
@@ -37,11 +46,20 @@ public class User {
         this.name = name;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

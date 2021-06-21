@@ -1,22 +1,24 @@
 package com.foodgrid.common.entity;
 
+import java.util.List;
+
 public class UserEvent {
-    private String name;
+    private List<String> name;
     private String type;
 
     public UserEvent() {
     }
 
-    public UserEvent(String name, String type) {
+    public UserEvent(List<String> name, String type) {
         this.name = name;
         this.type = type;
     }
 
-    public String getName() {
+    public List<String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(List<String> name) {
         this.name = name;
     }
 
@@ -31,7 +33,7 @@ public class UserEvent {
     @Override
     public String toString() {
         return "UserEvent{" +
-                "name='" + name + '\'' +
+                "name=" + name +
                 ", type='" + type + '\'' +
                 '}';
     }
