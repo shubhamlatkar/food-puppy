@@ -1,3 +1,4 @@
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/shubhamlatkar/foodgrid)
 # food-grid
 
 ## Food Delivery App
@@ -14,7 +15,7 @@ docker stop $(docker ps -a -q)
 
 1. Remove all images `docker image prune -a`.
 2. Stop all container `docker stop $(docker ps -a -q) `.
-3. Delete all stopped containers `docker rm $(docker ps -a -q)`,
+3. Delete all stopped containers `docker rm $(docker ps -a -q)`.
 4. Delete all stopped images `docker rmi $(docker images -q)`.
 
 #### Ref
