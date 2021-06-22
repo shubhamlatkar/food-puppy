@@ -91,17 +91,17 @@ services:
     networks:
       - foodgrid
 
-  restaurant:
+  notification:
     build:
       context: .
       dockerfile: Dockerfile
-      target: restaurant
-    container_name: restaurant
+      target: notification
+    container_name: notification
     depends_on:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
+      MONGO_URI: mongodb://database:27017/foodgrid-notification
       PROFILE: docker
     restart: always
     networks:

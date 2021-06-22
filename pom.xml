@@ -28,6 +28,7 @@
         <module>gateway</module>
         <module>configuration</module>
         <module>common</module>
+        <module>notification</module>
     </modules>
 
     <dependencies>

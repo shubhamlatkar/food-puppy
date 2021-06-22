@@ -1,0 +1,20 @@
+server:
+  port: 8083
+
+spring:
+  profiles:
+    active: ${PROFILE}
+  application:
+    name: notification
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  cloud:
+    config:
+      uri: http://configuration:8888
