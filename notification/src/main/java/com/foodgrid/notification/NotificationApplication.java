@@ -1,6 +1,7 @@
 package com.foodgrid.notification;
 
 import com.foodgrid.notification.entity.Notification;
+import com.foodgrid.notification.repository.NotificationRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,9 +26,12 @@ public class NotificationApplication {
     }
 
     @Bean
-    CommandLineRunner initData(ReactiveMongoTemplate reactiveMongoTemplate) {
-        return notification -> reactiveMongoTemplate.dropCollection(Notification.class).then(reactiveMongoTemplate.createCollection(
-                Notification.class, CollectionOptions.empty().capped().size(10485))).block();
+    CommandLineRunner initData(ReactiveMongoTemplate reactiveMongoTemplate, NotificationRepository notificationRepository) {
+        return notification -> {
+            reactiveMongoTemplate.dropCollection(Notification.class).then(reactiveMongoTemplate.createCollection(
+                    Notification.class, CollectionOptions.empty().capped().size(10485))).block();
+            notificationRepository.save(new Notification("Welcome")).block();
+        };
     }
 }
 
