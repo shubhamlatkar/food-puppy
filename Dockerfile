@@ -35,7 +35,7 @@ COPY common/pom.xml common/pom.xml
 
 COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
-COPY notification/src/main/java/com/foodgrid/common notification/src/main/java/com/foodgrid
+COPY common/src/main/java/com/foodgrid/common notification/src/main/java/com/foodgrid
 
 RUN rm notification/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
@@ -63,7 +63,7 @@ RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf
 RUN mkdir -p notification/target/dependency && (cd notification/target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A  docker image with command to run the eureka
-FROM openjdk:16-jdk-alpine as configuration
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
 
 ARG DEPENDENCY=/app/configuration/target/dependency
 
@@ -77,7 +77,7 @@ ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.co
 
 
 #### Stage 2: A  docker image with command to run the eureka
-FROM openjdk:16-jdk-alpine as eureka
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as eureka
 
 ARG DEPENDENCY=/app/eureka/target/dependency
 
@@ -90,7 +90,7 @@ EXPOSE 8761
 ENTRYPOINT ["/bin/sh", "-c", "sleep 60 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
 
 #### Stage 2: A  docker image with command to run the user
-FROM openjdk:16-jdk-alpine as user
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as user
 
 ARG DEPENDENCY=/app/user/target/dependency
 
@@ -105,7 +105,7 @@ EXPOSE 8081
 ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant
-FROM openjdk:16-jdk-alpine as restaurant
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as restaurant
 
 ARG DEPENDENCY=/app/restaurant/target/dependency
 
@@ -119,7 +119,7 @@ EXPOSE 8082
 ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
 #### Stage 2: A docker image with command to run the notification
-FROM openjdk:16-jdk-alpine as notification
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
 
 ARG DEPENDENCY=/app/notification/target/dependency
 
@@ -132,7 +132,7 @@ EXPOSE 8083
 ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
 
 #### Stage 2: A  docker image with command to run the gateway
-FROM openjdk:16-jdk-alpine as gateway
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
 
 ARG DEPENDENCY=/app/gateway/target/dependency
 
