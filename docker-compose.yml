@@ -3,9 +3,31 @@ version: '3.7'
 services:
 
   database:
-    image: "mongo:latest"
+    image: mongo:latest
     restart: always
     container_name: database
+    networks:
+      - foodgrid
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=zookeeper
+    networks:
+      - foodgrid
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_RETENTION_MS: 10000
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+      KAFKA_CREATE_TOPICS: "authentication:1:1"
+    depends_on:
+      - zookeeper
     networks:
       - foodgrid
 
@@ -64,6 +86,22 @@ services:
       - database
     environment:
       MONGO_URI: mongodb://database:27017/foodgrid-user
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  notification:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: notification
+    container_name: notification
+    depends_on:
+      - eureka
+      - database
+    environment:
+      MONGO_URI: mongodb://database:27017/foodgrid-notification
       PROFILE: docker
     restart: always
     networks:

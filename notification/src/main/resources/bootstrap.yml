@@ -1,11 +1,11 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
   profiles:
     active: ${PROFILE}
   application:
-    name: user
+    name: notification
   cloud:
     config:
       uri: http://localhost:8888

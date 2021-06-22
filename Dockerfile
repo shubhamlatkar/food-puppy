@@ -27,12 +27,17 @@ COPY gateway/pom.xml gateway/pom.xml
 COPY configuration/src configuration/src
 COPY configuration/pom.xml configuration/pom.xml
 
+COPY notification/src notification/src
+COPY notification/pom.xml notification/pom.xml
+
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
 
 COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
+COPY common/src/main/java/com/foodgrid/common notification/src/main/java/com/foodgrid
 
+RUN rm notification/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
 
@@ -55,8 +60,10 @@ RUN mkdir -p restaurant/target/dependency && (cd restaurant/target/dependency; j
 
 RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf ../*.jar)
 
+RUN mkdir -p notification/target/dependency && (cd notification/target/dependency; jar -xf ../*.jar)
+
 #### Stage 2: A  docker image with command to run the eureka
-FROM openjdk:16-jdk-alpine as configuration
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
 
 ARG DEPENDENCY=/app/configuration/target/dependency
 
@@ -70,7 +77,7 @@ ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.co
 
 
 #### Stage 2: A  docker image with command to run the eureka
-FROM openjdk:16-jdk-alpine as eureka
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as eureka
 
 ARG DEPENDENCY=/app/eureka/target/dependency
 
@@ -82,8 +89,22 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8761
 ENTRYPOINT ["/bin/sh", "-c", "sleep 60 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
 
+
+#### Stage 2: A docker image with command to run the notification
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
+
+ARG DEPENDENCY=/app/notification/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8083
+ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
+
 #### Stage 2: A  docker image with command to run the user
-FROM openjdk:16-jdk-alpine as user
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as user
 
 ARG DEPENDENCY=/app/user/target/dependency
 
@@ -95,10 +116,10 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8081
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.user.UserServiceApplication"] user
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodgrid.user.UserServiceApplication"
-ENTRYPOINT ["/bin/sh", "-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
+ENTRYPOINT ["/bin/sh", "-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant
-FROM openjdk:16-jdk-alpine as restaurant
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as restaurant
 
 ARG DEPENDENCY=/app/restaurant/target/dependency
 
@@ -109,10 +130,10 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8082
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.restaurant.RestaurantServiceApplication"] restaurant
-ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
 #### Stage 2: A  docker image with command to run the gateway
-FROM openjdk:16-jdk-alpine as gateway
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
 
 ARG DEPENDENCY=/app/gateway/target/dependency
 
@@ -122,4 +143,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8080
-ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
+ENTRYPOINT ["/bin/sh", "-c", "sleep 140 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
