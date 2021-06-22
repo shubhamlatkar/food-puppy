@@ -11,7 +11,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>common</name>
 
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <description>FoodGrid: food delivery backend common packages</description>
 
     <properties>

@@ -82,6 +82,8 @@ RUN mkdir -p account/target/dependency && (cd account/target/dependency; jar -xf
 
 RUN mkdir -p order/target/dependency && (cd order/target/dependency; jar -xf ../*.jar)
 
+RUN mkdir -p delivery/target/dependency && (cd delivery/target/dependency; jar -xf ../*.jar)
+
 #### Stage 2: A  docker image with command to run the eureka
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
 
@@ -174,7 +176,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8085
-ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.order.DeliveryApplication"] delivery
+ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.delivery.DeliveryApplication"] delivery
 
 
 #### Stage 2: A docker image with command to run the account
