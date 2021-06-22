@@ -107,5 +107,21 @@ services:
     networks:
       - foodgrid
 
+  restaurant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: restaurant
+    container_name: restaurant
+    depends_on:
+      - eureka
+      - database
+    environment:
+      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
 networks:
   foodgrid:

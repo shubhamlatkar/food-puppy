@@ -30,7 +30,7 @@ public class NotificationApplication {
         return notification -> {
             reactiveMongoTemplate.dropCollection(Notification.class).then(reactiveMongoTemplate.createCollection(
                     Notification.class, CollectionOptions.empty().capped().size(10485))).block();
-            notificationRepository.save(new Notification("Welcome")).block();
+            notificationRepository.save(new Notification("Welcome", "1")).block();
         };
     }
 }

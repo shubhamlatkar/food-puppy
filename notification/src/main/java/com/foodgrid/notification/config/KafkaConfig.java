@@ -23,7 +23,7 @@ public class KafkaConfig {
                         .getName()
                         .stream()
                         .filter(username -> !username.isEmpty())
-                        .map(Notification::new).collect(Collectors.toList()
+                        .map(username -> new Notification(username, "1")).collect(Collectors.toList()
                 ));
     }
 }

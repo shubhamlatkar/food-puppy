@@ -8,12 +8,22 @@ public class Notification {
     @Id
     private String id;
     private String name;
+    private String hostId;
 
     public Notification() {
     }
 
-    public Notification(String name) {
+    public Notification(String name, String hostId) {
         this.name = name;
+        this.hostId = hostId;
+    }
+
+    public String getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
     }
 
     public String getId() {
@@ -34,9 +44,10 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notifications{" +
+        return "Notification{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", hostId='" + hostId + '\'' +
                 '}';
     }
 }
