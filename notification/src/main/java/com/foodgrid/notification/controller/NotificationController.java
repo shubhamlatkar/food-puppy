@@ -18,7 +18,7 @@ public class NotificationController {
     private NotificationRepository notificationRepository;
 
     @GetMapping(value = "/{hostId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> getMovies(@PathVariable String hostId) {
+    public Flux<ServerSentEvent<String>> getNotifications(@PathVariable String hostId) {
         return notificationRepository.findByHostId(hostId)
                 .map(notification -> ServerSentEvent.<String>builder()
                         .id(notification.getId())
