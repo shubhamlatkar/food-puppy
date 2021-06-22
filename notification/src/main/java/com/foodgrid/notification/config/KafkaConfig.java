@@ -24,6 +24,6 @@ public class KafkaConfig {
                         .stream()
                         .filter(username -> !username.isEmpty())
                         .map(username -> new Notification(username, "1")).collect(Collectors.toList()
-                ));
+                )).subscribe(result -> System.out.println("Entity has been saved: {}" + result));
     }
 }
