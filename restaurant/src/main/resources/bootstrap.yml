@@ -9,16 +9,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-    stream:
-      function:
-        defination: authentication
-      bindings:
-        authentication-in-0:
-          destination: authentication
-      kafka:
-        binder:
-          brokers:
-            - localhost:9092
+
 ---
 spring:
   config:
@@ -27,13 +18,3 @@ spring:
   cloud:
     config:
       uri: http://configuration:8888
-    stream:
-      function:
-        defination: authentication
-      bindings:
-        authentication-in-0:
-          destination: authentication
-      kafka:
-        binder:
-          brokers:
-            - kafka:9092
