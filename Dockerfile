@@ -39,6 +39,8 @@ COPY order/pom.xml order/pom.xml
 COPY delivery/src delivery/src
 COPY delivery/pom.xml delivery/pom.xml
 
+COPY frontend/src frontend/src
+COPY frontend/pom.xml frontend/pom.xml
 
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
@@ -83,6 +85,8 @@ RUN mkdir -p account/target/dependency && (cd account/target/dependency; jar -xf
 RUN mkdir -p order/target/dependency && (cd order/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p delivery/target/dependency && (cd delivery/target/dependency; jar -xf ../*.jar)
+
+RUN mkdir -p frontend/target/dependency && (cd frontend/target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A  docker image with command to run the eureka
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
@@ -204,3 +208,16 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/sh", "-c", "sleep 150 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
+
+#### Stage 2: A  docker image with command to run the gateway
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
+
+ARG DEPENDENCY=/app/frontend/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8090
+ENTRYPOINT ["/bin/sh", "-c", "sleep 160 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend

@@ -32,6 +32,7 @@
         <module>order</module>
         <module>delivery</module>
         <module>account</module>
+        <module>frontend</module>
     </modules>
 
     <dependencies>
