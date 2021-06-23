@@ -197,19 +197,6 @@ EXPOSE 8086
 ENTRYPOINT ["/bin/sh","-c", "sleep 130 && java -cp app:app/lib/* com.foodgrid.account.AccountApplication"] account
 
 #### Stage 2: A  docker image with command to run the gateway
-FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
-
-ARG DEPENDENCY=/app/gateway/target/dependency
-
-# Copy project dependencies from the build stage
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-
-EXPOSE 8080
-ENTRYPOINT ["/bin/sh", "-c", "sleep 150 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
-
-#### Stage 2: A  docker image with command to run the gateway
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
 
 ARG DEPENDENCY=/app/frontend/target/dependency
@@ -220,4 +207,18 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8090
-ENTRYPOINT ["/bin/sh", "-c", "sleep 160 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend
+ENTRYPOINT ["/bin/sh", "-c", "sleep 150 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend
+
+#### Stage 2: A  docker image with command to run the gateway
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
+
+ARG DEPENDENCY=/app/gateway/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/sh", "-c", "sleep 160 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
+
