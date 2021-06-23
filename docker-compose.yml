@@ -42,8 +42,6 @@ services:
     restart: always
     networks:
       - foodgrid
-    volumes:
-      - /usr/share/logData:/usr/share/logData
 
   eureka:
     build:
@@ -186,35 +184,6 @@ services:
     environment:
       PROFILE: docker
     restart: always
-    networks:
-      - foodgrid
-
-  filebeat:
-    image: docker.elastic.co/beats/filebeat
-    volumes:
-      - ./elk/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - ./elk/config/logstash-beats.crt:/etc/pki/tls/certs/logstash-beats.crt
-      - /usr/share/logData/:/usr/share/logData/
-    ports:
-      - "80:80"
-    depends_on:
-      - gateway
-    links:
-      - elk
-    environment:
-      - xpack.security.enabled=true
-      - xpack.security.transport.ssl.enabled=true
-    networks:
-      - foodgrid
-
-  elk:
-    image: sebp/elk
-    depends_on:
-      - gateway
-    ports:
-      - "5601:5601"
-      - "9200:9200"
-      - "5044:5044"
     networks:
       - foodgrid
 
