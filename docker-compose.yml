@@ -65,7 +65,7 @@ services:
       target: gateway
     container_name: gateway
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - eureka
       - database
@@ -118,6 +118,70 @@ services:
       - database
     environment:
       MONGO_URI: mongodb://database:27017/foodgrid-restaurant
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  order:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: order
+    container_name: order
+    depends_on:
+      - eureka
+      - database
+    environment:
+      MONGO_URI: mongodb://database:27017/foodgrid-order
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  delivery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: delivery
+    container_name: delivery
+    depends_on:
+      - eureka
+      - database
+    environment:
+      MONGO_URI: mongodb://database:27017/foodgrid-delivery
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  account:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: account
+    container_name: account
+    depends_on:
+      - eureka
+      - database
+    environment:
+      MONGO_URI: mongodb://database:27017/foodgrid-account
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    container_name: frontend
+    depends_on:
+      - eureka
+      - database
+      - gateway
+    environment:
       PROFILE: docker
     restart: always
     networks:
