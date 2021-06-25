@@ -25,7 +25,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LOG_RETENTION_MS: 10000
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      KAFKA_CREATE_TOPICS: "authentication:1:1"
+      KAFKA_CREATE_TOPICS: authentication:1:1
     depends_on:
       - zookeeper
     networks:
@@ -85,7 +85,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-user
       PROFILE: docker
     restart: always
     networks:
@@ -101,7 +100,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-notification
       PROFILE: docker
     restart: always
     networks:
@@ -117,7 +115,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
       PROFILE: docker
     restart: always
     networks:
@@ -133,7 +130,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-order
       PROFILE: docker
     restart: always
     networks:
@@ -149,7 +145,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-delivery
       PROFILE: docker
     restart: always
     networks:
@@ -165,7 +160,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-account
       PROFILE: docker
     restart: always
     networks:
