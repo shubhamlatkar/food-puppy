@@ -25,7 +25,7 @@ public class DeliveryApplication {
         SpringApplication.run(DeliveryApplication.class, args);
     }
 
-    @GetMapping(value = {"/delivery/", "/"})
+    @GetMapping("/")
     public ResponseEntity<String> defaultGet() {
         return new ResponseEntity<>("Delivery Service ", HttpStatus.OK);
     }

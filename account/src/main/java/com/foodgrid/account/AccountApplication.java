@@ -25,7 +25,7 @@ public class AccountApplication {
         SpringApplication.run(AccountApplication.class, args);
     }
 
-    @GetMapping(value = {"/account/", "/"})
+    @GetMapping("/")
     public ResponseEntity<String> defaultGet() {
         return new ResponseEntity<>("Account Service ", HttpStatus.OK);
     }
