@@ -62,31 +62,3 @@ docker stop $(docker ps -a -q)
 
 #### Ref
 1. [Docker ref](https://www.codenotary.com/blog/extremely-useful-docker-commands/)
-
-```
-function loadNotifications () {
-
-    this.source = null;
-    
-    this.start = function () {
-        this.source = new EventSource("http://localhost:8083/notification/1",{
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNjI0NzAxOTM4LCJleHAiOjE2MjQ3MDIyMzh9.68-BtweiRre9dlDjHSa9aVuZNQapJsEFMlqKGwGIks2hJbg-eeVXUxy1VOo_rOUVTnff78kpsmzSenWP_PtBAw'
-                    }
-            }
-        );
-        this.source.addEventListener("notification", function (event) {
-            var data = event.data;
-            console.log("Event data : ", data);
-            // process the data
-        });
-        this.source.onerror = function (e) {
-            console.log("Error",e);
-        };
-    };
-}
-
-notifications = new loadNotifications();
-
-notifications.start();
-```
