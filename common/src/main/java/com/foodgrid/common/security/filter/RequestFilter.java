@@ -32,6 +32,7 @@ public class RequestFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImplementation userDetailsService;
     private final UserRepository userRepository;
 
+
     @Autowired
     public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository) {
         this.jwtTokenUtility = jwtTokenUtil;
@@ -43,6 +44,8 @@ public class RequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = httpServletRequest.getHeader("Authorization");
+
+        System.out.println(httpServletRequest.getRequestURL().toString());
 
         Cookie[] cookies = httpServletRequest.getCookies();
         String cookieJWT = null;
