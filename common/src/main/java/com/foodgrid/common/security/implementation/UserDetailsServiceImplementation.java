@@ -11,6 +11,7 @@ import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,9 +50,12 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     @Autowired
     private RestTemplate restTemplate;
-    
+
     @Autowired
     private JwtTokenUtility jwtTokenUtility;
+
+    @Value("${spring.cloud.config.uri}")
+    private String configUri;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -96,7 +100,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     public void initDatabase(MongoTemplate mongoTemplate) {
         ResponseEntity<String> response
-                = restTemplate.getForEntity("http://localhost:8888/api/v1/secret/", String.class);
+                = restTemplate.getForEntity(configUri + "/api/v1/secret/", String.class);
         jwtTokenUtility.setSecret(response.getBody());
 
         mongoTemplate.dropCollection(Authority.class);
