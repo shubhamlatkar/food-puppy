@@ -1,32 +1,24 @@
-package com.foodgrid.common.entity;
+package com.foodgrid.common.security.model.aggregate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Document
-public class User {
+public class Authority {
+
     @Id
     private String id;
     private String name;
-    private Date createdAt;
 
-    public User() {
+    public Authority() {
     }
 
-    public User(String id, String name, Date createdAt) {
+    public Authority(String id, String name) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
     }
 
-    public User(String name, Date createdAt) {
-        this.name = name;
-        this.createdAt = createdAt;
-    }
-
-    public User(String name) {
+    public Authority(String name) {
         this.name = name;
     }
 
@@ -46,20 +38,12 @@ public class User {
         this.name = name;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
+        return "Authority{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }
+

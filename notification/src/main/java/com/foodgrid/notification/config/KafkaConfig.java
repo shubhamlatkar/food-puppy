@@ -1,6 +1,7 @@
 package com.foodgrid.notification.config;
 
-import com.foodgrid.common.entity.UserEvent;
+import com.foodgrid.common.event.AuthenticationEvent;
+import com.foodgrid.common.security.utility.UserActivities;
 import com.foodgrid.notification.entity.Notification;
 import com.foodgrid.notification.repository.NotificationRepository;
 import org.slf4j.Logger;
@@ -21,13 +22,15 @@ public class KafkaConfig {
     private final Logger logger = LoggerFactory.getLogger(KafkaConfig.class);
 
     @Bean
-    public Consumer<UserEvent> authentication() {
-        return userEvent -> notificationRepository.saveAll(
-                userEvent
-                        .getName()
+    public Consumer<AuthenticationEvent> authentication() {
+        return authenticationEvent -> notificationRepository.saveAll(
+                authenticationEvent
+                        .getUsers()
                         .stream()
-                        .filter(username -> !username.isEmpty())
-                        .map(username -> new Notification(username, "1")).collect(Collectors.toList()
-                )).subscribe(result -> logger.info("Entity has been saved: {}", result));
+                        .filter(userAuthEventDTO -> userAuthEventDTO.getActivity() == UserActivities.LOGIN)
+                        .map(userAuthEventDTO ->
+                                new Notification(userAuthEventDTO.getUser().getMetadata().getLastActivity(), userAuthEventDTO.getUserId())
+                        ).collect(Collectors.toList())
+        ).subscribe(result -> logger.info("Entity has been saved: {}", result));
     }
 }

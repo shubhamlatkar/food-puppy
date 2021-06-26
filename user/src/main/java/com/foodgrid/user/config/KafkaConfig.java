@@ -1,8 +1,13 @@
 package com.foodgrid.user.config;
 
-import com.foodgrid.common.entity.User;
-import com.foodgrid.common.entity.UserEvent;
-import com.foodgrid.common.repository.UserRepository;
+import com.foodgrid.common.event.AuthenticationEvent;
+import com.foodgrid.common.security.model.aggregate.User;
+import com.foodgrid.common.security.payload.dco.UserToUserAuthEvent;
+import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.security.repository.UserRepository;
+import com.foodgrid.common.security.utility.UserTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -19,32 +24,45 @@ import java.util.stream.Stream;
 @Component
 public class KafkaConfig {
 
+
     @Autowired
     private UserRepository userRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(KafkaConfig.class);
 
     private final AtomicInteger count = new AtomicInteger();
 
     @Bean
-    public Supplier<Flux<UserEvent>> authentication() {
+    public Supplier<Flux<AuthenticationEvent>> authentication() {
         return () -> Flux.fromStream(Stream.generate(() -> {
             try {
                 Thread.sleep(1000);
                 List<User> users = userRepository.findAll();
                 if (count.get() < users.size()) {
+
                     count.set(users.size());
-                    Date start = new Date();
+
+                    var start = new Date();
                     start.setTime(new Date().getTime() - 10000);
-                    List<String> userList = new ArrayList<>();
+
+                    List<UserAuthEventDTO> userList = new ArrayList<>();
                     users.forEach(user -> {
-                        if (user.getCreatedAt().getTime() > start.getTime())
-                            userList.add(user.getName());
+                        if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime())
+                            userList.add(new UserToUserAuthEvent(user, UserTypes.USER).getUser());
                     });
-                    return new UserEvent(userList, "login");
+
+                    logger.info("New activity: {}", userList);
+                    return new AuthenticationEvent(true, userList);
                 } else {
-                    return new UserEvent(new ArrayList<>(), "no new update");
+                    logger.info("No new activity ");
+                    return new AuthenticationEvent(false, new ArrayList<>());
                 }
+            } catch (InterruptedException e) {
+                logger.error("InterruptedException: ", e);
+                Thread.currentThread().interrupt();
+                return new AuthenticationEvent(false, new ArrayList<>());
             } catch (Exception e) {
-                return new UserEvent(new ArrayList<>(), "exception");
+                return new AuthenticationEvent(false, new ArrayList<>());
             }
         })).subscribeOn(Schedulers.boundedElastic()).share();
     }

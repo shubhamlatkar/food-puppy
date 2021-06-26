@@ -1,8 +1,9 @@
 package com.foodgrid.restaurant.config;
 
-import com.foodgrid.common.entity.User;
-import com.foodgrid.common.entity.UserEvent;
-import com.foodgrid.common.repository.UserRepository;
+import com.foodgrid.common.event.AuthenticationEvent;
+import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.security.repository.UserRepository;
+import com.foodgrid.common.security.utility.UserActivities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,14 @@ public class KafkaConfig {
     private UserRepository userRepository;
 
     @Bean
-    public Consumer<UserEvent> authentication() {
-        return userEvent -> userRepository.saveAll(
-                userEvent
-                        .getName()
+    public Consumer<AuthenticationEvent> authentication() {
+        return authenticationEvent -> userRepository.saveAll(
+                authenticationEvent
+                        .getUsers()
                         .stream()
-                        .filter(username -> !username.isEmpty())
-                        .map(User::new).collect(Collectors.toList()
-                ));
+                        .filter(userAuthEventDTO -> userAuthEventDTO.getActivity() == UserActivities.LOGIN)
+                        .map(UserAuthEventDTO::getUser)
+                        .collect(Collectors.toList())
+        );
     }
 }
