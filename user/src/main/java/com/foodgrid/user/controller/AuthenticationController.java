@@ -1,4 +1,4 @@
-package com.foodgrid.common.security.controller;
+package com.foodgrid.user.controller;
 
 import com.foodgrid.common.security.payload.dto.request.LogIn;
 import com.foodgrid.common.security.payload.dto.request.SignUp;
