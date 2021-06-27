@@ -44,9 +44,7 @@ public class RequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = httpServletRequest.getHeader("Authorization");
-
-        System.out.println(httpServletRequest.getRequestURL().toString());
-
+        
         Cookie[] cookies = httpServletRequest.getCookies();
         String cookieJWT = null;
         if (cookies != null) {
