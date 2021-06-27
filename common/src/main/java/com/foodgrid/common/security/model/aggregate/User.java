@@ -151,6 +151,7 @@ public class User {
         if (activeTokens == null)
             activeTokens = new ArrayList<>();
         metadata.setLastActivity(LOGIN);
+        metadata.setLastUpdatedAt(new Date());
         activeTokens.add(token);
         return this;
     }

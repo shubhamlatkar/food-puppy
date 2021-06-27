@@ -196,7 +196,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8086
 ENTRYPOINT ["/bin/sh","-c", "sleep 130 && java -cp app:app/lib/* com.foodgrid.account.AccountApplication"] account
 
-#### Stage 2: A  docker image with command to run the gateway
+#### Stage 2: A  docker image with command to run the frontend
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
 
 ARG DEPENDENCY=/app/frontend/target/dependency

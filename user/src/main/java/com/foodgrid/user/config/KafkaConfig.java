@@ -17,7 +17,6 @@ import reactor.core.scheduler.Schedulers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -30,27 +29,23 @@ public class KafkaConfig {
 
     private final Logger logger = LoggerFactory.getLogger(KafkaConfig.class);
 
-    private final AtomicInteger count = new AtomicInteger();
-
     @Bean
     public Supplier<Flux<AuthenticationEvent>> authentication() {
         return () -> Flux.fromStream(Stream.generate(() -> {
             try {
                 Thread.sleep(1000);
                 List<User> users = userRepository.findAll();
-                if (count.get() < users.size()) {
 
-                    count.set(users.size());
+                var start = new Date();
+                start.setTime(new Date().getTime() - 10000);
 
-                    var start = new Date();
-                    start.setTime(new Date().getTime() - 10000);
+                List<UserAuthEventDTO> userList = new ArrayList<>();
+                users.forEach(user -> {
+                    if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime())
+                        userList.add(new UserToUserAuthEvent(user, UserTypes.USER).getUser());
+                });
 
-                    List<UserAuthEventDTO> userList = new ArrayList<>();
-                    users.forEach(user -> {
-                        if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime())
-                            userList.add(new UserToUserAuthEvent(user, UserTypes.USER).getUser());
-                    });
-
+                if (!userList.isEmpty()) {
                     logger.info("New activity: {}", userList);
                     return new AuthenticationEvent(true, userList);
                 } else {

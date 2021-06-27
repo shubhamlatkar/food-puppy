@@ -2,7 +2,9 @@ package com.foodgrid.user;
 
 
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
+import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.payload.dto.request.SignUp;
+import com.foodgrid.common.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -39,6 +42,8 @@ public class UserApplication {
     @Autowired
     private UserDetailsServiceImplementation userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
 
     @Bean
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
@@ -52,8 +57,8 @@ public class UserApplication {
     }
 
     @GetMapping(value = {"/user/", "/"})
-    public ResponseEntity<String> defaultGet() {
-        return new ResponseEntity<>("User Service ", HttpStatus.OK);
+    public ResponseEntity<List<User>> defaultGet() {
+        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 
 }
