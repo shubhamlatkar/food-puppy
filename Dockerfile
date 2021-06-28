@@ -99,7 +99,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8888
-ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.configuration.ConfigurationApplication"] configuration
+ENTRYPOINT ["/bin/sh", "-c", "sleep 20 && java -cp app:app/lib/* com.foodgrid.configuration.ConfigurationApplication"] configuration
 
 
 #### Stage 2: A  docker image with command to run the eureka
@@ -113,20 +113,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8761
-ENTRYPOINT ["/bin/sh", "-c", "sleep 60 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
-
-#### Stage 2: A docker image with command to run the notification
-FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
-
-ARG DEPENDENCY=/app/notification/target/dependency
-
-# Copy project dependencies from the build stage
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-
-EXPOSE 8083
-ENTRYPOINT ["/bin/sh","-c", "sleep 70 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
+ENTRYPOINT ["/bin/sh", "-c", "sleep 40 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
 
 #### Stage 2: A  docker image with command to run the user
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as user
@@ -141,7 +128,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8081
 # ENTRYPOINT ["java","-cp","app:app/lib/*","com.foodgrid.user.UserServiceApplication"] user
 # "/bin/sh", "-c", "sleep 10 && java -cp app:app/lib/* com.foodgrid.user.UserServiceApplication"
-ENTRYPOINT ["/bin/sh", "-c", "sleep 90 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
+ENTRYPOINT ["/bin/sh", "-c", "sleep 50 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
 #### Stage 2: A docker image with command to run the restaurant
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as restaurant
@@ -154,7 +141,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8082
-ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
+ENTRYPOINT ["/bin/sh","-c", "sleep 60 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
 #### Stage 2: A docker image with command to run the order
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as order
@@ -167,7 +154,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8084
-ENTRYPOINT ["/bin/sh","-c", "sleep 110 && java -cp app:app/lib/* com.foodgrid.order.OrderApplication"] order
+ENTRYPOINT ["/bin/sh","-c", "sleep 70 && java -cp app:app/lib/* com.foodgrid.order.OrderApplication"] order
 
 #### Stage 2: A docker image with command to run the delivery
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as delivery
@@ -180,7 +167,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8085
-ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.delivery.DeliveryApplication"] delivery
+ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.delivery.DeliveryApplication"] delivery
 
 
 #### Stage 2: A docker image with command to run the account
@@ -194,7 +181,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8086
-ENTRYPOINT ["/bin/sh","-c", "sleep 130 && java -cp app:app/lib/* com.foodgrid.account.AccountApplication"] account
+ENTRYPOINT ["/bin/sh","-c", "sleep 90 && java -cp app:app/lib/* com.foodgrid.account.AccountApplication"] account
 
 #### Stage 2: A  docker image with command to run the frontend
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
@@ -207,7 +194,21 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8090
-ENTRYPOINT ["/bin/sh", "-c", "sleep 150 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend
+ENTRYPOINT ["/bin/sh", "-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend
+
+
+#### Stage 2: A docker image with command to run the notification
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
+
+ARG DEPENDENCY=/app/notification/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
+
+EXPOSE 8083
+ENTRYPOINT ["/bin/sh","-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
 
 #### Stage 2: A  docker image with command to run the gateway
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
@@ -220,5 +221,5 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8080
-ENTRYPOINT ["/bin/sh", "-c", "sleep 160 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
+ENTRYPOINT ["/bin/sh", "-c", "sleep 140 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
 

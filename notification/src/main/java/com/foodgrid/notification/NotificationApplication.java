@@ -45,7 +45,7 @@ public class NotificationApplication {
         return notification -> {
             reactiveMongoTemplate.dropCollection(Notification.class).then(reactiveMongoTemplate.createCollection(
                     Notification.class, CollectionOptions.empty().capped().size(10485))).block();
-            notificationRepository.save(new Notification(UserActivities.SIGNUP, "1")).block();
+            notificationRepository.save(new Notification(UserActivities.SIGNUP, "60d8ae912e61a9526c025be3")).block();
 
             userDetailsService.initDatabase(mongoTemplate);
 
