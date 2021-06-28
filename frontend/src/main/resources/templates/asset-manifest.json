@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/foodgrid/static/css/main.ab7136cd.chunk.css",
-    "main.js": "/foodgrid/static/js/main.21fc9d54.chunk.js",
-    "main.js.map": "/foodgrid/static/js/main.21fc9d54.chunk.js.map",
+    "main.js": "/foodgrid/static/js/main.022d3a30.chunk.js",
+    "main.js.map": "/foodgrid/static/js/main.022d3a30.chunk.js.map",
     "runtime-main.js": "/foodgrid/static/js/runtime-main.667e5d3b.js",
     "runtime-main.js.map": "/foodgrid/static/js/runtime-main.667e5d3b.js.map",
     "static/js/2.2502e4bd.chunk.js": "/foodgrid/static/js/2.2502e4bd.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.667e5d3b.js",
     "static/js/2.2502e4bd.chunk.js",
     "static/css/main.ab7136cd.chunk.css",
-    "static/js/main.21fc9d54.chunk.js"
+    "static/js/main.022d3a30.chunk.js"
   ]
 }
