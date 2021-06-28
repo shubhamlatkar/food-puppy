@@ -60,9 +60,9 @@ public class AuthenticationService {
         );
 
         final String jwtToken = jwtTokenUtility.generateToken(userDetails);
-        
+
         userRepository.findByUsername(request.getUsername()).ifPresent(user -> userRepository.save(user.addToken(jwtToken)));
 
-        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getId(), userDetails.getUsername()));
+        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getId()));
     }
 }
