@@ -16,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationEventHandlerImplementation implements AuthenticationEventHandler {
+public class CustomAuthenticationEventHandlerImplementation implements AuthenticationEventHandler {
 
 
-    private final Logger logger = LoggerFactory.getLogger(AuthenticationEventHandlerImplementation.class);
+    private final Logger logger = LoggerFactory.getLogger(CustomAuthenticationEventHandlerImplementation.class);
 
     @Autowired
     private RestaurantNotificationRepository restaurantNotificationRepository;
