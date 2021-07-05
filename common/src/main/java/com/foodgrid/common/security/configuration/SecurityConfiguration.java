@@ -55,8 +55,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-//                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-//                .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/signup", "/notification/**").permitAll()
                 .antMatchers("/user/**", "/restaurant/**").hasRole("USER")

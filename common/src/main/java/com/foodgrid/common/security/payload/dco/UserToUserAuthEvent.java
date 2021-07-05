@@ -1,8 +1,12 @@
 package com.foodgrid.common.security.payload.dco;
 
 import com.foodgrid.common.security.model.aggregate.User;
+import com.foodgrid.common.security.model.entity.TokenData;
 import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.security.utility.UserActivities;
 import com.foodgrid.common.security.utility.UserTypes;
+
+import java.util.Comparator;
 
 public class UserToUserAuthEvent {
     private UserAuthEventDTO user;
@@ -15,7 +19,15 @@ public class UserToUserAuthEvent {
         this.user.setUserType(type);
         this.user.setUserId(user.getId());
         this.user.setActivity(user.getMetadata().getLastActivity());
-        this.user.setToken(user.getActiveTokens());
+        if (user.getMetadata().getLastActivity().equals(UserActivities.LOGIN))
+            this.user.setToken(
+                    user.getActiveTokens()
+                            .stream()
+                            .max(Comparator.comparing(TokenData::getCreatedAt))
+                            .orElse(new TokenData()).getToken()
+            );
+        else
+            this.user.setToken(null);
         this.user.setUser(user);
     }
 

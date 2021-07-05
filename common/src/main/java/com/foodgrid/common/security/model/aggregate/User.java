@@ -1,6 +1,8 @@
 package com.foodgrid.common.security.model.aggregate;
 
+import com.foodgrid.common.security.model.entity.TokenData;
 import com.foodgrid.common.security.model.entity.UserMetadata;
+import com.foodgrid.common.security.utility.UserTypes;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -38,27 +40,38 @@ public class User {
 
     private List<Role> roles;
 
-    private List<String> activeTokens;
+    private List<TokenData> activeTokens;
+
+    private UserTypes type;
 
     private UserMetadata metadata;
 
     public User() {
     }
 
-    public User(String username, String phone, String email, String password, List<Role> roles) {
+    public User(String username, String phone, String email, String password, List<Role> roles, UserTypes type) {
         this.username = username;
         this.phone = phone;
         this.email = email;
         this.password = password;
         this.roles = roles;
         this.metadata = new UserMetadata(new Date(), new Date(), SIGNUP);
+        this.type = type;
     }
 
-    public List<String> getActiveTokens() {
+    public UserTypes getType() {
+        return type;
+    }
+
+    public void setType(UserTypes type) {
+        this.type = type;
+    }
+
+    public List<TokenData> getActiveTokens() {
         return activeTokens;
     }
 
-    public User setActiveTokens(List<String> activeTokens) {
+    public User setActiveTokens(List<TokenData> activeTokens) {
         this.activeTokens = activeTokens;
         if (activeTokens.isEmpty())
             metadata.setLastActivity(LOGOUT);
@@ -131,6 +144,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 ", activeTokens=" + activeTokens +
+                ", type=" + type +
+                ", metadata=" + metadata +
                 '}';
     }
 
@@ -141,9 +156,14 @@ public class User {
     }
 
     public User removeToken(String token) {
-        if (activeTokens != null)
-            activeTokens.remove(token);
-        metadata.setLastActivity(LOGOUT);
+        if (activeTokens != null) {
+            activeTokens
+                    .stream()
+                    .filter(tokenData -> tokenData.getToken().equals(token))
+                    .findAny()
+                    .ifPresent(tokenData -> activeTokens.remove(tokenData));
+            metadata.setLastActivity(LOGOUT);
+        }
         return this;
     }
 
@@ -152,7 +172,7 @@ public class User {
             activeTokens = new ArrayList<>();
         metadata.setLastActivity(LOGIN);
         metadata.setLastUpdatedAt(new Date());
-        activeTokens.add(token);
+        activeTokens.add(new TokenData(token, new Date()));
         return this;
     }
 }

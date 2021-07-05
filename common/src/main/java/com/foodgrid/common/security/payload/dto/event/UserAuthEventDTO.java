@@ -4,21 +4,21 @@ import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.utility.UserActivities;
 import com.foodgrid.common.security.utility.UserTypes;
 
-import java.util.List;
-
 public class UserAuthEventDTO {
     private UserTypes userType;
     private String userId;
+    private String username;
     private UserActivities activity;
-    private List<String> token;
+    private String token;
     private User user;
 
     public UserAuthEventDTO() {
     }
 
-    public UserAuthEventDTO(UserTypes userType, String userId, UserActivities activity, List<String> token, User user) {
+    public UserAuthEventDTO(UserTypes userType, String userId, String username, UserActivities activity, String token, User user) {
         this.userType = userType;
         this.userId = userId;
+        this.username = username;
         this.activity = activity;
         this.token = token;
         this.user = user;
@@ -48,11 +48,11 @@ public class UserAuthEventDTO {
         this.activity = activity;
     }
 
-    public List<String> getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(List<String> token) {
+    public void     setToken(String token) {
         this.token = token;
     }
 
@@ -64,13 +64,22 @@ public class UserAuthEventDTO {
         this.user = user;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "UserAuthEventDTO{" +
-                "userType='" + userType + '\'' +
+                "userType=" + userType +
                 ", userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
                 ", activity=" + activity +
-                ", token=" + token +
+                ", token='" + token + '\'' +
                 ", user=" + user +
                 '}';
     }

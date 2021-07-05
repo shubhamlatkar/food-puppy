@@ -1,6 +1,6 @@
 package com.foodgrid.user.config;
 
-import com.foodgrid.common.event.AuthenticationEvent;
+import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 @Component
 public class KafkaConfig {
-
 
     @Autowired
     private UserRepository userRepository;

@@ -1,10 +1,15 @@
 package com.foodgrid.delivery;
 
+import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +28,14 @@ public class DeliveryApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DeliveryApplication.class, args);
+    }
+
+    @Autowired
+    private UserDetailsServiceImplementation userDetailsService;
+
+    @Bean
+    CommandLineRunner initData(MongoTemplate mongoTemplate) {
+        return user -> userDetailsService.initDatabase(mongoTemplate);
     }
 
     @GetMapping("/")

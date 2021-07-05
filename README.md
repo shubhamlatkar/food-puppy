@@ -48,7 +48,7 @@ fetch("http://localhost:8081/user/", {
 To run with docker
 
 ```
-git clone http://github.com/shubhamlatkar/foodgrid.git && cd foodgrid/ && git pull origin cqrs-impl && git checkout cqrs-impl && docker-compose up
+git clone http://github.com/shubhamlatkar/foodgrid.git && cd foodgrid/ && git pull origin cqrs-impl-notification && git checkout cqrs-impl-notification && docker-compose up
 ```
 
 ### Useful docker commands

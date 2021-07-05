@@ -91,7 +91,8 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         signUp.getPhone(),
                         signUp.getEmail(),
                         passwordConfig.passwordEncoder().encode(signUp.getPassword()),
-                        roles
+                        roles,
+                        signUp.getType()
                 )
         );
         return true;

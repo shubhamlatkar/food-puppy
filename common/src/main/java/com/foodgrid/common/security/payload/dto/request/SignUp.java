@@ -1,5 +1,7 @@
 package com.foodgrid.common.security.payload.dto.request;
 
+import com.foodgrid.common.security.utility.UserTypes;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -25,15 +27,18 @@ public class SignUp {
     @Size(max = 10)
     private String phone;
 
+    private UserTypes type;
+
     public SignUp() {
     }
 
-    public SignUp(String username, String email, Set<String> roles, String password, String phone) {
+    public SignUp(String username, String email, Set<String> roles, String password, String phone, UserTypes type) {
         this.username = username;
         this.email = email;
         this.roles = roles;
         this.password = password;
         this.phone = phone;
+        this.type = type;
     }
 
     public String getUsername() {
@@ -76,6 +81,14 @@ public class SignUp {
         this.phone = phone;
     }
 
+    public UserTypes getType() {
+        return type;
+    }
+
+    public void setType(UserTypes type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "SignUp{" +
@@ -84,6 +97,7 @@ public class SignUp {
                 ", roles=" + roles +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
+                ", type=" + type +
                 '}';
     }
 }

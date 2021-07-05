@@ -1,22 +1,21 @@
-package com.foodgrid.notification.entity;
+package com.foodgrid.notification.command.model.aggregate;
 
-import com.foodgrid.common.security.utility.UserActivities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Notification {
+public class UserNotification {
     @Id
     private String id;
-    private UserActivities name;
+    private String message;
     private String hostId;
 
-    public Notification() {
+    public UserNotification(String message, String hostId) {
+        this.message = message;
+        this.hostId = hostId;
     }
 
-    public Notification(UserActivities name, String hostId) {
-        this.name = name;
-        this.hostId = hostId;
+    public UserNotification() {
     }
 
     public String getId() {
@@ -27,12 +26,12 @@ public class Notification {
         this.id = id;
     }
 
-    public UserActivities getName() {
-        return name;
+    public String getMessage() {
+        return message;
     }
 
-    public void setName(UserActivities name) {
-        this.name = name;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getHostId() {
@@ -45,9 +44,9 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notification{" +
+        return "UserNotification{" +
                 "id='" + id + '\'' +
-                ", name=" + name +
+                ", message='" + message + '\'' +
                 ", hostId='" + hostId + '\'' +
                 '}';
     }

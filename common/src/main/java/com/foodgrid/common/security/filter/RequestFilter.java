@@ -3,6 +3,7 @@ package com.foodgrid.common.security.filter;
 import com.foodgrid.common.security.implementation.UserDetailsImplementation;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.model.aggregate.User;
+import com.foodgrid.common.security.model.entity.TokenData;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class RequestFilter extends OncePerRequestFilter {
@@ -44,7 +46,7 @@ public class RequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = httpServletRequest.getHeader("Authorization");
-        
+
         Cookie[] cookies = httpServletRequest.getCookies();
         String cookieJWT = null;
         if (cookies != null) {
@@ -71,7 +73,10 @@ public class RequestFilter extends OncePerRequestFilter {
             user = userRepository.findByUsername(username).orElse(null);
         String finalJwt = jwt;
         if (user != null) {
-            List<String> activeTokens = user.getActiveTokens();
+            List<String> activeTokens = user.getActiveTokens()
+                    .stream()
+                    .map(TokenData::getToken)
+                    .collect(Collectors.toList());
             if (!activeTokens.contains(finalJwt))
                 httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized...");
             if (httpServletRequest.getRequestURL().toString().contains("/logmeout"))

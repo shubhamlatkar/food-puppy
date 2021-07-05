@@ -1,6 +1,6 @@
 package com.foodgrid.restaurant.config;
 
-import com.foodgrid.common.event.AuthenticationEvent;
+import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.UserActivities;
