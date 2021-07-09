@@ -3,6 +3,7 @@ package com.foodgrid.notification;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.utility.UserActivities;
 import com.foodgrid.notification.command.model.aggregate.DeliveryNotification;
+import com.foodgrid.notification.command.model.aggregate.MetaData;
 import com.foodgrid.notification.command.model.aggregate.RestaurantNotification;
 import com.foodgrid.notification.command.model.aggregate.UserNotification;
 import com.foodgrid.notification.command.repository.DeliveryNotificationRepository;
@@ -45,19 +46,27 @@ public class NotificationApplication {
     @Autowired
     private UserDetailsServiceImplementation userDetailsService;
 
-    @Bean
+    @Bean("initData")
     CommandLineRunner initData(ReactiveMongoTemplate reactiveMongoTemplate, MongoTemplate mongoTemplate) {
         return notification -> {
-            
-            reactiveMongoTemplate.dropCollection(UserNotification.class)
-                    .then(reactiveMongoTemplate.createCollection(UserNotification.class, CollectionOptions.empty().capped().size(10485)))
-                    .then(reactiveMongoTemplate.dropCollection(RestaurantNotification.class))
-                    .then(reactiveMongoTemplate.createCollection(RestaurantNotification.class, CollectionOptions.empty().capped().size(10485)))
-                    .then(reactiveMongoTemplate.dropCollection(DeliveryNotification.class))
-                    .then(reactiveMongoTemplate.createCollection(DeliveryNotification.class, CollectionOptions.empty().capped().size(10485)))
-                    .block();
+            if (!mongoTemplate.collectionExists(MetaData.class))
+                mongoTemplate.dropCollection(MetaData.class);
 
-            userNotificationRepository.save(new UserNotification(UserActivities.SIGNUP.name(), "1")).block();
+            var userCollectionExists = reactiveMongoTemplate.collectionExists(UserNotification.class).block();
+            var restaurantCollectionExists = reactiveMongoTemplate.collectionExists(RestaurantNotification.class).block();
+            var deliveryCollectionExists = reactiveMongoTemplate.collectionExists(DeliveryNotification.class).block();
+            if ((userCollectionExists == null || !userCollectionExists)
+                    && (restaurantCollectionExists == null || !restaurantCollectionExists)
+                    && (deliveryCollectionExists == null || !deliveryCollectionExists))
+                reactiveMongoTemplate.dropCollection(UserNotification.class)
+                        .then(reactiveMongoTemplate.createCollection(UserNotification.class, CollectionOptions.empty().capped().size(10485)))
+                        .then(reactiveMongoTemplate.dropCollection(RestaurantNotification.class))
+                        .then(reactiveMongoTemplate.createCollection(RestaurantNotification.class, CollectionOptions.empty().capped().size(10485)))
+                        .then(reactiveMongoTemplate.dropCollection(DeliveryNotification.class))
+                        .then(reactiveMongoTemplate.createCollection(DeliveryNotification.class, CollectionOptions.empty().capped().size(10485)))
+                        .block();
+
+            userNotificationRepository.save(new UserNotification(UserActivities.SIGNUP.name(), "60e5dc6a58f5eb36303eb999")).block();
             restaurantNotificationRepository.save(new RestaurantNotification(UserActivities.SIGNUP.name(), "1")).block();
             deliveryNotificationRepository.save(new DeliveryNotification(UserActivities.SIGNUP.name(), "1")).block();
 

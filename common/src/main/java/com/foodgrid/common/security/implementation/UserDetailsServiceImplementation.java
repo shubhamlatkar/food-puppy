@@ -1,15 +1,16 @@
 package com.foodgrid.common.security.implementation;
 
 
+import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.configuration.BeanConfiguration;
 import com.foodgrid.common.security.model.aggregate.Authority;
 import com.foodgrid.common.security.model.aggregate.Role;
 import com.foodgrid.common.security.model.aggregate.User;
-import com.foodgrid.common.security.payload.dto.request.SignUp;
 import com.foodgrid.common.security.repository.AuthorityRepository;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
+import com.foodgrid.common.security.utility.UserTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -92,7 +93,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         signUp.getEmail(),
                         passwordConfig.passwordEncoder().encode(signUp.getPassword()),
                         roles,
-                        signUp.getType()
+                        UserTypes.USER
                 )
         );
         return true;

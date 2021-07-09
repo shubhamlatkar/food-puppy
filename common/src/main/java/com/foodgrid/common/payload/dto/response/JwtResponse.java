@@ -1,4 +1,4 @@
-package com.foodgrid.common.security.payload.dto.response;
+package com.foodgrid.common.payload.dto.response;
 
 public class JwtResponse {
 

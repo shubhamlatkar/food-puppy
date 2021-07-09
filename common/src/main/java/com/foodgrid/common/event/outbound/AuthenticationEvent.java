@@ -1,43 +1,20 @@
 package com.foodgrid.common.event.outbound;
 
-import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AuthenticationEvent {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class AuthenticationEvent implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Boolean isUpdated;
-
     private List<UserAuthEventDTO> users;
-
-    public AuthenticationEvent() {
-    }
-
-    public AuthenticationEvent(Boolean isUpdated, List<UserAuthEventDTO> users) {
-        this.isUpdated = isUpdated;
-        this.users = users;
-    }
-
-    public Boolean getUpdated() {
-        return isUpdated;
-    }
-
-    public void setUpdated(Boolean updated) {
-        isUpdated = updated;
-    }
-
-    public List<UserAuthEventDTO> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserAuthEventDTO> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthenticationEvent{" +
-                "isUpdated=" + isUpdated +
-                ", users=" + users +
-                '}';
-    }
 }

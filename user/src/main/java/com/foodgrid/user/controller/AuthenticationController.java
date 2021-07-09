@@ -1,7 +1,7 @@
 package com.foodgrid.user.controller;
 
-import com.foodgrid.common.security.payload.dto.request.LogIn;
-import com.foodgrid.common.security.payload.dto.request.SignUp;
+import com.foodgrid.common.payload.dto.request.LogIn;
+import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

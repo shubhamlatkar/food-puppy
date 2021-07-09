@@ -1,9 +1,15 @@
 package com.foodgrid.notification.command.model.aggregate;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RestaurantNotification {
 
     @Id
@@ -14,41 +20,5 @@ public class RestaurantNotification {
     public RestaurantNotification(String message, String hostId) {
         this.message = message;
         this.hostId = hostId;
-    }
-
-    public RestaurantNotification() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getHostId() {
-        return hostId;
-    }
-
-    public void setHostId(String hostId) {
-        this.hostId = hostId;
-    }
-
-    @Override
-    public String toString() {
-        return "UserNotification{" +
-                "id='" + id + '\'' +
-                ", message='" + message + '\'' +
-                ", hostId='" + hostId + '\'' +
-                '}';
     }
 }

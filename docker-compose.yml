@@ -9,27 +9,16 @@ services:
     networks:
       - foodgrid
 
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
+  activemq:
+    image: webcenter/activemq
+    container_name: activemq
+    ports:
+      - 8161:8161
     environment:
-      - KAFKA_ADVERTISED_HOST_NAME=zookeeper
-    networks:
-      - foodgrid
-
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LOG_RETENTION_MS: 10000
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      KAFKA_CREATE_TOPICS: "authentication:1:1"
-    depends_on:
-      - zookeeper
-    networks:
-      - foodgrid
+      ACTIVEMQ_STATIC_QUEUES: authentication
+      ACTIVEMQ_ENABLED_SCHEDULER: "true"
+      ACTIVEMQ_MIN_MEMORY: 512
+      ACTIVEMQ_MAX_MEMORY: 2048
 
   configuration:
     build:

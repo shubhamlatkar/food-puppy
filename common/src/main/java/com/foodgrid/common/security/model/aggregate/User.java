@@ -73,8 +73,10 @@ public class User {
 
     public User setActiveTokens(List<TokenData> activeTokens) {
         this.activeTokens = activeTokens;
-        if (activeTokens.isEmpty())
+        if (activeTokens.isEmpty()) {
             metadata.setLastActivity(LOGOUT);
+            metadata.setLastUpdatedAt(new Date());
+        }
         return this;
     }
 
@@ -163,6 +165,7 @@ public class User {
                     .findAny()
                     .ifPresent(tokenData -> activeTokens.remove(tokenData));
             metadata.setLastActivity(LOGOUT);
+            metadata.setLastUpdatedAt(new Date());
         }
         return this;
     }

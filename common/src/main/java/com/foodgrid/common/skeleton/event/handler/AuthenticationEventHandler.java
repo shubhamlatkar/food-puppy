@@ -1,21 +1,21 @@
 package com.foodgrid.common.skeleton.event.handler;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.security.model.aggregate.User;
+import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 
 public interface AuthenticationEventHandler {
 
     void authConsumer(AuthenticationEvent event);
 
-    void patch(User user);
+    void patch(UserAuthEventDTO user);
 
-    void delete(User user);
+    void delete(UserAuthEventDTO user);
 
-    void logout(String jwt, User user);
+    void logout(UserAuthEventDTO user);
 
-    void login(String jwt, User user);
+    void login(UserAuthEventDTO user);
 
-    void logoutAll(User user);
+    void logoutAll(UserAuthEventDTO user);
 
-    void signup(User user);
+    void signup(UserAuthEventDTO user);
 }

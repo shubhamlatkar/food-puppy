@@ -1,25 +1,27 @@
 package com.foodgrid.notification.command.event.service;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.security.model.aggregate.User;
-import com.foodgrid.common.security.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.skeleton.event.handler.AuthenticationEventHandler;
 import com.foodgrid.notification.command.model.aggregate.DeliveryNotification;
+import com.foodgrid.notification.command.model.aggregate.MetaData;
 import com.foodgrid.notification.command.model.aggregate.RestaurantNotification;
 import com.foodgrid.notification.command.model.aggregate.UserNotification;
 import com.foodgrid.notification.command.repository.DeliveryNotificationRepository;
+import com.foodgrid.notification.command.repository.MetaDataRepository;
 import com.foodgrid.notification.command.repository.RestaurantNotificationRepository;
 import com.foodgrid.notification.command.repository.UserNotificationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
+@Slf4j
+@DependsOn("initData")
 public class CustomAuthenticationEventHandlerImplementation implements AuthenticationEventHandler {
-
-
-    private final Logger logger = LoggerFactory.getLogger(CustomAuthenticationEventHandlerImplementation.class);
 
     @Autowired
     private RestaurantNotificationRepository restaurantNotificationRepository;
@@ -30,29 +32,36 @@ public class CustomAuthenticationEventHandlerImplementation implements Authentic
     @Autowired
     private UserNotificationRepository userNotificationRepository;
 
+    @Autowired
+    private MetaDataRepository metaDataRepository;
+
+    @Autowired
+    private ReactiveMongoTemplate reactiveMongoTemplate;
+
     @Override
+    @JmsListener(destination = "authentication")
     public void authConsumer(AuthenticationEvent event) {
-        if (Boolean.TRUE.equals(event.getUpdated())) {
+        if (Boolean.TRUE.equals(event.getIsUpdated()) && event.getUsers() != null) {
             for (UserAuthEventDTO userAuthEventDTO : event.getUsers()) {
                 switch (userAuthEventDTO.getActivity()) {
                     case LOGIN:
-                        login(userAuthEventDTO.getToken(), userAuthEventDTO.getUser());
+                        login(userAuthEventDTO);
                         break;
                     case SIGNUP:
-                        signup(userAuthEventDTO.getUser());
+                        signup(userAuthEventDTO);
                         break;
                     case LOGOUT:
-                        logout(userAuthEventDTO.getToken(), userAuthEventDTO.getUser());
+                        logout(userAuthEventDTO);
                         break;
                     case LOGOUT_ALL:
-                        logoutAll(userAuthEventDTO.getUser());
+                        logoutAll(userAuthEventDTO);
                         break;
                     case DELETE:
-                        delete(userAuthEventDTO.getUser());
+                        delete(userAuthEventDTO);
                         break;
                     case PATCH:
                     case CHANGE_PASSWORD:
-                        patch(userAuthEventDTO.getUser());
+                        patch(userAuthEventDTO);
                         break;
                     default:
                         break;
@@ -62,48 +71,61 @@ public class CustomAuthenticationEventHandlerImplementation implements Authentic
     }
 
     @Override
-    public void patch(User user) {
+    public void patch(UserAuthEventDTO user) {
         saveData(user);
     }
 
     @Override
-    public void delete(User user) {
-        logger.info("In delete method");
+    public void delete(UserAuthEventDTO user) {
+        log.info("In delete method");
     }
 
     @Override
-    public void logout(String jwt, User user) {
+    public void logout(UserAuthEventDTO user) {
         saveData(user);
     }
 
     @Override
-    public void login(String jwt, User user) {
+    public void login(UserAuthEventDTO user) {
         saveData(user);
     }
 
     @Override
-    public void logoutAll(User user) {
+    public void logoutAll(UserAuthEventDTO user) {
         saveData(user);
     }
 
     @Override
-    public void signup(User user) {
+    public void signup(UserAuthEventDTO user) {
         saveData(user);
     }
 
-    private void saveData(User user) {
-        switch (user.getType()) {
-            case USER:
-                userNotificationRepository.save(new UserNotification(user.getType().name(), user.getId())).subscribe(result -> logger.info("User Entity has been saved: {}", result));
-                break;
-            case RESTAURANT:
-                restaurantNotificationRepository.save(new RestaurantNotification(user.getType().name(), user.getId())).subscribe(result -> logger.info("Restaurant Entity has been saved: {}", result));
-                break;
-            case DELIVERY:
-                deliveryNotificationRepository.save(new DeliveryNotification(user.getType().name(), user.getId())).subscribe(result -> logger.info("Delivery Entity has been saved: {}", result));
-                break;
-            default:
-                break;
+    private boolean collectionExists() {
+        var userCollectionExists = reactiveMongoTemplate.collectionExists(UserNotification.class).block();
+        var restaurantCollectionExists = reactiveMongoTemplate.collectionExists(RestaurantNotification.class).block();
+        var deliveryCollectionExists = reactiveMongoTemplate.collectionExists(DeliveryNotification.class).block();
+        return userCollectionExists != null && userCollectionExists
+                && restaurantCollectionExists != null && restaurantCollectionExists
+                && deliveryCollectionExists != null && deliveryCollectionExists;
+    }
+
+    private void saveData(UserAuthEventDTO user) {
+        var metaData = metaDataRepository.findById(user.getUserId()).orElse(null);
+        if (collectionExists() && (metaData == null || metaData.getLastActivity() != user.getActivity())) {
+            switch (user.getUserType()) {
+                case USER:
+                    userNotificationRepository.save(new UserNotification(user.getActivity().name(), user.getUserId())).subscribe(result -> log.info("User Entity has been saved: {}", result));
+                    break;
+                case RESTAURANT:
+                    restaurantNotificationRepository.save(new RestaurantNotification(user.getActivity().name(), user.getUserId())).subscribe(result -> log.info("Restaurant Entity has been saved: {}", result));
+                    break;
+                case DELIVERY:
+                    deliveryNotificationRepository.save(new DeliveryNotification(user.getActivity().name(), user.getUserId())).subscribe(result -> log.info("Delivery Entity has been saved: {}", result));
+                    break;
+                default:
+                    break;
+            }
+            metaDataRepository.save(new MetaData(user.getUserId(), user.getActivity()));
         }
     }
 }
