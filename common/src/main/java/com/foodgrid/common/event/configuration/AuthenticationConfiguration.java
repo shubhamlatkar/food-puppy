@@ -15,7 +15,7 @@ public class AuthenticationConfiguration {
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(
             ConnectionFactory connectionFactory) {
 
-        var factory
+        DefaultJmsListenerContainerFactory factory
                 = new DefaultJmsListenerContainerFactory();
 
         factory.setConnectionFactory(connectionFactory);

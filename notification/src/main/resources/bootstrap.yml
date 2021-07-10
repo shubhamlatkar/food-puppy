@@ -6,14 +6,15 @@ spring:
     active: ${PROFILE}
   application:
     name: notification
-  data:
-    mongodb:
-      uri: mongodb://2.tcp.ngrok.io:17507/foodrid-notification
-      repositories:
-        enabled: true
-  activemq:
-    broker-url: tcp://0.tcp.ngrok.io:13394
-    user: admin
-    password: admin
-    packages:
-      trust-all: true
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  cloud:
+    config:
+      uri: http://configuration:8888
