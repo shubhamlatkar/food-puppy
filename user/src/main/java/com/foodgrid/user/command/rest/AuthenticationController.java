@@ -24,7 +24,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PutMapping("/{endpoint.authentication.signup}")
+    @PutMapping("/${endpoint.authentication.signup}")
     public ResponseEntity<String> signupUser(@Valid @RequestBody UserSignUp signupRequest, BindingResult result) {
         try {
             return authenticationService.signup(
@@ -41,22 +41,22 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/{endpoint.authentication.autoLogin}")
+    @GetMapping("/${endpoint.authentication.autoLogin}")
     public ResponseEntity<Object> tryAutoLogin() {
         return ResponseEntity.ok().body("Authenticated");
     }
 
-    @GetMapping("/{endpoint.authentication.logout}")
+    @GetMapping("/${endpoint.authentication.logout}")
     public ResponseEntity<String> logout() {
         return authenticationService.logOut();
     }
 
-    @GetMapping("/{endpoint.authentication.logoutAll}")
+    @GetMapping("/${endpoint.authentication.logoutAll}")
     public ResponseEntity<String> logoutAll() {
         return authenticationService.logoutAll();
     }
 
-    @PostMapping("/{endpoint.authentication.login}")
+    @PostMapping("/${endpoint.authentication.login}")
     public ResponseEntity<Object> getJwtToken(@RequestBody LogIn request) {
         try {
             return authenticationService.login(request);

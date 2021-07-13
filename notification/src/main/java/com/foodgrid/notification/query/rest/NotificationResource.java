@@ -12,7 +12,7 @@ import reactor.core.scheduler.Schedulers;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/notification")
 public class NotificationResource {
 
     @Autowired

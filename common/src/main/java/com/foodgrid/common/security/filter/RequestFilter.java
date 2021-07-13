@@ -11,6 +11,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -35,6 +36,11 @@ public class RequestFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImplementation userDetailsService;
     private final UserRepository userRepository;
 
+    @Value("${endpoint.authentication.logout}")
+    private String logout;
+
+    @Value("${endpoint.authentication.logoutAll}")
+    private String logoutAll;
 
     @Autowired
     public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository) {
@@ -80,9 +86,10 @@ public class RequestFilter extends OncePerRequestFilter {
                     .collect(Collectors.toList());
             if (!activeTokens.contains(finalJwt))
                 httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized...");
-            if (httpServletRequest.getRequestURL().toString().contains("/{endpoint.authentication.logout}"))
+            if (httpServletRequest.getRequestURL().toString().contains(logout)) {
                 userRepository.save(user.removeToken(finalJwt));
-            if (httpServletRequest.getRequestURL().toString().contains("/{endpoint.authentication.logoutAll}"))
+            }
+            if (httpServletRequest.getRequestURL().toString().contains(logoutAll))
                 userRepository.save(user.setActiveTokens(new ArrayList<>()));
 
         }

@@ -18,7 +18,7 @@ const Dashboard = (props) => {
         setUser({ ...res.data });
         let source = null;
         source = new EventSource(
-          "/api/v1/notification/events/user/" + res.data.id
+          "/api/v1/notification/notification/user/" + res.data.id
         );
         source.addEventListener("notification", function (event) {
           var data = event.data;
