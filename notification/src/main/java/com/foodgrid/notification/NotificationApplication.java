@@ -65,10 +65,10 @@ public class NotificationApplication {
                         .then(reactiveMongoTemplate.dropCollection(DeliveryNotification.class))
                         .then(reactiveMongoTemplate.createCollection(DeliveryNotification.class, CollectionOptions.empty().capped().size(10485)))
                         .block();
-
-            userNotificationRepository.save(new UserNotification(UserActivities.SIGNUP.name(), "60e5dc6a58f5eb36303eb999")).block();
-            restaurantNotificationRepository.save(new RestaurantNotification(UserActivities.SIGNUP.name(), "1")).block();
-            deliveryNotificationRepository.save(new DeliveryNotification(UserActivities.SIGNUP.name(), "1")).block();
+            var id = "60e5dc6a58f5eb36303eb999";
+            userNotificationRepository.save(new UserNotification(UserActivities.SIGNUP.name(), id)).block();
+            restaurantNotificationRepository.save(new RestaurantNotification(UserActivities.SIGNUP.name(), id)).block();
+            deliveryNotificationRepository.save(new DeliveryNotification(UserActivities.SIGNUP.name(), id)).block();
 
             userDetailsService.initDatabase(mongoTemplate);
         };

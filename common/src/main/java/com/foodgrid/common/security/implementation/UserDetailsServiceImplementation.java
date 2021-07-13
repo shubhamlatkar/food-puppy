@@ -103,6 +103,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     public void initDatabase(MongoTemplate mongoTemplate) {
         ResponseEntity<String> response
                 = restTemplate.getForEntity(configUri + "/api/v1/secret/", String.class);
+//                = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
         jwtTokenUtility.setSecret(response.getBody());
 
         mongoTemplate.dropCollection(Authority.class);

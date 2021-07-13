@@ -9,6 +9,7 @@ import com.foodgrid.common.security.utility.JwtTokenUtility;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,7 +44,7 @@ public class RequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse, @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = httpServletRequest.getHeader("Authorization");
 
@@ -79,9 +80,9 @@ public class RequestFilter extends OncePerRequestFilter {
                     .collect(Collectors.toList());
             if (!activeTokens.contains(finalJwt))
                 httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized...");
-            if (httpServletRequest.getRequestURL().toString().contains("/logmeout"))
+            if (httpServletRequest.getRequestURL().toString().contains("/{endpoint.authentication.logout}"))
                 userRepository.save(user.removeToken(finalJwt));
-            if (httpServletRequest.getRequestURL().toString().contains("/logoutall"))
+            if (httpServletRequest.getRequestURL().toString().contains("/{endpoint.authentication.logoutAll}"))
                 userRepository.save(user.setActiveTokens(new ArrayList<>()));
 
         }

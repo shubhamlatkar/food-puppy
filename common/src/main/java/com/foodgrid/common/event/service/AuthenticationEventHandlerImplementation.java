@@ -90,7 +90,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
         if (Boolean.FALSE.equals(userRepository.existsByUsername(user.getUsername()))) {
             Set<String> roles = new HashSet<>();
             roles.add(user.getRole());
-            userDetailsServiceImplementation.saveUser(new SignUp(user.getUsername(), null, roles, user.getPassword(), null));
+            userDetailsServiceImplementation.saveUser(new SignUp(user.getUsername(), null, roles, user.getPassword(), null, user.getUserType()));
         }
     }
 }
