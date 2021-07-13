@@ -29,9 +29,6 @@ COPY eureka/pom.xml eureka/pom.xml
 COPY user/src user/src
 COPY user/pom.xml user/pom.xml
 
-COPY --from=frontend /frontend/build user/src/main/resources/static
-RUN rm -r user/src/main/foodgrid
-
 COPY restaurant/src restaurant/src
 COPY restaurant/pom.xml restaurant/pom.xml
 
@@ -55,6 +52,9 @@ COPY delivery/pom.xml delivery/pom.xml
 
 COPY frontend/src frontend/src
 COPY frontend/pom.xml frontend/pom.xml
+
+COPY --from=frontend /frontend/build frontend/src/main/resources/static
+RUN rm -r frontend/src/main/foodgrid
 
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
