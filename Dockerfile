@@ -1,3 +1,14 @@
+#### Stage 1: Build the react application
+FROM node as frontend
+
+WORKDIR /frontend
+
+COPY frontend/src/main/foodgrid .
+
+RUN npm i
+
+RUN npm run build
+
 #### Stage 1: Build the application
 FROM openjdk:16-jdk-alpine as build
 
@@ -17,6 +28,9 @@ COPY eureka/pom.xml eureka/pom.xml
 
 COPY user/src user/src
 COPY user/pom.xml user/pom.xml
+
+COPY --from=frontend /frontend/build user/src/main/resources/static
+RUN rm -r user/src/main/foodgrid
 
 COPY restaurant/src restaurant/src
 COPY restaurant/pom.xml restaurant/pom.xml
