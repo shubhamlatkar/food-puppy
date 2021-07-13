@@ -1,9 +1,9 @@
-package com.foodgrid.user.config;
+package com.foodgrid.user.configuration;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;

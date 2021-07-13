@@ -1,4 +1,4 @@
-package com.foodgrid.user.controller;
+package com.foodgrid.user.command.rest;
 
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
@@ -24,7 +24,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signup")
+    @PutMapping("/{endpoint.authentication.signup}")
     public ResponseEntity<String> signupUser(@Valid @RequestBody UserSignUp signupRequest, BindingResult result) {
         try {
             return authenticationService.signup(
@@ -41,22 +41,22 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/tryAutoLogin")
+    @GetMapping("/{endpoint.authentication.autoLogin}")
     public ResponseEntity<Object> tryAutoLogin() {
         return ResponseEntity.ok().body("Authenticated");
     }
 
-    @GetMapping("/logmeout")
+    @GetMapping("/{endpoint.authentication.logout}")
     public ResponseEntity<String> logout() {
         return authenticationService.logOut();
     }
 
-    @GetMapping("/logoutall")
+    @GetMapping("/{endpoint.authentication.logoutAll}")
     public ResponseEntity<String> logoutAll() {
         return authenticationService.logoutAll();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/{endpoint.authentication.login}")
     public ResponseEntity<Object> getJwtToken(@RequestBody LogIn request) {
         try {
             return authenticationService.login(request);
