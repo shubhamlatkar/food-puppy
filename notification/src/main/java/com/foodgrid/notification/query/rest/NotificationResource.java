@@ -26,36 +26,42 @@ public class NotificationResource {
 
     private static final String TYPE = "notification";
 
-    @GetMapping(value = "/user/{hostId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> getUserNotifications(@PathVariable String hostId) {
-        return userNotificationRepository.findByHostId(hostId)
-                .map(notification -> ServerSentEvent.<String>builder()
-                        .id(notification.getId())
-                        .event(TYPE)
-                        .data(notification.getMessage())
-                        .build())
-                .subscribeOn(Schedulers.boundedElastic());
-    }
+    @GetMapping(value = "/{type}/{hostId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> getUserNotifications(@PathVariable String type, @PathVariable String hostId) {
+        switch (type) {
+            case "user":
+                return userNotificationRepository.findByHostId(hostId)
+                        .map(notification -> ServerSentEvent.<String>builder()
+                                .id(notification.getId())
+                                .event(TYPE)
+                                .data(notification.getMessage())
+                                .build())
+                        .subscribeOn(Schedulers.boundedElastic());
+            case "restaurant":
+                return restaurantNotificationRepository.findByHostId(hostId)
+                        .map(notification -> ServerSentEvent.<String>builder()
+                                .id(notification.getId())
+                                .event(TYPE)
+                                .data(notification.getMessage())
+                                .build())
+                        .subscribeOn(Schedulers.boundedElastic());
+            case "delivery":
+                return deliveryNotificationRepository.findByHostId(hostId)
+                        .map(notification -> ServerSentEvent.<String>builder()
+                                .id(notification.getId())
+                                .event(TYPE)
+                                .data(notification.getMessage())
+                                .build())
+                        .subscribeOn(Schedulers.boundedElastic());
+            default:
+                return userNotificationRepository.findByHostId(hostId)
+                        .map(notification -> ServerSentEvent.<String>builder()
+                                .id(notification.getId())
+                                .event(TYPE)
+                                .data(notification.getMessage() + "Not found")
+                                .build())
+                        .subscribeOn(Schedulers.boundedElastic());
 
-    @GetMapping(value = "/restaurant/{hostId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> getRestaurantNotifications(@PathVariable String hostId) {
-        return restaurantNotificationRepository.findByHostId(hostId)
-                .map(notification -> ServerSentEvent.<String>builder()
-                        .id(notification.getId())
-                        .event(TYPE)
-                        .data(notification.getMessage())
-                        .build())
-                .subscribeOn(Schedulers.boundedElastic());
-    }
-
-    @GetMapping(value = "/delivery/{hostId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> getDeliveryNotifications(@PathVariable String hostId) {
-        return deliveryNotificationRepository.findByHostId(hostId)
-                .map(notification -> ServerSentEvent.<String>builder()
-                        .id(notification.getId())
-                        .event(TYPE)
-                        .data(notification.getMessage())
-                        .build())
-                .subscribeOn(Schedulers.boundedElastic());
+        }
     }
 }
