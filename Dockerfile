@@ -1,5 +1,5 @@
 #### Stage 1: Build the react application
-FROM node as frontend
+FROM node as ui
 
 WORKDIR /frontend
 
@@ -53,7 +53,7 @@ COPY delivery/pom.xml delivery/pom.xml
 COPY frontend/src frontend/src
 COPY frontend/pom.xml frontend/pom.xml
 
-COPY --from=frontend /frontend/build frontend/src/main/resources/static
+COPY --from=ui /frontend/build frontend/src/main/resources/static
 RUN rm -r frontend/src/main/foodgrid
 
 COPY common/src common/src
