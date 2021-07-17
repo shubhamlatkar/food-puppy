@@ -11,7 +11,7 @@ const Dashboard = (props) => {
       headers: {
         "Content-Type": "application/json"
       },
-      data: JSON.stringify({ username: "test", password: "test" })
+      data: JSON.stringify({ username: "testUser", password: "test" })
     })
       .then((res) => {
         console.log("success", res.data);

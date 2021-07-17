@@ -17,7 +17,7 @@ public class AuthenticationEventHandler {
         this.authenticationEventHandlerImplementation = authenticationEventHandlerImplementation;
     }
 
-    @JmsListener(destination = "authentication")
+    @JmsListener(destination = "AUTHENTICATION")
     public void authConsumer(AuthenticationEvent event) {
         authenticationEventHandlerImplementation.authConsumer(event);
     }

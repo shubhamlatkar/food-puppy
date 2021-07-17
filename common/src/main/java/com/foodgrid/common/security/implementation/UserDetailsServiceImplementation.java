@@ -38,7 +38,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
 
     @Autowired
-    AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     private RoleRepository roleRepository;

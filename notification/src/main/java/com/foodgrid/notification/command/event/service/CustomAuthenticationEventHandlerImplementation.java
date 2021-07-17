@@ -37,7 +37,7 @@ public class CustomAuthenticationEventHandlerImplementation implements Authentic
     private ReactiveMongoTemplate reactiveMongoTemplate;
 
     @Override
-    @JmsListener(destination = "authentication")
+    @JmsListener(destination = "AUTHENTICATION")
     public void authConsumer(AuthenticationEvent event) {
         if (Boolean.TRUE.equals(event.getIsUpdated()) && event.getUsers() != null) {
             for (UserAuthEventDTO userAuthEventDTO : event.getUsers()) {

@@ -19,7 +19,7 @@ public class AuthenticationConfiguration {
                 = new DefaultJmsListenerContainerFactory();
 
         factory.setConnectionFactory(connectionFactory);
-        factory.setConcurrency("5-10");
+        factory.setPubSubDomain(true);
 
         return factory;
     }

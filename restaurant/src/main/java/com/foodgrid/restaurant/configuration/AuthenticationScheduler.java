@@ -40,7 +40,7 @@ public class AuthenticationScheduler {
 
         if (!userList.isEmpty()) {
             log.info("New activity: {}", userList);
-            this.jmsMessagingTemplate.convertAndSend("authentication", new AuthenticationEvent(true, userList));
+            this.jmsMessagingTemplate.convertAndSend("AUTHENTICATION", new AuthenticationEvent(true, userList));
         }
     }
 }
