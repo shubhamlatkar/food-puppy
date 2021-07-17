@@ -1,4 +1,4 @@
-package com.foodgrid.user.command.payload.dto;
+package com.foodgrid.delivery.command.payload.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserSignUp {
+@NoArgsConstructor
+public class DeliverySignUp {
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;

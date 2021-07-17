@@ -1,10 +1,10 @@
-package com.foodgrid.restaurant.command.rest;
+package com.foodgrid.delivery.command.rest;
 
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.service.AuthenticationService;
 import com.foodgrid.common.utility.UserTypes;
-import com.foodgrid.restaurant.command.payload.dto.RestaurantSignUp;
+import com.foodgrid.delivery.command.payload.dto.DeliverySignUp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,9 @@ public class AuthenticationController {
     }
 
     @PutMapping("/${endpoint.authentication.signup}")
-    public ResponseEntity<String> signupUser(@Valid @RequestBody RestaurantSignUp signupRequest, BindingResult result) {
+    public ResponseEntity<String> signupUser(@Valid @RequestBody DeliverySignUp signupRequest, BindingResult result) {
         Set<String> roles = new HashSet<>();
-        roles.add("ROLE_RESTAURANT");
+        roles.add("ROLE_DELIVERY");
         try {
             return authenticationService.signup(
                     new SignUp(
@@ -38,7 +38,7 @@ public class AuthenticationController {
                             roles,
                             signupRequest.getPassword(),
                             signupRequest.getPhone(),
-                            UserTypes.RESTAURANT
+                            UserTypes.DELIVERY
                     ), result);
         } catch (Exception e) {
             return new ResponseEntity<>("Some exception caught", HttpStatus.INTERNAL_SERVER_ERROR);

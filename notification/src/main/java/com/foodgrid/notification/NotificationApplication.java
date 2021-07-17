@@ -1,7 +1,7 @@
 package com.foodgrid.notification;
 
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
-import com.foodgrid.common.security.utility.UserActivities;
+import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.notification.command.model.aggregate.DeliveryNotification;
 import com.foodgrid.notification.command.model.aggregate.MetaData;
 import com.foodgrid.notification.command.model.aggregate.RestaurantNotification;

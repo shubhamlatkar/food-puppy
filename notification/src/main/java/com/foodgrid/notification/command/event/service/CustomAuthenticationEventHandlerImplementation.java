@@ -13,14 +13,12 @@ import com.foodgrid.notification.command.repository.RestaurantNotificationReposi
 import com.foodgrid.notification.command.repository.UserNotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@DependsOn("initData")
 public class CustomAuthenticationEventHandlerImplementation implements AuthenticationEventHandler {
 
     @Autowired

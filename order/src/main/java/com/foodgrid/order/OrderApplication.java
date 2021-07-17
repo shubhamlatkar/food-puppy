@@ -12,12 +12,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan("com.foodgrid")
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
+@RestController
+@CrossOrigin("*")
 public class OrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderApplication.class, args);
@@ -26,9 +33,14 @@ public class OrderApplication {
     @Autowired
     private UserDetailsServiceImplementation userDetailsService;
 
-    @Bean
+    @Bean("initData")
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
         return user -> userDetailsService.initDatabase(mongoTemplate);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> getDefault() {
+        return new ResponseEntity<>("Order Service ", HttpStatus.OK);
     }
 }
 

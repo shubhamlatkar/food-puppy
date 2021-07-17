@@ -1,6 +1,6 @@
 package com.foodgrid.notification.command.model.aggregate;
 
-import com.foodgrid.common.security.utility.UserActivities;
+import com.foodgrid.common.utility.UserActivities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.foodgrid.common.payload.dto.event;
 
-import com.foodgrid.common.security.utility.UserActivities;
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserActivities;
+import com.foodgrid.common.utility.UserTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +20,6 @@ public class UserAuthEventDTO implements Serializable {
     private UserActivities activity;
     private String token;
     private String role;
+    private String phone;
+    private String email;
 }

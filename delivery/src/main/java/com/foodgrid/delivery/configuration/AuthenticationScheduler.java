@@ -1,4 +1,4 @@
-package com.foodgrid.restaurant.configuration;
+package com.foodgrid.delivery.configuration;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
@@ -35,7 +35,7 @@ public class AuthenticationScheduler {
         List<UserAuthEventDTO> userList = new ArrayList<>();
         users.forEach(user -> {
             if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime())
-                userList.add(new UserToUserAuthEvent(user, UserTypes.RESTAURANT).getUser());
+                userList.add(new UserToUserAuthEvent(user, UserTypes.DELIVERY).getUser());
         });
 
         if (!userList.isEmpty()) {

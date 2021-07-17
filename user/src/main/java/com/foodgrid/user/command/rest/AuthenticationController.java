@@ -3,7 +3,7 @@ package com.foodgrid.user.command.rest;
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.service.AuthenticationService;
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserTypes;
 import com.foodgrid.user.command.payload.dto.UserSignUp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -26,12 +28,14 @@ public class AuthenticationController {
 
     @PutMapping("/${endpoint.authentication.signup}")
     public ResponseEntity<String> signupUser(@Valid @RequestBody UserSignUp signupRequest, BindingResult result) {
+        Set<String> roles = new HashSet<>();
+        roles.add("ROLE_USER");
         try {
             return authenticationService.signup(
                     new SignUp(
                             signupRequest.getUsername(),
                             signupRequest.getEmail(),
-                            signupRequest.getRoles(),
+                            roles,
                             signupRequest.getPassword(),
                             signupRequest.getPhone(),
                             UserTypes.USER

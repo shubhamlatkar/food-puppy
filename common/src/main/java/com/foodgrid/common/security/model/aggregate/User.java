@@ -2,7 +2,7 @@ package com.foodgrid.common.security.model.aggregate;
 
 import com.foodgrid.common.security.model.entity.TokenData;
 import com.foodgrid.common.security.model.entity.UserMetadata;
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserTypes;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.foodgrid.common.security.utility.UserActivities.*;
+import static com.foodgrid.common.utility.UserActivities.*;
 
 @Document
 public class User {
@@ -74,7 +74,7 @@ public class User {
     public User setActiveTokens(List<TokenData> activeTokens) {
         this.activeTokens = activeTokens;
         if (activeTokens.isEmpty()) {
-            metadata.setLastActivity(LOGOUT);
+            metadata.setLastActivity(LOGOUT_ALL);
             metadata.setLastUpdatedAt(new Date());
         }
         return this;
@@ -159,13 +159,10 @@ public class User {
 
     public User removeToken(String token) {
         if (activeTokens != null) {
-            activeTokens
-                    .stream()
-                    .filter(tokenData -> tokenData.getToken().equals(token))
-                    .findAny()
-                    .ifPresent(tokenData -> activeTokens.remove(tokenData));
-            metadata.setLastActivity(LOGOUT);
-            metadata.setLastUpdatedAt(new Date());
+            this.activeTokens.removeIf(tokenData -> tokenData.getToken().equals(token));
+            this.metadata.setLastDeletedToken(token);
+            this.metadata.setLastActivity(LOGOUT);
+            this.metadata.setLastUpdatedAt(new Date());
         }
         return this;
     }

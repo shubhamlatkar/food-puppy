@@ -4,7 +4,7 @@ import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -51,7 +51,7 @@ public class RestaurantApplication {
             userDetailsService.initDatabase(mongoTemplate);
             Set<String> roles = new HashSet<>();
             roles.add("ROLE_RESTAURANT");
-            userDetailsService.saveUser(new SignUp("test", "test@test.com", roles, "test", "1234567890", UserTypes.RESTAURANT));
+            userDetailsService.saveUser(new SignUp("testRestaurant", "testRestaurant@test.com", roles, "test", "12345678901", UserTypes.RESTAURANT));
         };
     }
 

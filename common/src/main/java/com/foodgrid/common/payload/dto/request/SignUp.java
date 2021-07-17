@@ -1,6 +1,7 @@
 package com.foodgrid.common.payload.dto.request;
 
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserTypes;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class SignUp {
     @NotBlank
     @Size(min = 3, max = 20)
@@ -33,12 +35,4 @@ public class SignUp {
 
     private UserTypes type;
 
-    public SignUp(String username, String email, Set<String> roles, String password, String phone, UserTypes type) {
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
-        this.password = password;
-        this.phone = phone;
-        this.type = type;
-    }
 }

@@ -10,7 +10,7 @@ import com.foodgrid.common.security.repository.AuthorityRepository;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
-import com.foodgrid.common.security.utility.UserTypes;
+import com.foodgrid.common.utility.UserTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.foodgrid.common.security.utility.Authorities.*;
-import static com.foodgrid.common.security.utility.Roles.*;
+import static com.foodgrid.common.utility.Authorities.*;
+import static com.foodgrid.common.utility.Roles.*;
 
 
 @Service
@@ -62,7 +62,6 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(Collectors.toSet());
@@ -86,6 +85,9 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                 .map(role -> roleRepository.findByName(role.substring(5)).orElse(null))
                 .collect(Collectors.toList());
 
+        if (roles.contains(null))
+            return false;
+
         userRepository.save(
                 new User(
                         signUp.getUsername(),
@@ -103,7 +105,6 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     public void initDatabase(MongoTemplate mongoTemplate) {
         ResponseEntity<String> response
                 = restTemplate.getForEntity(configUri + "/api/v1/secret/", String.class);
-//                = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
         jwtTokenUtility.setSecret(response.getBody());
 
         mongoTemplate.dropCollection(Authority.class);
@@ -128,7 +129,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         authorityRepository.findByName(RESTAURANT_READ.getValue()).orElse(null),
                         authorityRepository.findByName(RESTAURANT_WRITE.getValue()).orElse(null)
                 ))),
-                new Role(SERVICE.name(), new ArrayList<>(Arrays.asList(
+                new Role(DELIVERY.name(), new ArrayList<>(Arrays.asList(
                         authorityRepository.findByName(SERVICE_READ.getValue()).orElse(null),
                         authorityRepository.findByName(SERVICE_WRITE.getValue()).orElse(null)
                 ))),
