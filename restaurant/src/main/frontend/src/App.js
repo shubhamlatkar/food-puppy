@@ -13,13 +13,13 @@ function App() {
   return (
     <div className="App App-header">
       <Router>
-        <NavLink to="/member/dashboard">Dashboard</NavLink>
-        <NavLink to="/member/banner">Banner</NavLink>
+        <NavLink to="/restaurant/member/dashboard">Dashboard</NavLink>
+        <NavLink to="/restaurant/member/banner">Banner</NavLink>
         <h1>Test frontend for foodgrid restaurant</h1>
         <Switch>
           <Route path="/" exact component={Dashboard} />
-          <Route path="/member/dashboard" component={Dashboard} />
-          <Route path="/member/banner" component={Banner} />
+          <Route path="/restaurant/member/dashboard" component={Dashboard} />
+          <Route path="/restaurant/member/banner" component={Banner} />
         </Switch>
       </Router>
     </div>

@@ -10,22 +10,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
-//@EnableEurekaClient
-@CrossOrigin("*")
-@Controller
+@EnableEurekaClient
 @ComponentScan("com.foodgrid")
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
@@ -51,11 +47,6 @@ public class UserApplication {
             roles.add("ROLE_USER");
             userDetailsService.saveUser(new SignUp("testUser", "testUser@test.com", roles, "test", "12345678902", UserTypes.USER));
         };
-    }
-
-    @RequestMapping("/user/member/**")
-    public String forward() {
-        return "forward:/";
     }
 
 }

@@ -22,7 +22,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-
 @SpringBootApplication
 @ComponentScan("com.foodgrid")
 @EnableMongoRepositories("com.foodgrid")

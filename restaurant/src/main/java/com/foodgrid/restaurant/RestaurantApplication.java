@@ -15,17 +15,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
 @EnableEurekaClient
-@CrossOrigin("*")
-@Controller
 @ComponentScan("com.foodgrid")
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
@@ -49,10 +44,5 @@ public class RestaurantApplication {
             roles.add("ROLE_RESTAURANT");
             userDetailsService.saveUser(new SignUp("testRestaurant", "testRestaurant@test.com", roles, "test", "12345678901", UserTypes.RESTAURANT));
         };
-    }
-
-    @RequestMapping("/restaurant/member/**")
-    public String forward() {
-        return "forward:/";
     }
 }
