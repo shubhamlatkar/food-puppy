@@ -156,21 +156,5 @@ services:
     networks:
       - foodgrid
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend
-    container_name: frontend
-    depends_on:
-      - eureka
-      - database
-      - gateway
-    environment:
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
-
 networks:
   foodgrid:

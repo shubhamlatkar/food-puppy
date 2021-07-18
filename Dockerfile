@@ -78,9 +78,6 @@ COPY delivery/pom.xml delivery/pom.xml
 COPY --from=ui /frontend/delivery/build delivery/src/main/resources/static
 RUN rm -r delivery/src/main/frontend
 
-COPY frontend/src frontend/src
-COPY frontend/pom.xml frontend/pom.xml
-
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
 
@@ -124,8 +121,6 @@ RUN mkdir -p accounts/target/dependency && (cd accounts/target/dependency; jar -
 RUN mkdir -p order/target/dependency && (cd order/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p delivery/target/dependency && (cd delivery/target/dependency; jar -xf ../*.jar)
-
-RUN mkdir -p frontend/target/dependency && (cd frontend/target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A  docker image with command to run the configuration
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
@@ -178,19 +173,6 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8086
 ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.accounts.AccountsApplication"] accounts
-
-#### Stage 2: A  docker image with command to run the frontend
-FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
-
-ARG DEPENDENCY=/app/frontend/target/dependency
-
-# Copy project dependencies from the build stage
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
-
-EXPOSE 8090
-ENTRYPOINT ["/bin/sh", "-c", "sleep 90 && java -cp app:app/lib/* com.foodgrid.frontend.FrontendApplication"] frontend
 
 #### Stage 2: A docker image with command to run the notification
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
