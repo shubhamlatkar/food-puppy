@@ -185,7 +185,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8083
-ENTRYPOINT ["/bin/sh","-c", "sleep 100 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
+ENTRYPOINT ["/bin/sh","-c", "sleep 90 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
 
 #### Stage 2: A  docker image with command to run the user
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as user
