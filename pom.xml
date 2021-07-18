@@ -31,8 +31,7 @@
         <module>notification</module>
         <module>order</module>
         <module>delivery</module>
-        <module>account</module>
-        <module>frontend</module>
+        <module>accounts</module>
     </modules>
 
     <dependencies>

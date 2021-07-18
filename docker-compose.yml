@@ -9,25 +9,16 @@ services:
     networks:
       - foodgrid
 
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
+  activemq:
+    image: webcenter/activemq
+    container_name: activemq
+    ports:
+      - 8161:8161
     environment:
-      - KAFKA_ADVERTISED_HOST_NAME=zookeeper
-    networks:
-      - foodgrid
-
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LOG_RETENTION_MS: 10000
-      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
-      KAFKA_CREATE_TOPICS: "authentication:1:1"
-    depends_on:
-      - zookeeper
+      ACTIVEMQ_CONFIG_TOPICS_AUTHENTICATION: AUTHENTICATION
+      ACTIVEMQ_ENABLED_SCHEDULER: "true"
+      ACTIVEMQ_MIN_MEMORY: 512
+      ACTIVEMQ_MAX_MEMORY: 2048
     networks:
       - foodgrid
 
@@ -85,7 +76,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-user
       PROFILE: docker
     restart: always
     networks:
@@ -101,7 +91,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-notification
       PROFILE: docker
     restart: always
     networks:
@@ -117,7 +106,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-restaurant
       PROFILE: docker
     restart: always
     networks:
@@ -133,7 +121,6 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-order
       PROFILE: docker
     restart: always
     networks:
@@ -149,38 +136,20 @@ services:
       - eureka
       - database
     environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-delivery
       PROFILE: docker
     restart: always
     networks:
       - foodgrid
 
-  account:
+  accounts:
     build:
       context: .
       dockerfile: Dockerfile
-      target: account
-    container_name: account
+      target: accounts
+    container_name: accounts
     depends_on:
       - eureka
       - database
-    environment:
-      MONGO_URI: mongodb://database:27017/foodgrid-account
-      PROFILE: docker
-    restart: always
-    networks:
-      - foodgrid
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend
-    container_name: frontend
-    depends_on:
-      - eureka
-      - database
-      - gateway
     environment:
       PROFILE: docker
     restart: always
