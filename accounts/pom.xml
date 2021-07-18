@@ -7,12 +7,12 @@
         <artifactId>foodgrid</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>account</artifactId>
+    <artifactId>accounts</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>account</name>
+    <name>accounts</name>
 
     <packaging>jar</packaging>
-    <description>FoodGrid: food delivery backend account service</description>
+    <description>FoodGrid: food delivery backend accounts service</description>
 
     <properties>
         <java.version>11</java.version>

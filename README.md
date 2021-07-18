@@ -76,6 +76,7 @@ fetch("http://localhost:8081/user/", {
 ```
 
 #### Test Notifications
+
 ```
 function loadNotifications () {
 
@@ -113,10 +114,6 @@ docker stop $(docker ps -a -q)
 2. Stop all container `docker stop $(docker ps -a -q)`.
 3. Delete all stopped containers `docker rm $(docker ps -a -q)`.
 4. Delete all stopped images `docker rmi $(docker images -q)`.
-
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-docker rmi $(docker images -q)
 
 #### Ref
 

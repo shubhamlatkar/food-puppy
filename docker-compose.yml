@@ -141,12 +141,12 @@ services:
     networks:
       - foodgrid
 
-  account:
+  accounts:
     build:
       context: .
       dockerfile: Dockerfile
-      target: account
-    container_name: account
+      target: accounts
+    container_name: accounts
     depends_on:
       - eureka
       - database

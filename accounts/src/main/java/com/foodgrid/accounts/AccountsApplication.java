@@ -1,4 +1,4 @@
-package com.foodgrid.account;
+package com.foodgrid.accounts;
 
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,16 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-@EnableEurekaClient
+//@EnableEurekaClient
 @CrossOrigin("*")
 @ComponentScan("com.foodgrid")
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
-@RequestMapping("/${endpoint.service}/${endpoint.version}/notification")
-public class AccountApplication {
+@RequestMapping("/${endpoint.service}/${endpoint.version}")
+public class AccountsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AccountApplication.class, args);
+        SpringApplication.run(AccountsApplication.class, args);
     }
 
     @Autowired

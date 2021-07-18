@@ -66,8 +66,8 @@ COPY configuration/pom.xml configuration/pom.xml
 COPY notification/src notification/src
 COPY notification/pom.xml notification/pom.xml
 
-COPY account/src account/src
-COPY account/pom.xml account/pom.xml
+COPY accounts/src accounts/src
+COPY accounts/pom.xml accounts/pom.xml
 
 COPY order/src order/src
 COPY order/pom.xml order/pom.xml
@@ -87,14 +87,14 @@ COPY common/pom.xml common/pom.xml
 COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common notification/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common account/src/main/java/com/foodgrid
+COPY common/src/main/java/com/foodgrid/common accounts/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common order/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common delivery/src/main/java/com/foodgrid
 
 RUN rm notification/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm account/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm accounts/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm order/src/main/java/com/foodgrid/CommonApplication.java
 RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
 
@@ -119,7 +119,7 @@ RUN mkdir -p gateway/target/dependency && (cd gateway/target/dependency; jar -xf
 
 RUN mkdir -p notification/target/dependency && (cd notification/target/dependency; jar -xf ../*.jar)
 
-RUN mkdir -p account/target/dependency && (cd account/target/dependency; jar -xf ../*.jar)
+RUN mkdir -p accounts/target/dependency && (cd accounts/target/dependency; jar -xf ../*.jar)
 
 RUN mkdir -p order/target/dependency && (cd order/target/dependency; jar -xf ../*.jar)
 
@@ -166,10 +166,10 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8084
 ENTRYPOINT ["/bin/sh","-c", "sleep 70 && java -cp app:app/lib/* com.foodgrid.order.OrderApplication"] order
 
-#### Stage 2: A docker image with command to run the account
-FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as account
+#### Stage 2: A docker image with command to run the accounts
+FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as accounts
 
-ARG DEPENDENCY=/app/account/target/dependency
+ARG DEPENDENCY=/app/accounts/target/dependency
 
 # Copy project dependencies from the build stage
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
@@ -177,7 +177,7 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8086
-ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.account.AccountApplication"] account
+ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.accounts.AccountsApplication"] accounts
 
 #### Stage 2: A  docker image with command to run the frontend
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as frontend
