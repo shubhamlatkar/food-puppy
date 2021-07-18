@@ -17,6 +17,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/${endpoint.service}/${endpoint.version}")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

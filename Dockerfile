@@ -3,11 +3,30 @@ FROM node as ui
 
 WORKDIR /frontend
 
-COPY frontend/src/main/foodgrid .
+COPY user/src/main/frontend user/
+
+COPY restaurant/src/main/frontend restaurant/
+
+COPY delivery/src/main/frontend delivery/
+
+WORKDIR /frontend/user
 
 RUN npm i
 
 RUN npm run build
+
+WORKDIR /frontend/restaurant
+
+RUN npm i
+
+RUN npm run build
+
+WORKDIR /frontend/delivery
+
+RUN npm i
+
+RUN npm run build
+
 
 #### Stage 1: Build the application
 FROM openjdk:16-jdk-alpine as build
@@ -29,8 +48,14 @@ COPY eureka/pom.xml eureka/pom.xml
 COPY user/src user/src
 COPY user/pom.xml user/pom.xml
 
+COPY --from=ui /frontend/user/build user/src/main/resources/static
+RUN rm -r user/src/main/frontend
+
 COPY restaurant/src restaurant/src
 COPY restaurant/pom.xml restaurant/pom.xml
+
+COPY --from=ui /frontend/restaurant/build restaurant/src/main/resources/static
+RUN rm -r restaurant/src/main/frontend
 
 COPY gateway/src gateway/src
 COPY gateway/pom.xml gateway/pom.xml
@@ -50,11 +75,11 @@ COPY order/pom.xml order/pom.xml
 COPY delivery/src delivery/src
 COPY delivery/pom.xml delivery/pom.xml
 
+COPY --from=ui /frontend/delivery/build delivery/src/main/resources/static
+RUN rm -r delivery/src/main/frontend
+
 COPY frontend/src frontend/src
 COPY frontend/pom.xml frontend/pom.xml
-
-COPY --from=ui /frontend/build frontend/src/main/resources/static
-RUN rm -r frontend/src/main/foodgrid
 
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
