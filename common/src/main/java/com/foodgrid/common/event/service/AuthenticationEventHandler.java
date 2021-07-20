@@ -1,4 +1,4 @@
-package com.foodgrid.common.skeleton.event.handler;
+package com.foodgrid.common.event.service;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
