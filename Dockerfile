@@ -36,50 +36,75 @@ WORKDIR /app
 
 # Copy maven executable to the image
 COPY mvnw .
+COPY gradlew .
+
 COPY .mvn .mvn
+COPY gradle gradle
 
 # Copy the pom.xml file
 COPY pom.xml .
+COPY build.gradle .
+COPY settings.gradle .
 
 # Copy the project source
 COPY eureka/src eureka/src
 COPY eureka/pom.xml eureka/pom.xml
+COPY eureka/build.gradle eureka/build.gradle
+COPY eureka/settings.gradle eureka/settings.gradle
 
 COPY user/src user/src
 COPY user/pom.xml user/pom.xml
+COPY user/build.gradle user/build.gradle
+COPY user/settings.gradle user/settings.gradle
 
 COPY --from=ui /frontend/user/build user/src/main/resources/static
 RUN rm -r user/src/main/frontend
 
 COPY restaurant/src restaurant/src
 COPY restaurant/pom.xml restaurant/pom.xml
+COPY restaurant/build.gradle restaurant/build.gradle
+COPY restaurant/settings.gradle restaurant/settings.gradle
 
 COPY --from=ui /frontend/restaurant/build restaurant/src/main/resources/static
 RUN rm -r restaurant/src/main/frontend
 
 COPY gateway/src gateway/src
 COPY gateway/pom.xml gateway/pom.xml
+COPY gateway/build.gradle gateway/build.gradle
+COPY gateway/settings.gradle gateway/settings.gradle
 
 COPY configuration/src configuration/src
 COPY configuration/pom.xml configuration/pom.xml
+COPY configuration/build.gradle configuration/build.gradle
+COPY configuration/settings.gradle configuration/settings.gradle
 
 COPY notification/src notification/src
 COPY notification/pom.xml notification/pom.xml
+COPY notification/build.gradle notification/build.gradle
+COPY notification/settings.gradle notification/settings.gradle
 
 COPY accounts/src accounts/src
 COPY accounts/pom.xml accounts/pom.xml
+COPY accounts/build.gradle accounts/build.gradle
+COPY accounts/settings.gradle accounts/settings.gradle
 
 COPY order/src order/src
 COPY order/pom.xml order/pom.xml
+COPY order/build.gradle order/build.gradle
+COPY order/settings.gradle order/settings.gradle
 
 COPY delivery/src delivery/src
 COPY delivery/pom.xml delivery/pom.xml
+COPY delivery/build.gradle delivery/build.gradle
+COPY delivery/settings.gradle delivery/settings.gradle
 
 COPY --from=ui /frontend/delivery/build delivery/src/main/resources/static
 RUN rm -r delivery/src/main/frontend
 
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
+COPY common/build.gradle common/build.gradle
+COPY common/settings.gradle common/settings.gradle
 
 COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
