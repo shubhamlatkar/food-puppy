@@ -123,7 +123,7 @@ RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
-RUN ./gradlew build
+RUN ./gradlew build --no-daemon
 
 RUN mkdir -p configuration/build/libs && (cd configuration/build/libs; jar -xf ../*.jar)
 
