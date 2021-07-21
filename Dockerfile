@@ -1,3 +1,4 @@
+MAINTAINER Shubham Latkar <shubhamlatkar@gmail.com>
 #### Stage 2: Build the frontend
 FROM node as ui
 
@@ -123,25 +124,25 @@ RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build --no-daemon -x test
 
-RUN mkdir -p configuration/build/libs && (cd configuration/build/libs; jar -xf ../*.jar)
+RUN mkdir -p configuration/build/libs && (cd configuration/build/libs; jar -xf configuration-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p eureka/build/libs && (cd eureka/build/libs; jar -xf ../*.jar)
+RUN mkdir -p eureka/build/libs && (cd eureka/build/libs; jar -xf eureka-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p user/build/libs && (cd user/build/libs; jar -xf ../*.jar)
+RUN mkdir -p user/build/libs && (cd user/build/libs; jar -xf user-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p restaurant/build/libs && (cd restaurant/build/libs; jar -xf ../*.jar)
+RUN mkdir -p restaurant/build/libs && (cd restaurant/build/libs; jar -xf restaurant-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p gateway/build/libs && (cd gateway/build/libs; jar -xf ../*.jar)
+RUN mkdir -p gateway/build/libs && (cd gateway/build/libs; jar -xf gateway-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p notification/build/libs && (cd notification/build/libs; jar -xf ../*.jar)
+RUN mkdir -p notification/build/libs && (cd notification/build/libs; jar -xf notification-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p accounts/build/libs && (cd accounts/build/libs; jar -xf ../*.jar)
+RUN mkdir -p accounts/build/libs && (cd accounts/build/libs; jar -xf accounts-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p order/build/libs && (cd order/build/libs; jar -xf ../*.jar)
+RUN mkdir -p order/build/libs && (cd order/build/libs; jar -xf order-0.0.1-SNAPSHOT.jar)
 
-RUN mkdir -p delivery/build/libs && (cd delivery/build/libs; jar -xf ../*.jar)
+RUN mkdir -p delivery/build/libs && (cd delivery/build/libs; jar -xf delivery-0.0.1-SNAPSHOT.jar)
 
 #### Stage 2: A  docker image with command to run the configuration
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
