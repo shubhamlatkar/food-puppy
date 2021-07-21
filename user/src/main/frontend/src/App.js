@@ -50,8 +50,8 @@ const App = () => {
         <Loader />
       ) : (
         <Router>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-          <NavLink to="/banner">Banner</NavLink>
+          <NavLink to="/user/member/dashboard">Dashboard</NavLink>
+          <NavLink to="/user/member/banner">Banner</NavLink>
           <h2>Test frontend for foodgrid user</h2>
           <Switch>
             <Route
@@ -62,12 +62,12 @@ const App = () => {
               )}
             />
             <Route
-              path="/dashboard"
+              path="/user/member/dashboard"
               component={() => (
                 <Dashboard user={user} notification={notification} />
               )}
             />
-            <Route path="/banner" component={Banner} />
+            <Route path="/user/member/banner" component={Banner} />
           </Switch>
         </Router>
       )}

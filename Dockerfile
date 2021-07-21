@@ -1,5 +1,5 @@
 #### Stage 2: Build the frontend
-FROM node as ui
+FROM node:10.24.1-alpine3.11 as ui
 
 WORKDIR /frontend
 
@@ -87,6 +87,13 @@ COPY common/src/main/java/com/foodgrid/common notification/src/main/java/com/foo
 COPY common/src/main/java/com/foodgrid/common accounts/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common order/src/main/java/com/foodgrid
 COPY common/src/main/java/com/foodgrid/common delivery/src/main/java/com/foodgrid
+
+RUN rm notification/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm accounts/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm order/src/main/java/com/foodgrid/CommonApplication.java
+RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
 
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
