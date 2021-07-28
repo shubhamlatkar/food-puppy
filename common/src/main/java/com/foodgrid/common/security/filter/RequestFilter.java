@@ -1,5 +1,6 @@
 package com.foodgrid.common.security.filter;
 
+import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.common.security.implementation.UserDetailsImplementation;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.model.aggregate.User;
@@ -20,12 +21,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +34,7 @@ public class RequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtility jwtTokenUtility;
     private final UserDetailsServiceImplementation userDetailsService;
     private final UserRepository userRepository;
+    private final UserSession userSession;
 
     @Value("${endpoint.authentication.logout}")
     private String logout;
@@ -42,24 +42,25 @@ public class RequestFilter extends OncePerRequestFilter {
     @Value("${endpoint.authentication.logoutAll}")
     private String logoutAll;
 
+    @Value("${endpoint.service}")
+    private String serviceType;
+
+    @Value("${endpoint.version}")
+    private String version;
+
     @Autowired
-    public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository) {
+    public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository, UserSession userSession) {
         this.jwtTokenUtility = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
+        this.userSession = userSession;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse, @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = httpServletRequest.getHeader("Authorization");
-
-        Cookie[] cookies = httpServletRequest.getCookies();
-        String cookieJWT = null;
-        if (cookies != null) {
-            cookieJWT = Arrays.stream(cookies)
-                    .map(Cookie::getValue).findFirst().orElse(null);
-        }
+        var flag = false;
 
         String username = null;
         String jwt = null;
@@ -67,12 +68,9 @@ public class RequestFilter extends OncePerRequestFilter {
             if (authorization != null && authorization.startsWith("Bearer ")) {
                 jwt = authorization.substring(7);
                 username = jwtTokenUtility.getUsernameFromToken(jwt);
-            } else if (cookieJWT != null) {
-                username = jwtTokenUtility.getUsernameFromToken(cookieJWT);
             }
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
-            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized...");
-            return;
+            flag = true;
         }
 
         User user = null;
@@ -84,8 +82,13 @@ public class RequestFilter extends OncePerRequestFilter {
                     .stream()
                     .map(TokenData::getToken)
                     .collect(Collectors.toList());
-            if (!activeTokens.contains(finalJwt))
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized...");
+
+            if (!activeTokens.contains(finalJwt)) {
+                flag = true;
+            }
+
+            userSession.setUserId(user.getId());
+
             if (httpServletRequest.getRequestURL().toString().contains(logout)) {
                 userRepository.save(user.removeToken(finalJwt));
             }
@@ -107,6 +110,9 @@ public class RequestFilter extends OncePerRequestFilter {
                     );
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        if (Boolean.TRUE.equals(flag)) {
+            httpServletResponse.sendRedirect("/" + serviceType + "/" + version + "/exception");
+        } else
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

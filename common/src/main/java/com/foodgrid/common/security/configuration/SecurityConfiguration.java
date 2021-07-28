@@ -1,14 +1,15 @@
 package com.foodgrid.common.security.configuration;
 
+import com.foodgrid.common.payload.logger.ExceptionLog;
 import com.foodgrid.common.security.filter.CORSFilter;
 import com.foodgrid.common.security.filter.RequestFilter;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,13 +25,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final RequestFilter requestFilter;
     private final BeanConfiguration passwordConfig;
     private final CORSFilter corsFilter;
-
-    private final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
     public SecurityConfiguration(RequestFilter requestFilter, BeanConfiguration passwordConfig, CORSFilter corsFilter) {
@@ -58,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**/login", "/**/signup", "/**/notification/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/", "/**/member/**", "/**/static/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/**/member/**", "/**/static/**", "/**/exception").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -72,7 +72,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         try {
             auth.authenticationProvider(daoAuthenticationProvider());
         } catch (Exception e) {
-            logger.info("Exception caught");
+            log.error(
+                    new ExceptionLog(
+                            this.getClass().getName(),
+                            this.getClass().getEnclosingMethod().getName(),
+                            e.getMessage(),
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    ).toString(),
+                    e
+            );
         }
     }
 

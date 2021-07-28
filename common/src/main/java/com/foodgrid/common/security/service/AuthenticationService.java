@@ -1,13 +1,21 @@
 package com.foodgrid.common.security.service;
 
-import com.foodgrid.common.security.implementation.UserDetailsImplementation;
-import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
+import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
+import com.foodgrid.common.exception.exceptions.InvalidDataException;
+import com.foodgrid.common.exception.model.ApiExceptionDTO;
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
+import com.foodgrid.common.payload.dto.response.AuthenticationActionResponse;
 import com.foodgrid.common.payload.dto.response.JwtResponse;
+import com.foodgrid.common.payload.logger.ExceptionLog;
+import com.foodgrid.common.security.implementation.UserDetailsImplementation;
+import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
+import com.foodgrid.common.utility.UserActivities;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +23,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.Date;
+
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository userRepository;
@@ -31,19 +42,45 @@ public class AuthenticationService {
         this.jwtTokenUtility = jwtTokenUtility;
     }
 
-    public ResponseEntity<String> signup(SignUp signUp, BindingResult result) {
-        return (userDetailsService.saveUser(signUp) && !result.hasErrors()) ? ResponseEntity.ok().body("Saved") : ResponseEntity.badRequest().body("Bad Credentials");
+    public ResponseEntity<AuthenticationActionResponse> signup(SignUp signUp, BindingResult result) {
+        if (result.hasErrors())
+            throw new InvalidDataException("Invalid data");
+        else if (Boolean.TRUE.equals(userDetailsService.saveUser(signUp)))
+            return ResponseEntity.ok().body(
+                    new AuthenticationActionResponse(
+                            UserActivities.SIGNUP,
+                            true,
+                            new Date(),
+                            "User data saved"
+                    )
+            );
+        else
+            throw new InternalServerErrorException("Some internal error caught");
     }
 
-    public ResponseEntity<String> logOut() {
-        return ResponseEntity.ok().body("logged out....");
+    public ResponseEntity<AuthenticationActionResponse> logOut() {
+        return ResponseEntity.ok().body(
+                new AuthenticationActionResponse(
+                        UserActivities.LOGOUT,
+                        true,
+                        new Date(),
+                        "Logged out successfully..."
+                )
+        );
     }
 
-    public ResponseEntity<String> logoutAll() {
-        return ResponseEntity.ok("Logged out from all devices");
+    public ResponseEntity<AuthenticationActionResponse> logoutAll() {
+        return ResponseEntity.ok(
+                new AuthenticationActionResponse(
+                        UserActivities.LOGOUT_ALL,
+                        true,
+                        new Date(),
+                        "Logged out from all devices...."
+                )
+        );
     }
 
-    public ResponseEntity<Object> login(LogIn request) {
+    public ResponseEntity<JwtResponse> login(LogIn request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -52,7 +89,7 @@ public class AuthenticationService {
                     )
             );
         } catch (BadCredentialsException e) {
-            return ResponseEntity.badRequest().body("Bad cred");
+            throw new InvalidDataException(e.getMessage());
         }
 
         final UserDetailsImplementation userDetails = (UserDetailsImplementation) userDetailsService.loadUserByUsername(
@@ -64,5 +101,31 @@ public class AuthenticationService {
         userRepository.findByUsername(request.getUsername()).ifPresent(user -> userRepository.save(user.addToken(jwtToken)));
 
         return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getId()));
+    }
+
+    public ResponseEntity<AuthenticationActionResponse> tryAutoLogin() {
+        return ResponseEntity.ok(
+                new AuthenticationActionResponse(
+                        UserActivities.LOGIN,
+                        true,
+                        new Date(),
+                        "Refresh token successful..."
+                )
+        );
+    }
+
+    public ResponseEntity<ApiExceptionDTO> exception() {
+        log.error(
+                new ExceptionLog(
+                        this.getClass().getName(),
+                        "handleInvalidDataException",
+                        "Invalid JWT Token",
+                        HttpStatus.BAD_REQUEST
+                ).toString()
+        );
+        return new ResponseEntity<>(
+                new ApiExceptionDTO("Invalid JWT Token", HttpStatus.BAD_REQUEST, "Invalid data")
+                , HttpStatus.BAD_REQUEST
+        );
     }
 }

@@ -1,0 +1,62 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: #000000;
+  border: 0.1rem solid #ebd1bc;
+  padding: 0.4rem;
+  margin: 0.4rem;
+  background-color: #756d67;
+  border-radius: 0.7rem;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.loader {
+  text-transform: uppercase;
+  font-size: 15vw;
+
+  text-align: center;
+  background: linear-gradient(
+    to right,
+    #909191 20%,
+    #797878 40%,
+    #505050 60%,
+    #4d4c4c 80%
+  );
+  background-size: 200% auto;
+
+  color: #000000;
+  background-clip: text;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: foodgrid 0.7s reverse infinite;
+  @keyframes foodgrid {
+    to {
+      background-position: 200% center;
+    }
+  }
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #181818;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}

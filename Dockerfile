@@ -1,5 +1,5 @@
 #### Stage 2: Build the frontend
-FROM node as ui
+FROM node:10.24.1-alpine3.11 as ui
 
 WORKDIR /frontend
 
@@ -241,4 +241,3 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/sh", "-c", "sleep 160 && java -cp app:app/lib/* com.foodgrid.gateway.GatewayApplication"] gateway
-

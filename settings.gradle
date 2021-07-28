@@ -1,0 +1,12 @@
+rootProject.name = 'com.foodgrid'
+
+include "user"
+include "common"
+include "accounts"
+include "configuration"
+include "delivery"
+include "eureka"
+include "notification"
+include "gateway"
+include "order"
+include "restaurant"

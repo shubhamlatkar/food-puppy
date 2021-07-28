@@ -15,6 +15,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +27,7 @@ import java.util.Set;
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
 @EnableScheduling
+@Controller
 public class RestaurantApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestaurantApplication.class, args);
@@ -44,5 +47,10 @@ public class RestaurantApplication {
             roles.add("ROLE_RESTAURANT");
             userDetailsService.saveUser(new SignUp("testRestaurant", "testRestaurant@test.com", roles, "test", "12345678901", UserTypes.RESTAURANT));
         };
+    }
+
+    @RequestMapping(value = "/member/**")
+    public String redirect() {
+        return "forward:/";
     }
 }
