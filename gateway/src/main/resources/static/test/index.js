@@ -1,3 +1,4 @@
+var build = true;
 var token = "";
 var id = "";
 var addressId = "";
@@ -9,7 +10,7 @@ var addressId = "";
 // User api for signup
 const testSignUp = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/signup";
+        var url = build ? "/user/api/v1/signup" : "http://localhost:8081/api/v1/signup";
 
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", url);
@@ -41,7 +42,7 @@ const testSignUp = () =>
 // User api for login
 const testLogin = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/login";
+        var url = build ? "/user/api/v1/login" : "http://localhost:8081/api/v1/login";
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url);
@@ -69,7 +70,7 @@ const testLogin = () =>
 // User api for logout
 const testLogout = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/logmeout";
+        var url = build ? "/user/api/v1/logmeout" : "http://localhost:8081/api/v1/logmeout";
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -90,7 +91,7 @@ const testLogout = () =>
 // User api for logout
 const testLogoutAll = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/logoutall";
+        var url = build ? "/user/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -111,7 +112,7 @@ const testLogoutAll = () =>
 // User api for Put address
 const testPutAddress = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/address";
+        var url = build ? "/user/api/v1/address" : "http://localhost:8081/api/v1/address";
 
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", url);
@@ -148,7 +149,7 @@ const testPutAddress = () =>
 // User api for testGetAddressById
 const testGetAddressById = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/address/" + addressId;
+        var url = build ? "/user/api/v1/address/" + addressId : "http://localhost:8081/api/v1/address/" + addressId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -168,7 +169,7 @@ const testGetAddressById = () =>
 
 const testGetAddressByUserId = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/address/user/" + id;
+        var url = build ? "/user/api/v1/address/user/" + id : "http://localhost:8081/api/v1/address/user/" + id;
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -188,7 +189,7 @@ const testGetAddressByUserId = () =>
 
 const testDeleteAddress = () =>
     new Promise(function(resolve, reject) {
-        var url = "http://localhost:8081/api/v1/address/" + addressId;
+        var url = build ? "/user/api/v1/address/" + addressId : "http://localhost:8081/api/v1/address/" + addressId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
@@ -208,7 +209,7 @@ const testDeleteAddress = () =>
     });
 
 const testPatchAddress = () => new Promise(function(resolve, reject) {
-    var url = "http://localhost:8081/api/v1/address/" + addressId;
+    var url = build ? "/user/api/v1/address" + addressId "http://localhost:8081/api/v1/address/" + addressId;
     var xhr = new XMLHttpRequest();
     xhr.open("PATCH", url);
 
