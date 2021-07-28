@@ -1,5 +1,6 @@
 package com.foodgrid.common.security.filter;
 
+import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.common.security.implementation.UserDetailsImplementation;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.model.aggregate.User;
@@ -33,6 +34,7 @@ public class RequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtility jwtTokenUtility;
     private final UserDetailsServiceImplementation userDetailsService;
     private final UserRepository userRepository;
+    private final UserSession userSession;
 
     @Value("${endpoint.authentication.logout}")
     private String logout;
@@ -47,10 +49,11 @@ public class RequestFilter extends OncePerRequestFilter {
     private String version;
 
     @Autowired
-    public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository) {
+    public RequestFilter(JwtTokenUtility jwtTokenUtil, UserDetailsServiceImplementation userDetailsService, UserRepository userRepository, UserSession userSession) {
         this.jwtTokenUtility = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
+        this.userSession = userSession;
     }
 
     @Override
@@ -84,6 +87,7 @@ public class RequestFilter extends OncePerRequestFilter {
                 flag = true;
             }
 
+            userSession.setUserId(user.getId());
 
             if (httpServletRequest.getRequestURL().toString().contains(logout)) {
                 userRepository.save(user.removeToken(finalJwt));

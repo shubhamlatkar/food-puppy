@@ -1,4 +1,4 @@
-package com.foodgrid.user.command.payload.dto;
+package com.foodgrid.user.command.internal.payload.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,3 +29,4 @@ public class UserSignUp {
     @Size(max = 10)
     private String phone;
 }
+

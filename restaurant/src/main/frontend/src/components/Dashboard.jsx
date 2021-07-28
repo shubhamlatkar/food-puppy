@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 const Dashboard = (props) => {
   const [user, setUser] = useState({});
   const [notification, setNotification] = useState([]);
+
   useEffect(() => {
     axios({
       url: "/restaurant/api/v1/login",
@@ -29,6 +30,7 @@ const Dashboard = (props) => {
       })
       .catch((err) => console.log("error", err));
   }, []);
+
   return (
     <React.Fragment>
       <h2>Restaurant Dashboard</h2>

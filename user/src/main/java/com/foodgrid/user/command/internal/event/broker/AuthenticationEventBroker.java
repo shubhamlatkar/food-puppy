@@ -1,6 +1,7 @@
-package com.foodgrid.user.command.event.outbound;
+package com.foodgrid.user.command.internal.event.broker;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
+import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.payload.logger.InformationLog;
@@ -9,18 +10,19 @@ import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Topic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Component
 @Slf4j
-public class AuthenticationScheduler {
+public class AuthenticationEventBroker {
 
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
@@ -28,11 +30,13 @@ public class AuthenticationScheduler {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${event.authentication}")
-    private String authenticationEvent;
+    @Autowired
+    @Qualifier("authenticationTopic")
+    private Topic authenticationTopic;
+
 
     @Scheduled(fixedDelay = 1000)
-    public void send() {
+    public void sendAuthEvent() {
         List<User> users = userRepository.findAll();
 
         var start = new Date();
@@ -45,14 +49,18 @@ public class AuthenticationScheduler {
         });
 
         if (!userList.isEmpty()) {
-            log.info(
-                    new InformationLog(
-                            this.getClass().getName(),
-                            "AuthenticationScheduler",
-                            "New activity: " + userList
-                    ).toString()
-            );
-            this.jmsMessagingTemplate.convertAndSend(authenticationEvent, new AuthenticationEvent(true, userList));
+            try {
+                log.info(
+                        new InformationLog(
+                                this.getClass().getName(),
+                                "AuthenticationEventBroker",
+                                "New activity: " + userList
+                        ).toString()
+                );
+                this.jmsMessagingTemplate.convertAndSend(authenticationTopic, new AuthenticationEvent(true, userList));
+            } catch (Exception e) {
+                throw new InternalServerErrorException(e.getMessage());
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.foodgrid.user.command.rest;
+package com.foodgrid.user.command.internal.rest;
 
 import com.foodgrid.common.exception.model.ApiExceptionDTO;
 import com.foodgrid.common.payload.dto.request.LogIn;
@@ -7,7 +7,7 @@ import com.foodgrid.common.payload.dto.response.AuthenticationActionResponse;
 import com.foodgrid.common.payload.dto.response.JwtResponse;
 import com.foodgrid.common.security.service.AuthenticationService;
 import com.foodgrid.common.utility.UserTypes;
-import com.foodgrid.user.command.payload.dto.UserSignUp;
+import com.foodgrid.user.command.internal.payload.dto.request.UserSignUp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
