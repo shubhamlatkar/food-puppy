@@ -1,9 +1,9 @@
 package com.foodgrid.user.shared.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.foodgrid.common.utility.CrudActions;
 import com.foodgrid.user.command.internal.model.aggregate.AddressCommandModel;
 import com.foodgrid.user.command.internal.payload.dto.request.AddressRequest;
-import com.foodgrid.user.shared.utility.AddressActions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressEventDto implements Serializable {
     private static final long serialVersionUID = 1L;
-    private AddressActions action;
+    private CrudActions action;
     private String id;
     private String userId;
     private Double x;
@@ -29,7 +29,7 @@ public class AddressEventDto implements Serializable {
     private String state;
     private Boolean isSelected;
 
-    public AddressEventDto(AddressRequest address, String userId, String id, AddressActions action) {
+    public AddressEventDto(AddressRequest address, String userId, String id, CrudActions action) {
         this.setPin(address.getPin());
         this.setState(address.getState());
         this.setCity(address.getCity());
@@ -44,7 +44,7 @@ public class AddressEventDto implements Serializable {
         this.setAction(action);
     }
 
-    public AddressEventDto(AddressCommandModel address, AddressActions action) {
+    public AddressEventDto(AddressCommandModel address, CrudActions action) {
         this.setPin(address.getAddressDetails().getPin());
         this.setState(address.getAddressDetails().getState());
         this.setCity(address.getAddressDetails().getCity());

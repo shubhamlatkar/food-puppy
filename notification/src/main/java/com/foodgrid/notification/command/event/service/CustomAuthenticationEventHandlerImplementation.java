@@ -3,7 +3,6 @@ package com.foodgrid.notification.command.event.service;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.event.service.AuthenticationEventHandler;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.notification.command.model.aggregate.DeliveryNotification;
 import com.foodgrid.notification.command.model.aggregate.MetaData;
 import com.foodgrid.notification.command.model.aggregate.RestaurantNotification;
@@ -36,8 +35,6 @@ public class CustomAuthenticationEventHandlerImplementation implements Authentic
 
     @Autowired
     private ReactiveMongoTemplate reactiveMongoTemplate;
-
-    private static final String AUTH_METHOD = "AuthenticationScheduler";
 
 
     @Override
@@ -117,35 +114,17 @@ public class CustomAuthenticationEventHandlerImplementation implements Authentic
             switch (user.getUserType()) {
                 case USER:
                     userNotificationRepository.save(new UserNotification(user.getActivity().name(), user.getUserId())).subscribe(result ->
-                            log.info(
-                                    new InformationLog(
-                                            this.getClass().getName(),
-                                            AUTH_METHOD,
-                                            "User Entity has been saved: " + result
-                                    ).toString()
-                            )
+                            log.info("User Entity has been saved: {}", result)
                     );
                     break;
                 case RESTAURANT:
                     restaurantNotificationRepository.save(new RestaurantNotification(user.getActivity().name(), user.getUserId())).subscribe(result ->
-                            log.info(
-                                    new InformationLog(
-                                            this.getClass().getName(),
-                                            AUTH_METHOD,
-                                            "Restaurant Entity has been saved: " + result
-                                    ).toString()
-                            )
+                            log.info("Restaurant Entity has been saved: {}", result)
                     );
                     break;
                 case DELIVERY:
                     deliveryNotificationRepository.save(new DeliveryNotification(user.getActivity().name(), user.getUserId())).subscribe(result ->
-                            log.info(
-                                    new InformationLog(
-                                            this.getClass().getName(),
-                                            AUTH_METHOD,
-                                            "Delivery Entity has been saved: " + result
-                                    ).toString()
-                            )
+                            log.info("Delivery Entity has been saved: {}", result)
                     );
                     break;
                 default:

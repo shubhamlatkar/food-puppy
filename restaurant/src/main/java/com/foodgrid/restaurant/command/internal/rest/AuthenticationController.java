@@ -1,13 +1,15 @@
-package com.foodgrid.restaurant.command.rest;
+package com.foodgrid.restaurant.command.internal.rest;
 
 import com.foodgrid.common.exception.model.ApiExceptionDTO;
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.payload.dto.response.AuthenticationActionResponse;
+import com.foodgrid.common.payload.dto.response.GenericIdResponse;
 import com.foodgrid.common.payload.dto.response.JwtResponse;
 import com.foodgrid.common.security.service.AuthenticationService;
 import com.foodgrid.common.utility.UserTypes;
-import com.foodgrid.restaurant.command.payload.dto.RestaurantSignUp;
+import com.foodgrid.restaurant.command.internal.payload.dto.request.RestaurantSignUp;
+import com.foodgrid.restaurant.command.internal.service.RestaurantAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,15 +25,17 @@ import java.util.HashSet;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final RestaurantAuthenticationService restaurantAuthenticationService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService, RestaurantAuthenticationService restaurantAuthenticationService) {
         this.authenticationService = authenticationService;
+        this.restaurantAuthenticationService = restaurantAuthenticationService;
     }
 
     @PutMapping("/${endpoint.authentication.signup}")
     public ResponseEntity<AuthenticationActionResponse> signupUser(@Valid @RequestBody RestaurantSignUp signupRequest, BindingResult result) {
-        return authenticationService.signup(
+        return ResponseEntity.ok(authenticationService.signup(
                 new SignUp(
                         signupRequest.getUsername(),
                         signupRequest.getEmail(),
@@ -41,31 +45,36 @@ public class AuthenticationController {
                         UserTypes.RESTAURANT
                 ),
                 result
-        );
+        ));
     }
 
     @GetMapping("/${endpoint.authentication.autoLogin}")
     public ResponseEntity<AuthenticationActionResponse> tryAutoLogin() {
-        return authenticationService.tryAutoLogin();
+        return ResponseEntity.ok(authenticationService.tryAutoLogin());
     }
 
     @GetMapping("/${endpoint.authentication.logout}")
     public ResponseEntity<AuthenticationActionResponse> logout() {
-        return authenticationService.logOut();
+        return ResponseEntity.ok(authenticationService.logOut());
     }
 
     @GetMapping("/${endpoint.authentication.logoutAll}")
     public ResponseEntity<AuthenticationActionResponse> logoutAll() {
-        return authenticationService.logoutAll();
+        return ResponseEntity.ok(authenticationService.logoutAll());
     }
 
     @PostMapping("/${endpoint.authentication.login}")
     public ResponseEntity<JwtResponse> getJwtToken(@RequestBody LogIn request) {
-        return authenticationService.login(request);
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 
     @GetMapping("/exception")
     public ResponseEntity<ApiExceptionDTO> exception() {
-        return authenticationService.exception();
+        return ResponseEntity.ok(authenticationService.exception());
+    }
+
+    @DeleteMapping("/${endpoint.authentication.delete}")
+    public ResponseEntity<GenericIdResponse> deleteMe() {
+        return ResponseEntity.ok(restaurantAuthenticationService.deleteMe());
     }
 }

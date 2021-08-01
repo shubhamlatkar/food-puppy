@@ -4,7 +4,6 @@ import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
@@ -50,13 +49,7 @@ public class AuthenticationEventBroker {
 
         if (!userList.isEmpty()) {
             try {
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "AuthenticationEventBroker",
-                                "New activity: " + userList
-                        ).toString()
-                );
+                log.info("New activity: {}", userList);
                 this.jmsMessagingTemplate.convertAndSend(authenticationTopic, new AuthenticationEvent(true, userList));
             } catch (Exception e) {
                 throw new InternalServerErrorException(e.getMessage());

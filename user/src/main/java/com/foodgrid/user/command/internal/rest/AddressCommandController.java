@@ -24,16 +24,16 @@ public class AddressCommandController {
 
     @PutMapping("/${endpoint.user.address}")
     public ResponseEntity<AddressOperationSuccess> addAddress(@Valid @RequestBody AddressRequest address, BindingResult result) {
-        return addressService.addAddress(address, result);
+        return ResponseEntity.ok(addressService.addAddress(address, result));
     }
 
     @DeleteMapping("/${endpoint.user.address}/{addressId}")
     public ResponseEntity<AddressOperationSuccess> deleteAddressById(@PathVariable String addressId) {
-        return addressService.deleteAddressById(addressId);
+        return ResponseEntity.ok(addressService.deleteAddressById(addressId));
     }
 
     @PatchMapping("/${endpoint.user.address}/{addressId}")
     public ResponseEntity<AddressOperationSuccess> patchAddress(@PathVariable String addressId, @Valid @RequestBody AddressRequest address, BindingResult result) {
-        return addressService.patchAddress(addressId, address, result);
+        return ResponseEntity.ok(addressService.patchAddress(addressId, address, result));
     }
 }

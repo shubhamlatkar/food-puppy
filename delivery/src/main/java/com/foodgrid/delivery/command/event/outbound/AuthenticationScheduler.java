@@ -3,7 +3,6 @@ package com.foodgrid.delivery.command.event.outbound;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
@@ -44,13 +43,7 @@ public class AuthenticationScheduler {
         });
 
         if (!userList.isEmpty()) {
-            log.info(
-                    new InformationLog(
-                            this.getClass().getName(),
-                            "AuthenticationScheduler",
-                            "New activity: " + userList
-                    ).toString()
-            );
+            log.info("New activity: {}",userList);
             this.jmsMessagingTemplate.convertAndSend(authenticationEvent, new AuthenticationEvent(true, userList));
         }
     }

@@ -4,8 +4,6 @@ package com.foodgrid.common.security.implementation;
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.exception.exceptions.InvalidDataException;
 import com.foodgrid.common.payload.dto.request.SignUp;
-import com.foodgrid.common.payload.logger.ExceptionLog;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.common.security.configuration.BeanConfiguration;
 import com.foodgrid.common.security.model.aggregate.Authority;
 import com.foodgrid.common.security.model.aggregate.Role;
@@ -19,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,7 +34,6 @@ import java.util.stream.Collectors;
 
 import static com.foodgrid.common.utility.Authorities.*;
 import static com.foodgrid.common.utility.Roles.*;
-
 
 @Service
 @Slf4j
@@ -83,16 +79,8 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     }
 
     public Boolean saveUser(SignUp signUp) {
-        var method = "saveUser";
         if (userRepository.existsByUsername(signUp.getUsername()) || userRepository.existsByEmail(signUp.getEmail())) {
-            log.warn(
-                    new ExceptionLog(
-                            this.getClass().getName(),
-                            method,
-                            "Duplicate username or email",
-                            HttpStatus.NOT_ACCEPTABLE
-                    ).toString()
-            );
+            log.warn("Duplicate username or email");
             throw new InvalidDataException("Duplicate data");
         }
 
@@ -103,14 +91,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                 .collect(Collectors.toList());
 
         if (roles.contains(null)) {
-            log.warn(
-                    new ExceptionLog(
-                            this.getClass().getName(),
-                            method,
-                            "Roles not yet ready",
-                            HttpStatus.INTERNAL_SERVER_ERROR
-                    ).toString()
-            );
+            log.warn("Roles not yet ready");
             throw new InternalServerErrorException("Roles not yet initialized");
         }
 
@@ -124,13 +105,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         UserTypes.USER
                 )
         );
-        log.info(
-                new InformationLog(
-                        this.getClass().getName(),
-                        method,
-                        "User saved successfully"
-                ).toString()
-        );
+        log.info("User saved successfully");
         return true;
 
     }
@@ -176,13 +151,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                 )))
         )));
 
-        log.info(
-                new InformationLog(
-                        this.getClass().getName(),
-                        "initDatabase",
-                        "Data base initialized successfully"
-                ).toString()
-        );
+        log.info("Data base initialized successfully");
     }
 
 }

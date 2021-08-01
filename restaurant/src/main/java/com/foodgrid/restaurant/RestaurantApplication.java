@@ -4,6 +4,8 @@ import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
+import com.foodgrid.restaurant.command.internal.model.aggregate.MenuCommandModel;
+import com.foodgrid.restaurant.query.internal.model.aggregate.MenuQueryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +44,8 @@ public class RestaurantApplication {
     @Bean
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
         return restaurant -> {
+            mongoTemplate.dropCollection(MenuCommandModel.class);
+            mongoTemplate.dropCollection(MenuQueryModel.class);
             userDetailsService.initDatabase(mongoTemplate);
             Set<String> roles = new HashSet<>();
             roles.add("ROLE_RESTAURANT");

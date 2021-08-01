@@ -1,14 +1,268 @@
 var build = true;
 var token = "";
 var id = "";
+var itemId = "";
 var addressId = "";
+/**
+----------------------RESTAURANT START-----------------------
+**/
+// Restaurant api for signup
+const testRestaurantSignUp = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/signup" : "http://localhost:8082/api/v1/signup";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", url);
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testRestaurantSignUp", xhr.status, data);
+                resolve("testRestaurantSignUp successful");
+
+            }
+        };
+
+        var data = `{
+            "username":"rosewood",
+            "password":"rosewood@shu.com",
+            "email":"rosewood@shu.com",
+            "phone":"1234567890",
+            "roles":["ROLE_RESTAURANT"]
+        }`;
+
+        xhr.send(data);
+    });
+
+// Restaurant api for login
+const testRestaurantLogin = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/login" : "http://localhost:8082/api/v1/login";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                token = data.token;
+                id = data.id;
+                console.log("testRestaurantLogin", xhr.status, data);
+                resolve("testRestaurantLogin successful");
+            }
+        };
+
+        var data = `{
+            "username":"rosewood",
+            "password":"rosewood@shu.com"
+        }`;
+
+        xhr.send(data);
+    });
+
+// Restaurant api for logout
+const testRestaurantLogout = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/logmeout" : "http://localhost:8082/api/v1/logmeout";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testRestaurantLogout", xhr.status, data);
+                resolve("testRestaurantLogout successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+// Restaurant api for logout
+const testRestaurantLogoutAll = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/user/api/v1/logoutall" : "http://localhost:8082/api/v1/logoutall";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testRestaurantLogoutAll", xhr.status, data);
+                resolve("testRestaurantLogoutAll successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+// Restaurant api for logout
+const testRestaurantDelete = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/user/api/v1/delete" : "http://localhost:8082/api/v1/delete";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testRestaurantDelete", xhr.status, data);
+                resolve("testRestaurantDelete successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+
+/**
+----------------------MENU START-----------------------
+**/
+const testDeleteItem = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/user/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testDeleteItem", xhr.status, data);
+                resolve("testDeleteItem successful");
+            }
+        };
+
+        xhr.send();
+
+    });
+
+const testAddItem = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/user/api/v1/menu/item/" : "http://localhost:8082/api/v1/menu/item";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                itemId = data.id;
+                console.log("testAddItem", xhr.status, data);
+                resolve("testAddItem successful");
+            }
+        };
+
+        var data = `{
+        	 "name":"test1",
+             "value":123.11,
+             "ingredient":"test1",
+             "comment":"test1",
+             "startFirst":11,
+             "endFirst":25,
+             "startSecond":11,
+            "endSecond":22
+        }`;
+
+        xhr.send(data);
+    });
+
+const testPatchItem = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/user/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("PATCH", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testPatchItem", xhr.status, data);
+                resolve("testPatchItem successful");
+            }
+        };
+
+        var data = `{
+        	 "name":"test",
+             "value":123.1,
+             "ingredient":"test",
+             "comment":"test",
+             "startFirst":1,
+             "endFirst":2,
+             "startSecond":1,
+            "endSecond":2
+        }`;
+
+        xhr.send(data);
+    });
+
+const testGetItemByRestaurantId = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/menu" : "http://localhost:8082/api/v1/menu";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testGetItemByRestaurantId", xhr.status, data);
+                resolve("testGetItemByRestaurantId successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+const testGetItemByItemId = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testGetItemByItemId", xhr.status, data);
+                resolve("testGetItemByItemId successful");
+            }
+        };
+
+        xhr.send();
+    });
 
 /**
 ----------------------USER START-----------------------
 **/
-
 // User api for signup
-const testSignUp = () =>
+const testUserSignUp = () =>
     new Promise(function(resolve, reject) {
         var url = build ? "/user/api/v1/signup" : "http://localhost:8081/api/v1/signup";
 
@@ -20,11 +274,8 @@ const testSignUp = () =>
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
-                //                if (xhr.status === 200) {
-                console.log("testSignUp", xhr.status, data);
-                resolve("testSignUp successful");
-                //                } else
-                //                    reject(new Error("Whoops! some error"));
+                console.log("testUserSignUp", xhr.status, data);
+                resolve("testUserSignUp successful");
             }
         };
 
@@ -40,7 +291,7 @@ const testSignUp = () =>
     });
 
 // User api for login
-const testLogin = () =>
+const testUserLogin = () =>
     new Promise(function(resolve, reject) {
         var url = build ? "/user/api/v1/login" : "http://localhost:8081/api/v1/login";
 
@@ -54,8 +305,8 @@ const testLogin = () =>
                 var data = JSON.parse(xhr.responseText);
                 token = data.token;
                 id = data.id;
-                console.log("testLogin", xhr.status, data);
-                resolve("testLogin successful");
+                console.log("testUserLogin", xhr.status, data);
+                resolve("testUserLogin successful");
             }
         };
 
@@ -68,7 +319,7 @@ const testLogin = () =>
     });
 
 // User api for logout
-const testLogout = () =>
+const testUserLogout = () =>
     new Promise(function(resolve, reject) {
         var url = build ? "/user/api/v1/logmeout" : "http://localhost:8081/api/v1/logmeout";
 
@@ -80,8 +331,8 @@ const testLogout = () =>
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
-                console.log("testLogout", xhr.status, data);
-                resolve("testLogout successful");
+                console.log("testUserLogout", xhr.status, data);
+                resolve("testUserLogout successful");
             }
         };
 
@@ -89,7 +340,7 @@ const testLogout = () =>
     });
 
 // User api for logout
-const testLogoutAll = () =>
+const testUserLogoutAll = () =>
     new Promise(function(resolve, reject) {
         var url = build ? "/user/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
 
@@ -101,14 +352,38 @@ const testLogoutAll = () =>
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
-                console.log("testLogoutAll", xhr.status, data);
-                resolve("testLogoutAll successful");
+                console.log("testUserLogoutAll", xhr.status, data);
+                resolve("testUserLogoutAll successful");
             }
         };
 
         xhr.send();
     });
 
+// User api for logout
+const testUserDelete = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/user/api/v1/delete" : "http://localhost:8081/api/v1/delete";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testUserDelete", xhr.status, data);
+                resolve("testUserDelete successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+/**
+----------------------ADDRESS START-----------------------
+**/
 // User api for Put address
 const testPutAddress = () =>
     new Promise(function(resolve, reject) {
@@ -267,27 +542,35 @@ const loadNotifications = () => {
 
 //notifications.start();
 
-var content = document.getElementById("content");
 
-const addContent = (msg) => {
-    var para = document.createElement("P");
-    var t = document.createTextNode(msg);
-    para.appendChild(t);
-    content.appendChild(para);
-}
+/**
+----------------------ADDRESS TESTER FUNCTION START-----------------------
+**/
+const addressTester = () => {
 
-const hideLoader = () => {
-    document.getElementById("loader").style.display = "none";
-}
+    var content = document.getElementById("content");
 
-const showLoader = () => {
-    document.getElementById("loader").style.display = "block";
-}
+    const addContent = (msg) => {
+        var para = document.createElement("P");
+        var t = document.createTextNode(msg);
+        para.appendChild(t);
+        content.appendChild(para);
+    }
 
-showLoader();
-testSignUp().then(res => {
+    const hideLoader = () => {
+        document.getElementById("loader").style.display = "none";
+    }
+
+    const showLoader = () => {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("current-test-heading").innerHTML = "Address app test suit";
+        content.innerHTML = "";
+    }
+
+    showLoader();
+    testUserSignUp().then(res => {
         addContent(res);
-        testLogin().then((res) => {
+        testUserLogin().then((res) => {
             addContent(res);
             testPutAddress().then((res) => {
                 addContent(res);
@@ -301,7 +584,11 @@ testSignUp().then(res => {
                                 addContent(res);
                                 testDeleteAddress().then(res => {
                                     addContent(res);
-                                    testLogoutAll().then(res => {
+//                                    testUserLogoutAll().then(res => {
+//                                        addContent(res)
+//                                        hideLoader();
+//                                    })
+                                    testUserDelete().then(res => {
                                         addContent(res)
                                         hideLoader();
                                     })
@@ -312,5 +599,61 @@ testSignUp().then(res => {
                 })
             })
         })
-    })
-    .catch(err => console.log(err));
+    });
+}
+
+/**
+----------------------MENU TESTER FUNCTION START-----------------------
+**/
+
+const menuTester = () => {
+
+    var content = document.getElementById("content");
+
+    const addContent = (msg) => {
+        var para = document.createElement("P");
+        var t = document.createTextNode(msg);
+        para.appendChild(t);
+        content.appendChild(para);
+    }
+
+    const hideLoader = () => {
+        document.getElementById("loader").style.display = "none";
+    }
+
+    const showLoader = () => {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("current-test-heading").innerHTML = "Menu app test suit";
+        content.innerHTML = "";
+    }
+
+    showLoader();
+    testRestaurantSignUp().then(res => {
+        addContent(res);
+        testRestaurantLogin().then((res) => {
+            addContent(res);
+            testAddItem().then(res => {
+                addContent(res)
+                testGetItemByItemId().then(res =>{
+                    addContent(res)
+                    testPatchItem().then(res => {
+                        addContent(res)
+                        testGetItemByRestaurantId().then(res => {
+                            addContent(res)
+                            testGetItemByItemId().then(res => {
+                                addContent(res)
+                                testDeleteItem().then(res => {
+                                    addContent(res)
+                                    testRestaurantDelete().then(res => {
+                                        addContent(res)
+                                        hideLoader();
+                                    })
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        })
+    });
+};
