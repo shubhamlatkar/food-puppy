@@ -1,21 +1,58 @@
 body {
-    background: radial-gradient(circle, #424242, #353535, #272727, #141414);
-    background-color: #181818;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  height: 100vh;
+  background: radial-gradient(circle, #424242, #353535, #272727, #141414);
+  background-color: #181818;
+  min-height: 100vh;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  /* grid container settings */
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "main";
 }
 
-.loader {
+body > header {
+  grid-area: header;
+  height: calc(10vh + 2vmin);
+}
+
+body > header > ul > li {
+  display: inline;
+  border-bottom: 0.25rem solid #1b1b1b;
+  margin: 0.1rem;
+}
+
+body > header > ul > li:hover {
+  cursor: pointer;
+  border-bottom-color: #3f3f3f;
+}
+
+body > header > ul > li:active {
+  border-bottom-color: #979595;
+}
+
+  body > main {
+  grid-area: main;
+  height: 90vh;
+}
+
+main > .loader-wrapper {
+  max-width: calc(30px + 2vmin);
+  margin: 0 auto;
+}
+
+main > .loader-wrapper > .loader {
   border: 5px solid #1b1b1b;
   border-radius: 50%;
   border-top: 5px solid #adaeaf;
-  width: 30px;
-  height: 30px;
+  width: calc(30px + 2vmin);
+  height: calc(30px + 2vmin);
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
   display: none;

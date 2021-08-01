@@ -1,4 +1,4 @@
-package com.foodgrid.restaurant.command.payload.dto;
+package com.foodgrid.restaurant.command.internal.payload.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,6 +3,7 @@ package com.foodgrid.user.command.internal.service;
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.exception.exceptions.InvalidDataException;
 import com.foodgrid.common.security.component.UserSession;
+import com.foodgrid.common.utility.CrudActions;
 import com.foodgrid.user.command.internal.event.broker.AddressEventBroker;
 import com.foodgrid.user.command.internal.model.aggregate.AddressCommandModel;
 import com.foodgrid.user.command.internal.payload.dto.request.AddressRequest;
@@ -10,13 +11,13 @@ import com.foodgrid.user.command.internal.payload.dto.response.AddressOperationS
 import com.foodgrid.user.command.internal.repository.AddressCommandRepository;
 import com.foodgrid.user.shared.model.AddressDetails;
 import com.foodgrid.user.shared.payload.AddressEventDto;
-import com.foodgrid.user.shared.utility.AddressActions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 @Service
+@Slf4j
 public class AddressCommandService {
     private final AddressCommandRepository addressRepository;
     private final AddressEventBroker addressEventBroker;
@@ -29,7 +30,7 @@ public class AddressCommandService {
         this.userSession = userSession;
     }
 
-    public ResponseEntity<AddressOperationSuccess> addAddress(AddressRequest address, BindingResult result) {
+    public AddressOperationSuccess addAddress(AddressRequest address, BindingResult result) {
         if (result.hasErrors())
             throw new InvalidDataException("Invalid address");
         else {
@@ -39,33 +40,35 @@ public class AddressCommandService {
             try {
                 var addressCommand = new AddressCommandModel(address, userSession.getUserId());
                 id = addressRepository.save(addressCommand).getId();
-                var addressEvent = new AddressEventDto(address, userSession.getUserId(), id, AddressActions.ADD);
+                var addressEvent = new AddressEventDto(address, userSession.getUserId(), id, CrudActions.ADD);
                 addressEventBroker.sendAddressEvent(addressEvent);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new InternalServerErrorException("Internal server error for address repository");
             }
-            if (id != null)
-                return ResponseEntity.ok(new AddressOperationSuccess(id, "Address added successfully"));
-            else
+            if (id != null) {
+                log.info("Address Command added address :{}", address);
+                return new AddressOperationSuccess(id, "Address added successfully");
+            } else
                 throw new InvalidDataException("Invalid data");
         }
     }
 
-    public ResponseEntity<AddressOperationSuccess> deleteAddressById(String addressId) {
+    public AddressOperationSuccess deleteAddressById(String addressId) {
         try {
             addressRepository.deleteById(addressId);
             var addressDto = new AddressEventDto();
-            addressDto.setAction(AddressActions.DELETE);
+            addressDto.setAction(CrudActions.DELETE);
             addressDto.setId(addressId);
             addressEventBroker.sendAddressEvent(addressDto);
         } catch (Exception e) {
             throw new InvalidDataException("Invalid address id");
         }
-        return ResponseEntity.ok(new AddressOperationSuccess(addressId, "Deleted successfully"));
+        log.info("Address Command deleted address by id :{}", addressId);
+        return new AddressOperationSuccess(addressId, "Deleted successfully");
     }
 
-    public ResponseEntity<AddressOperationSuccess> patchAddress(String addressId, AddressRequest address, BindingResult result) {
+    public AddressOperationSuccess patchAddress(String addressId, AddressRequest address, BindingResult result) {
         if (result.hasErrors())
             throw new InvalidDataException("Invalid address");
         var existingAddress = addressRepository.findById(addressId).orElse(null);
@@ -75,9 +78,10 @@ public class AddressCommandService {
             existingAddress.setLocation(address.getLocation());
             existingAddress.setIsSelected(address.getIsSelected());
             addressRepository.save(existingAddress);
-            var addressEvent = new AddressEventDto(existingAddress, AddressActions.UPDATE);
+            var addressEvent = new AddressEventDto(existingAddress, CrudActions.UPDATE);
             addressEventBroker.sendAddressEvent(addressEvent);
-            return ResponseEntity.ok().body(new AddressOperationSuccess(addressId, "Patched successfully"));
-        } else return ResponseEntity.ok().body(new AddressOperationSuccess(addressId, "Not Found"));
+            log.info("Address Command patched address :{}", address);
+            return new AddressOperationSuccess(addressId, "Patched successfully");
+        } else return new AddressOperationSuccess(addressId, "Not Found");
     }
 }

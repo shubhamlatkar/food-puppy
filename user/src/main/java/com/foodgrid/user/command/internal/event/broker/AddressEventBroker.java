@@ -1,7 +1,6 @@
 package com.foodgrid.user.command.internal.event.broker;
 
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.user.shared.payload.AddressEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,7 @@ public class AddressEventBroker {
 
     public void sendAddressEvent(AddressEventDto address) {
         try {
-            log.info(
-                    new InformationLog(
-                            this.getClass().getName(),
-                            "AddressEventBroker",
-                            "Address event: " + address
-                    ).toString()
-            );
+            log.info("Address event: {}", address);
             this.jmsMessagingTemplate.convertAndSend(addressTopic, address);
         } catch (Exception e) {
             throw new InternalServerErrorException(e.getMessage());

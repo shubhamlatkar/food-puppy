@@ -8,9 +8,21 @@
     <title>Test Apis</title>
 </head>
 <body>
-<h1>Api Tester</h1>
-<div id="content"></div>
-<div id="loader" class="loader"></div>
+    <header>
+        <ul>
+            <li onclick="menuTester();">Menu</li>
+            <li>User</li>
+            <li onclick="addressTester();">Address</li>
+        </ul>
+    </header>
+    <main>
+        <h1>Api Tester</h1>
+        <h2 id="current-test-heading"></h2>
+        <div id="content"></div>
+        <div class="loader-wrapper">
+            <div id="loader" class="loader"></div>
+        </div>
+    </main>
 </body>
 <script src="./index.js"></script>
 </html>

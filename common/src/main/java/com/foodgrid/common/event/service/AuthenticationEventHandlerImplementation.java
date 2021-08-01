@@ -3,7 +3,6 @@ package com.foodgrid.common.event.service;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.payload.dto.request.SignUp;
-import com.foodgrid.common.payload.logger.InformationLog;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
@@ -75,13 +74,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
                 user1.setUsername(user.getUsername());
                 user1.setPassword(user.getPassword());
                 userRepository.save(user1);
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "patch",
-                                user1.getType() + " user patched " + user1
-                        ).toString()
-                );
+                log.info("{} user patched {}", user1.getType(), user1);
             }
         });
     }
@@ -91,13 +84,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
         userRepository.findByUsername(user.getUsername()).ifPresent(user1 -> {
             if (user1.getMetadata().getLastActivity() != user.getActivity() || user1.getMetadata().getLastUpdatedAt().getTime() < (new Date().getTime() - 10000)) {
                 userRepository.delete(user1);
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "delete",
-                                user1.getType().name() + " user delete " + user
-                        ).toString()
-                );
+                log.info("{} user delete {}", user1.getType().name(), user);
             }
         });
     }
@@ -107,13 +94,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
         userRepository.findByUsername(user.getUsername()).ifPresent(user1 -> {
             if (user1.getMetadata().getLastActivity() != user.getActivity() || user1.getMetadata().getLastUpdatedAt().getTime() < (new Date().getTime() - 10000)) {
                 userRepository.save(user1.removeToken(user.getToken()));
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "logout",
-                                user1.getType().name() + " user logged out " + user
-                        ).toString()
-                );
+                log.info("{} user logged out {}", user1.getType().name(), user);
             }
         });
     }
@@ -123,13 +104,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
         userRepository.findByUsername(user.getUsername()).ifPresent(user1 -> {
             if (user1.getMetadata().getLastActivity() != user.getActivity() || user1.getMetadata().getLastUpdatedAt().getTime() < (new Date().getTime() - 10000)) {
                 userRepository.save(user1.addToken(user.getToken()));
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "login",
-                                user1.getType().name() + " user login " + user
-                        ).toString()
-                );
+                log.info("{} user login {}", user1.getType().name(), user);
             }
         });
     }
@@ -139,13 +114,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
         userRepository.findByUsername(user.getUsername()).ifPresent(user1 -> {
             if (user1.getMetadata().getLastActivity() != user.getActivity() || user1.getMetadata().getLastUpdatedAt().getTime() < (new Date().getTime() - 10000)) {
                 userRepository.save(user1.setActiveTokens(new ArrayList<>()));
-                log.info(
-                        new InformationLog(
-                                this.getClass().getName(),
-                                "logoutAll",
-                                user1.getType().name() + " user logged out from all devices " + user
-                        ).toString()
-                );
+                log.info("{} user logged out from all devices {}", user1.getType().name(), user);
             }
         });
     }
@@ -156,13 +125,7 @@ public class AuthenticationEventHandlerImplementation implements AuthenticationE
             Set<String> roles = new HashSet<>();
             roles.add("ROLE_" + user.getRole());
             userDetailsServiceImplementation.saveUser(new SignUp(user.getUsername(), user.getEmail(), roles, user.getPassword(), user.getPhone(), user.getUserType()));
-            log.info(
-                    new InformationLog(
-                            this.getClass().getName(),
-                            "signup",
-                            user.getUserType().name() + " user signup " + user
-                    ).toString()
-            );
+            log.info("{} user signup {}", user.getUserType().name(), user);
         }
     }
 }
