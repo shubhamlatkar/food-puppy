@@ -29,6 +29,8 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Copy Common
+        run: cp -r common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid && rm user/src/main/java/com/foodgrid/CommonApplication.java
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
