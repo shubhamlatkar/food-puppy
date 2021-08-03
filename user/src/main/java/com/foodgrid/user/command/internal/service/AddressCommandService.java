@@ -43,7 +43,6 @@ public class AddressCommandService {
                 var addressEvent = new AddressEventDto(address, userSession.getUserId(), id, CrudActions.ADD);
                 addressEventBroker.sendAddressEvent(addressEvent);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new InternalServerErrorException("Internal server error for address repository");
             }
             if (id != null) {
