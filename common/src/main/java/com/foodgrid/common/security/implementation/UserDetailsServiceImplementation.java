@@ -15,6 +15,7 @@ import com.foodgrid.common.security.utility.JwtTokenUtility;
 import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     private BeanConfiguration passwordConfig;
 
     @Autowired
+    @Qualifier("external")
     private RestTemplate restTemplate;
 
     @Autowired

@@ -5,6 +5,7 @@ import com.foodgrid.common.payload.dto.response.GetItemResponse;
 import com.foodgrid.user.command.internal.model.entity.ItemCommandModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,13 +13,11 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Slf4j
 public class RestService {
-    private final RestTemplate restTemplate;
 
     @Autowired
-    public RestService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
+    @Qualifier("internal")
+    private RestTemplate restTemplate;
+    
     public ItemCommandModel getItemShort(String restaurantId, String itemId) {
         ResponseEntity<GetItemResponse> shortItemResponse = restTemplate.getForEntity(
                 "http://restaurant/api/v1/public/short/menu/item?restaurantId=" + restaurantId + "&itemId=" + itemId,

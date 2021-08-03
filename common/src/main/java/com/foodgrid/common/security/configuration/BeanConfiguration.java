@@ -1,5 +1,6 @@
 package com.foodgrid.common.security.configuration;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,14 @@ public class BeanConfiguration {
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate() {
+    @Qualifier("internal")
+    public RestTemplate internalRestTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    @Qualifier("external")
+    public RestTemplate externalRestTemplate() {
         return new RestTemplate();
     }
 
