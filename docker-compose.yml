@@ -66,12 +66,12 @@ services:
     networks:
       - foodgrid
 
-  user:
+  user-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: user
-    container_name: user
+    container_name: user-service
     depends_on:
       - eureka
       - database
@@ -81,12 +81,12 @@ services:
     networks:
       - foodgrid
 
-  notification:
+  notification-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: notification
-    container_name: notification
+    container_name: notification-service
     depends_on:
       - eureka
       - database
@@ -96,12 +96,12 @@ services:
     networks:
       - foodgrid
 
-  restaurant:
+  restaurant-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: restaurant
-    container_name: restaurant
+    container_name: restaurant-service
     depends_on:
       - eureka
       - database
@@ -111,12 +111,12 @@ services:
     networks:
       - foodgrid
 
-  order:
+  order-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: order
-    container_name: order
+    container_name: order-service
     depends_on:
       - eureka
       - database
@@ -126,12 +126,12 @@ services:
     networks:
       - foodgrid
 
-  delivery:
+  delivery-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: delivery
-    container_name: delivery
+    container_name: delivery-service
     depends_on:
       - eureka
       - database
@@ -141,12 +141,12 @@ services:
     networks:
       - foodgrid
 
-  accounts:
+  accounts-service:
     build:
       context: .
       dockerfile: Dockerfile
       target: accounts
-    container_name: accounts
+    container_name: accounts-service
     depends_on:
       - eureka
       - database

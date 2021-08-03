@@ -133,7 +133,7 @@ const testRestaurantLogoutAll = () =>
 // Restaurant api for logout
 const testRestaurantDelete = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/restaurant/user/api/v1/delete" : "http://localhost:8082/api/v1/delete";
+        var url = build ? "/restaurant/api/v1/delete" : "http://localhost:8082/api/v1/delete";
 
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
@@ -411,10 +411,10 @@ const testUserLogoutAll = () =>
         xhr.send();
     });
 
-// User api for logout
+// User api for delete
 const testUserDelete = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/user/user/api/v1/delete" : "http://localhost:8081/api/v1/delete";
+        var url = build ? "/user/api/v1/delete" : "http://localhost:8081/api/v1/delete";
 
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
