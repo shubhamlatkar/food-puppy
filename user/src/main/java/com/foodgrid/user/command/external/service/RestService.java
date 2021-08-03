@@ -21,7 +21,7 @@ public class RestService {
 
     public ItemCommandModel getItemShort(String restaurantId, String itemId) {
         ResponseEntity<GetItemResponse> shortItemResponse = restTemplate.getForEntity(
-                "http://restaurant/api/v1/public/short/menu/item?restaurantId=" + restaurantId + "&itemId=" + itemId,
+                "http://restaurant:8082/api/v1/public/short/menu/item?restaurantId=" + restaurantId + "&itemId=" + itemId,
                 GetItemResponse.class
         );
         var shortItem = shortItemResponse.getBody();
