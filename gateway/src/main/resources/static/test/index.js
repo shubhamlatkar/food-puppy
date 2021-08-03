@@ -179,7 +179,7 @@ const testDeleteItem = () =>
 
 const testAddItem = (item) =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/restaurant/user/api/v1/menu/item/" : "http://localhost:8082/api/v1/menu/item";
+        var url = build ? "/restaurant/api/v1/menu/item/" : "http://localhost:8082/api/v1/menu/item";
 
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", url);
@@ -203,7 +203,7 @@ const testAddItem = (item) =>
 
 const testPatchItem = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/restaurant/user/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+        var url = build ? "/restaurant/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("PATCH", url);
