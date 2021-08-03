@@ -67,5 +67,18 @@ jobs:
     #   make bootstrap
     #   make release
 
+    - name: Copy Common User
+      run: cp -R common/src/main/java/com/foodgrid/common/ user/src/main/java/com/foodgrid && rm user/src/main/java/com/foodgrid/common/CommonApplication.java
+    - name: Copy Common Restaurant
+      run: cp -R common/src/main/java/com/foodgrid/common/ restaurant/src/main/java/com/foodgrid && rm restaurant/src/main/java/com/foodgrid/common/CommonApplication.java
+    - name: Copy Common Accounts
+      run: cp -R common/src/main/java/com/foodgrid/common/ accounts/src/main/java/com/foodgrid && rm accounts/src/main/java/com/foodgrid/common/CommonApplication.java
+    - name: Copy Common Delivery
+      run: cp -R common/src/main/java/com/foodgrid/common/ delivery/src/main/java/com/foodgrid && rm delivery/src/main/java/com/foodgrid/common/CommonApplication.java
+    - name: Copy Common Notification
+      run: cp -R common/src/main/java/com/foodgrid/common/ notification/src/main/java/com/foodgrid && rm notification/src/main/java/com/foodgrid/common/CommonApplication.java
+    - name: Copy Common Order
+      run: cp -R common/src/main/java/com/foodgrid/common/ order/src/main/java/com/foodgrid && rm order/src/main/java/com/foodgrid/common/CommonApplication.java
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
