@@ -175,4 +175,9 @@ public class User {
         activeTokens.add(new TokenData(token, new Date()));
         return this;
     }
+
+    public User deleteActivity() {
+        this.metadata.setLastActivity(DELETE);
+        return this;
+    }
 }

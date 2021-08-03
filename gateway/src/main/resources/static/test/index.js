@@ -1,8 +1,32 @@
 var build = true;
-var token = "";
-var id = "";
+var userToken = "";
+var userId = "";
+var restaurantToken = "";
+var restaurantId = "";
 var itemId = "";
 var addressId = "";
+
+var menuItem1 = {
+    "name": "test1",
+    "value": 123.11,
+    "ingredient": "test1",
+    "comment": "test1",
+    "startFirst": 11,
+    "endFirst": 25,
+    "startSecond": 11,
+    "endSecond": 22
+};
+
+var menuItem2 = {
+    "name": "test2",
+    "value": 121.11,
+    "ingredient": "test2",
+    "comment": "test2",
+    "startFirst": 10,
+    "endFirst": 13,
+    "startSecond": 19,
+    "endSecond": 22
+};
 /**
 ----------------------RESTAURANT START-----------------------
 **/
@@ -49,8 +73,8 @@ const testRestaurantLogin = () =>
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
-                token = data.token;
-                id = data.id;
+                restaurantToken = data.token;
+                restaurantId = data.id;
                 console.log("testRestaurantLogin", xhr.status, data);
                 resolve("testRestaurantLogin successful");
             }
@@ -72,7 +96,7 @@ const testRestaurantLogout = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -93,7 +117,7 @@ const testRestaurantLogoutAll = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -114,7 +138,7 @@ const testRestaurantDelete = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -138,7 +162,7 @@ const testDeleteItem = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
         xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onreadystatechange = function() {
@@ -153,14 +177,14 @@ const testDeleteItem = () =>
 
     });
 
-const testAddItem = () =>
+const testAddItem = (item) =>
     new Promise(function(resolve, reject) {
         var url = build ? "/restaurant/user/api/v1/menu/item/" : "http://localhost:8082/api/v1/menu/item";
 
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
         xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onreadystatechange = function() {
@@ -172,16 +196,7 @@ const testAddItem = () =>
             }
         };
 
-        var data = `{
-        	 "name":"test1",
-             "value":123.11,
-             "ingredient":"test1",
-             "comment":"test1",
-             "startFirst":11,
-             "endFirst":25,
-             "startSecond":11,
-            "endSecond":22
-        }`;
+        var data = JSON.stringify(item);
 
         xhr.send(data);
     });
@@ -193,7 +208,7 @@ const testPatchItem = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("PATCH", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
         xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onreadystatechange = function() {
@@ -225,7 +240,7 @@ const testGetItemByRestaurantId = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -245,13 +260,49 @@ const testGetItemByItemId = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + restaurantToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
                 console.log("testGetItemByItemId", xhr.status, data);
                 resolve("testGetItemByItemId successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+const testGetMenuByRestaurantId = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/public/menu/" + restaurantId : "http://localhost:8082/api/v1/public/menu/" + restaurantId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testGetMenuByRestaurantId", xhr.status, data);
+                resolve("testGetMenuByRestaurantId successful");
+            }
+        };
+
+        xhr.send();
+    });
+
+const testGetItemByRestaurantIdAndItemId = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/restaurant/api/v1/public/menu/item?restaurantId=" + restaurantId + "&itemId=" + itemId : "http://localhost:8082/api/v1/public/menu/item?restaurantId=" + restaurantId + "&itemId=" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testGetItemByRestaurantIdAndItemId", xhr.status, data);
+                resolve("testGetItemByRestaurantIdAndItemId successful");
             }
         };
 
@@ -303,8 +354,8 @@ const testUserLogin = () =>
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
-                token = data.token;
-                id = data.id;
+                userToken = data.token;
+                userId = data.id;
                 console.log("testUserLogin", xhr.status, data);
                 resolve("testUserLogin successful");
             }
@@ -326,7 +377,7 @@ const testUserLogout = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -347,7 +398,7 @@ const testUserLogoutAll = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -368,7 +419,7 @@ const testUserDelete = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -392,7 +443,7 @@ const testPutAddress = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
         xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onreadystatechange = function() {
@@ -429,7 +480,7 @@ const testGetAddressById = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -444,12 +495,12 @@ const testGetAddressById = () =>
 
 const testGetAddressByUserId = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/user/api/v1/address/user/" + id : "http://localhost:8081/api/v1/address/user/" + id;
+        var url = build ? "/user/api/v1/address/user/" + userId : "http://localhost:8081/api/v1/address/user/" + userId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -469,7 +520,7 @@ const testDeleteAddress = () =>
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
 
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -483,23 +534,24 @@ const testDeleteAddress = () =>
 
     });
 
-const testPatchAddress = () => new Promise(function(resolve, reject) {
-    var url = build ? "/user/api/v1/address" + addressId : "http://localhost:8081/api/v1/address/" + addressId;
-    var xhr = new XMLHttpRequest();
-    xhr.open("PATCH", url);
+const testPatchAddress = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/api/v1/address" + addressId : "http://localhost:8081/api/v1/address/" + addressId;
+        var xhr = new XMLHttpRequest();
+        xhr.open("PATCH", url);
 
-    xhr.setRequestHeader("Authorization", "Bearer " + token);
-    xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+        xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            var data = JSON.parse(xhr.responseText);
-            console.log("testPatchAddress", xhr.status, data);
-            resolve("testPatchAddress successful");
-        }
-    };
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testPatchAddress", xhr.status, data);
+                resolve("testPatchAddress successful");
+            }
+        };
 
-    var data = `{
+        var data = `{
             "location":{
                 "x":124.23,
                   "y":124.543
@@ -513,9 +565,85 @@ const testPatchAddress = () => new Promise(function(resolve, reject) {
               "isSelected":false
         }`;
 
-    xhr.send(data);
+        xhr.send(data);
 
-});
+    });
+
+/**
+----------------------CART START-----------------------
+**/
+
+const testAddItemToCart = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/api/v1/cart/item" : "http://localhost:8081/api/v1/cart/item";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testAddItemToCart", xhr.status, data);
+                resolve("testAddItemToCart successful");
+            }
+        };
+
+        var data = JSON.stringify({
+            "restaurantId": restaurantId,
+            "itemId": itemId
+        });
+
+        xhr.send(data);
+
+    });
+
+
+const testRemoveItemFromCart = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/api/v1/cart/item/remove/" + itemId : "http://localhost:8081/api/v1/cart/item/remove/" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testRemoveItemFromCart", xhr.status, data);
+                resolve("testRemoveItemFromCart successful");
+            }
+        };
+
+        xhr.send();
+
+    });
+
+const testDecreaseQuantityOfItemFromCart = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/api/v1/cart/item/" + itemId : "http://localhost:8081/api/v1/cart/item/" + itemId;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testDecreaseQuantityOfItemFromCart", xhr.status, data);
+                resolve("testDecreaseQuantityOfItemFromCart successful");
+            }
+        };
+
+        xhr.send();
+
+    });
 
 /**
 ----------------------NOTIFICATION START-----------------------
@@ -544,30 +672,44 @@ const loadNotifications = () => {
 
 
 /**
+----------------------UTILITY START-----------------------
+**/
+const changeLinkColor = activeLink => {
+    document.getElementById("menu-btn").style.borderBottomColor = "#1b1b1b";
+    document.getElementById("user-btn").style.borderBottomColor = "#1b1b1b";
+    document.getElementById("address-btn").style.borderBottomColor = "#1b1b1b";
+    document.getElementById(activeLink).style.borderBottomColor = "#979595";
+}
+
+var content = document.getElementById("content");
+
+const addContent = (msg) => {
+    var para = document.createElement("P");
+    var t = document.createTextNode(msg);
+    para.appendChild(t);
+    content.appendChild(para);
+}
+
+
+const hideLoader = () => {
+    document.getElementById("loader").style.display = "none";
+}
+
+const showLoader = (msg) => {
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("current-test-heading").innerHTML = msg;
+    content.innerHTML = "";
+}
+
+
+/**
 ----------------------ADDRESS TESTER FUNCTION START-----------------------
 **/
 const addressTester = () => {
 
-    var content = document.getElementById("content");
+    changeLinkColor("address-btn");
 
-    const addContent = (msg) => {
-        var para = document.createElement("P");
-        var t = document.createTextNode(msg);
-        para.appendChild(t);
-        content.appendChild(para);
-    }
-
-    const hideLoader = () => {
-        document.getElementById("loader").style.display = "none";
-    }
-
-    const showLoader = () => {
-        document.getElementById("loader").style.display = "block";
-        document.getElementById("current-test-heading").innerHTML = "Address app test suit";
-        content.innerHTML = "";
-    }
-
-    showLoader();
+    showLoader("Address app test suit");
     testUserSignUp().then(res => {
         addContent(res);
         testUserLogin().then((res) => {
@@ -584,10 +726,10 @@ const addressTester = () => {
                                 addContent(res);
                                 testDeleteAddress().then(res => {
                                     addContent(res);
-//                                    testUserLogoutAll().then(res => {
-//                                        addContent(res)
-//                                        hideLoader();
-//                                    })
+                                    //                                    testUserLogoutAll().then(res => {
+                                    //                                        addContent(res)
+                                    //                                        hideLoader();
+                                    //                                    })
                                     testUserDelete().then(res => {
                                         addContent(res)
                                         hideLoader();
@@ -608,46 +750,37 @@ const addressTester = () => {
 
 const menuTester = () => {
 
-    var content = document.getElementById("content");
+    changeLinkColor("menu-btn");
 
-    const addContent = (msg) => {
-        var para = document.createElement("P");
-        var t = document.createTextNode(msg);
-        para.appendChild(t);
-        content.appendChild(para);
-    }
-
-    const hideLoader = () => {
-        document.getElementById("loader").style.display = "none";
-    }
-
-    const showLoader = () => {
-        document.getElementById("loader").style.display = "block";
-        document.getElementById("current-test-heading").innerHTML = "Menu app test suit";
-        content.innerHTML = "";
-    }
-
-    showLoader();
+    showLoader("Menu app test suit");
     testRestaurantSignUp().then(res => {
         addContent(res);
         testRestaurantLogin().then((res) => {
             addContent(res);
-            testAddItem().then(res => {
+            testAddItem(menuItem1).then(res => {
                 addContent(res)
-                testGetItemByItemId().then(res =>{
-                    addContent(res)
-                    testPatchItem().then(res => {
+                testAddItem(menuItem2).then(res => {
+                    testGetItemByItemId().then(res => {
                         addContent(res)
-                        testGetItemByRestaurantId().then(res => {
+                        testPatchItem().then(res => {
                             addContent(res)
-                            testGetItemByItemId().then(res => {
+                            testGetItemByRestaurantId().then(res => {
                                 addContent(res)
-                                testDeleteItem().then(res => {
+                                testGetItemByItemId().then(res => {
                                     addContent(res)
-                                    testRestaurantDelete().then(res => {
+                                    testGetMenuByRestaurantId().then(res => {
                                         addContent(res)
-                                        hideLoader();
-                                    })
+                                        testGetItemByRestaurantIdAndItemId().then(res => {
+                                            addContent(res)
+                                            testDeleteItem().then(res => {
+                                                addContent(res)
+                                                testRestaurantDelete().then(res => {
+                                                    addContent(res)
+                                                    hideLoader();
+                                                })
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });
@@ -655,5 +788,54 @@ const menuTester = () => {
                 });
             });
         })
+    });
+};
+
+
+/**
+----------------------CART TESTER FUNCTION START-----------------------
+**/
+const cartTester = () => {
+
+    changeLinkColor("cart-btn");
+
+    showLoader("Cart app test suit");
+
+    testRestaurantSignUp().then(res => {
+        addContent(res);
+        testRestaurantLogin().then(res => {
+            addContent(res);
+            testAddItem(menuItem1).then(res => {
+                addContent(res);
+                testUserSignUp().then(res => {
+                    addContent(res);
+                    testUserLogin().then(res => {
+                        addContent(res);
+                        testAddItemToCart().then(res => {
+                            addContent(res);
+                            testAddItemToCart().then(res => {
+                                addContent(res);
+                                testDecreaseQuantityOfItemFromCart().then(res =>{
+                                    addContent(res);
+                                    testRemoveItemFromCart().then(res =>{
+                                        addContent(res);
+                                        testAddItemToCart(menuItem2).then(res => {
+                                            addContent(res);
+                                            testUserDelete().then(res => {
+                                                addContent(res);
+                                                testRestaurantDelete().then(res => {
+                                                    addContent(res);
+                                                    hideLoader();
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 };

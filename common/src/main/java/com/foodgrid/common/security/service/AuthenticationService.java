@@ -2,6 +2,7 @@ package com.foodgrid.common.security.service;
 
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.exception.exceptions.InvalidDataException;
+import com.foodgrid.common.exception.exceptions.NotFoundException;
 import com.foodgrid.common.exception.model.ApiExceptionDTO;
 import com.foodgrid.common.payload.dto.request.LogIn;
 import com.foodgrid.common.payload.dto.request.SignUp;
@@ -114,11 +115,13 @@ public class AuthenticationService {
     }
 
     public GenericIdResponse delete() {
-        try {
-            userRepository.deleteById(userSession.getUserId());
-            return new GenericIdResponse(userSession.getUserId(), "Deleted successfully..");
-        } catch (Exception e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
+        userRepository.findById(userSession.getUserId()).ifPresentOrElse(
+                user -> userRepository.save(user.deleteActivity()),
+                () -> {
+                    throw new NotFoundException("User not found");
+                }
+        );
+        return new GenericIdResponse(userSession.getUserId(), "Deleted successfully..");
+
     }
 }

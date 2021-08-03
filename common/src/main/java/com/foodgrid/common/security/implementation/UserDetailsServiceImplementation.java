@@ -151,7 +151,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                 )))
         )));
 
-        log.info("Data base initialized successfully");
+        log.info("Database initialized successfully");
     }
 
 }
