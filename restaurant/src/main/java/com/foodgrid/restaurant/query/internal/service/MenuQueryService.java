@@ -1,6 +1,7 @@
 package com.foodgrid.restaurant.query.internal.service;
 
 import com.foodgrid.common.exception.exceptions.NotFoundException;
+import com.foodgrid.common.payload.dto.response.GetItemResponse;
 import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.restaurant.query.internal.model.aggregate.MenuQueryModel;
 import com.foodgrid.restaurant.query.internal.model.entity.ItemQueryModel;
@@ -33,11 +34,41 @@ public class MenuQueryService {
     public ItemQueryModel getItemById(String id) {
         var menu = menuQueryRepository.findByRestaurantId(userSession.getUserId()).orElse(null);
         if (menu == null)
-            throw new NotFoundException("Not found for restaurant id " + userSession.getUserId());
+            throw new NotFoundException("Not available for restaurant id " + userSession.getUserId());
         var item = menu.getItems().stream().filter(itemQueryModel -> itemQueryModel.getId().equals(id)).findFirst().orElse(null);
         if (item == null)
-            throw new NotFoundException("Not found with id " + id);
-        log.info("Get menu for item id: {}", id);
+            throw new NotFoundException("Item not found with id " + id);
+        log.info("Get item for item id: {}", id);
         return item;
+    }
+
+    public ItemQueryModel getItemByRestaurantIdAndItemId(String restaurantId, String itemId) {
+        var menu = menuQueryRepository.findByRestaurantId(restaurantId).orElse(null);
+        if (menu == null)
+            throw new NotFoundException("Not found for restaurant id " + restaurantId);
+        var item = menu.getItems().stream().filter(itemQueryModel -> itemQueryModel.getId().equals(itemId)).findFirst().orElse(null);
+        if (item == null)
+            throw new NotFoundException("Item Not found with id " + itemId);
+        log.info("Get item for item id: {}", itemId);
+        return item;
+    }
+
+    public MenuQueryModel getMenuForRestaurant(String restaurantId) {
+        var menu = menuQueryRepository.findByRestaurantId(restaurantId).orElse(null);
+        if (menu == null)
+            throw new NotFoundException("Menu not found with id " + restaurantId);
+        log.info("Get menu for: {}", menu.getId());
+        return menu;
+    }
+
+    public GetItemResponse getItemByRestaurantIdAndItemIdShort(String restaurantId, String itemId) {
+        var menu = menuQueryRepository.findByRestaurantId(restaurantId).orElse(null);
+        if (menu == null)
+            throw new NotFoundException("Not found for restaurant id " + restaurantId);
+        var item = menu.getItems().stream().filter(itemQueryModel -> itemQueryModel.getId().equals(itemId)).findFirst().orElse(null);
+        if (item == null)
+            throw new NotFoundException("Item Not found with id " + itemId);
+        log.info("Get item short for item id: {}", itemId);
+        return new GetItemResponse(item.getId(), item.getName(), item.getValue());
     }
 }

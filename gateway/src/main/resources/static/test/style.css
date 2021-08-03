@@ -26,6 +26,7 @@ body > header > ul > li {
   display: inline;
   border-bottom: 0.25rem solid #1b1b1b;
   margin: 0.1rem;
+  border-radius: 0.2rem;
 }
 
 body > header > ul > li:hover {
@@ -37,7 +38,7 @@ body > header > ul > li:active {
   border-bottom-color: #979595;
 }
 
-  body > main {
+body > main {
   grid-area: main;
   height: 90vh;
 }

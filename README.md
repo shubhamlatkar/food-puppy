@@ -19,6 +19,6 @@ docker stop $(docker ps -a -q)
 3. Delete all stopped containers `docker rm $(docker ps -a -q)`.
 4. Delete all stopped images `docker rmi $(docker images -q)`.
 
-#### Ref
+#### References
 
-1. [Docker ref](https://www.codenotary.com/blog/extremely-useful-docker-commands/)
+1. [Docker](https://www.codenotary.com/blog/extremely-useful-docker-commands/)

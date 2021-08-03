@@ -8,7 +8,7 @@ services:
     ports:
       - 8161:8161
     environment:
-      ACTIVEMQ_STATIC_QUEUES: authentication
+      ACTIVEMQ_CONFIG_TOPICS_AUTHENTICATION: AUTHENTICATION
       ACTIVEMQ_ENABLED_SCHEDULER: "true"
       ACTIVEMQ_MIN_MEMORY: 512
       ACTIVEMQ_MAX_MEMORY: 2048
@@ -19,7 +19,7 @@ services:
     ports:
       - 4040:4040
     environment:
-      NGROK_AUTH: ${AUTH_TOKEN}
+      NGROK_AUTH: ${AUTH_TOKEN1}
       NGROK_PROTOCOL: TCP
       NGROK_LOOK_DOMAIN: activemq
       NGROK_PORT: 61616
@@ -29,13 +29,24 @@ services:
     restart: always
     container_name: database
 
+  dbclient:
+    image: mongo-express
+    container_name: dbclient
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=database
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - database
+    ports:
+      - 8081:8081
+
   mngrok:
     image: wernight/ngrok
     container_name: mngrok
     ports:
       - 4041:4040
     environment:
-      NGROK_AUTH: ${AUTH_TOKEN_2}
+      NGROK_AUTH: ${AUTH_TOKEN2}
       NGROK_PROTOCOL: TCP
       NGROK_LOOK_DOMAIN: database
       NGROK_PORT: 27017

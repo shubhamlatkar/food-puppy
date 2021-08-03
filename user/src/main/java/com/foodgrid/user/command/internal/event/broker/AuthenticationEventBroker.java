@@ -6,6 +6,7 @@ import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
+import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,11 @@ public class AuthenticationEventBroker {
 
         List<UserAuthEventDTO> userList = new ArrayList<>();
         users.forEach(user -> {
-            if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime())
+            if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime()) {
                 userList.add(new UserToUserAuthEvent(user, UserTypes.USER).getUser());
+                if (user.getMetadata().getLastActivity().equals(UserActivities.DELETE))
+                    userRepository.delete(user);
+            }
         });
 
         if (!userList.isEmpty()) {

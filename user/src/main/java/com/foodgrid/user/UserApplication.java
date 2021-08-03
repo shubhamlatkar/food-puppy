@@ -6,6 +6,7 @@ import com.foodgrid.common.security.implementation.UserDetailsServiceImplementat
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
 import com.foodgrid.user.command.internal.model.aggregate.AddressCommandModel;
+import com.foodgrid.user.command.internal.model.aggregate.CartCommandModel;
 import com.foodgrid.user.query.internal.model.aggregate.AddressQueryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -49,6 +50,7 @@ public class UserApplication {
         return user -> {
             mongoTemplate.dropCollection(AddressQueryModel.class);
             mongoTemplate.dropCollection(AddressCommandModel.class);
+            mongoTemplate.dropCollection(CartCommandModel.class);
             userDetailsService.initDatabase(mongoTemplate);
             Set<String> roles = new HashSet<>();
             roles.add("ROLE_USER");
