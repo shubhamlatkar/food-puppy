@@ -12,7 +12,6 @@ import com.foodgrid.common.security.repository.AuthorityRepository;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
-import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -104,10 +103,10 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         signUp.getEmail(),
                         passwordConfig.passwordEncoder().encode(signUp.getPassword()),
                         roles,
-                        UserTypes.USER
+                        signUp.getType()
                 )
         );
-        log.info("User saved successfully");
+        log.info("User saved successfully for username: {}", signUp.getUsername());
         return true;
 
     }

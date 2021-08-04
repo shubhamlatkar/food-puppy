@@ -37,6 +37,9 @@ public class EventConfiguration {
     @Value("${event.authentication}")
     private String authenticationTopic;
 
+    @Value("${event.user.cart}")
+    private String cartTopic;
+
     @Bean
     @Qualifier("addressTopic")
     public Topic addressTopic() {
@@ -53,5 +56,11 @@ public class EventConfiguration {
     @Qualifier("menuTopic")
     public Topic menuTopic() {
         return new ActiveMQTopic(menuTopic);
+    }
+
+    @Bean
+    @Qualifier("cartTopic")
+    public Topic cartTopic() {
+        return new ActiveMQTopic(cartTopic);
     }
 }

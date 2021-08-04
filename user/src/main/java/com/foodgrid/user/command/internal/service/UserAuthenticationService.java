@@ -4,7 +4,6 @@ import com.foodgrid.common.payload.dto.response.GenericIdResponse;
 import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.common.security.service.AuthenticationService;
 import com.foodgrid.user.command.internal.repository.AddressCommandRepository;
-import com.foodgrid.user.command.internal.repository.CartCommandRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +16,15 @@ public class UserAuthenticationService {
     private final AddressCommandRepository addressCommandRepository;
     private final UserSession userSession;
     private final AddressCommandService addressCommandService;
-    private final CartCommandRepository cartCommandRepository;
+    private final CartCommandService cartCommandService;
 
     @Autowired
-    public UserAuthenticationService(AuthenticationService authenticationService, AddressCommandRepository addressCommandRepository, UserSession userSession, AddressCommandService addressCommandService, CartCommandRepository cartCommandRepository) {
+    public UserAuthenticationService(AuthenticationService authenticationService, AddressCommandRepository addressCommandRepository, UserSession userSession, AddressCommandService addressCommandService, CartCommandService cartCommandService) {
         this.authenticationService = authenticationService;
         this.addressCommandRepository = addressCommandRepository;
         this.userSession = userSession;
         this.addressCommandService = addressCommandService;
-        this.cartCommandRepository = cartCommandRepository;
+        this.cartCommandService = cartCommandService;
     }
 
     public GenericIdResponse deleteMe() {
@@ -36,7 +35,7 @@ public class UserAuthenticationService {
                                 .parallelStream()
                                 .forEach(addressCommandModel ->
                                         addressCommandService.deleteAddressById(addressCommandModel.getId())));
-        cartCommandRepository.findById(userSession.getUserId()).ifPresent(cartCommandRepository::delete);
+        cartCommandService.removeCart();
         return authenticationService.delete();
     }
 }

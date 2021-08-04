@@ -157,7 +157,7 @@ const testRestaurantDelete = () =>
 **/
 const testDeleteItem = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/restaurant/user/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+        var url = build ? "/restaurant/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
@@ -393,7 +393,7 @@ const testUserLogout = () =>
 // User api for logout
 const testUserLogoutAll = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/user/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
+        var url = build ? "/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -645,6 +645,26 @@ const testDecreaseQuantityOfItemFromCart = () =>
 
     });
 
+const testGetCart = () =>
+    new Promise(function(resolve, reject) {
+        var url = build ? "/user/api/v1/cart" : "http://localhost:8081/api/v1/cart";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+
+        xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = JSON.parse(xhr.responseText);
+                console.log("testGetCart", xhr.status, data);
+                resolve("testGetCart successful");
+            }
+        };
+
+        xhr.send();
+    });
+
 /**
 ----------------------NOTIFICATION START-----------------------
 **/
@@ -678,6 +698,7 @@ const changeLinkColor = activeLink => {
     document.getElementById("menu-btn").style.borderBottomColor = "#1b1b1b";
     document.getElementById("user-btn").style.borderBottomColor = "#1b1b1b";
     document.getElementById("address-btn").style.borderBottomColor = "#1b1b1b";
+    document.getElementById("cart-btn").style.borderBottomColor = "#1b1b1b";
     document.getElementById(activeLink).style.borderBottomColor = "#979595";
 }
 
@@ -813,19 +834,25 @@ const cartTester = () => {
                         addContent(res);
                         testAddItemToCart().then(res => {
                             addContent(res);
-                            testAddItemToCart().then(res => {
+                            testGetCart().then(res => {
                                 addContent(res);
-                                testDecreaseQuantityOfItemFromCart().then(res =>{
+                                testAddItemToCart().then(res => {
                                     addContent(res);
-                                    testRemoveItemFromCart().then(res =>{
+                                    testDecreaseQuantityOfItemFromCart().then(res =>{
                                         addContent(res);
-                                        testAddItemToCart(menuItem2).then(res => {
+                                        testRemoveItemFromCart().then(res =>{
                                             addContent(res);
-                                            testUserDelete().then(res => {
+                                            testGetCart().then(res => {
                                                 addContent(res);
-                                                testRestaurantDelete().then(res => {
+                                                testAddItemToCart(menuItem2).then(res => {
                                                     addContent(res);
-                                                    hideLoader();
+                                                    testUserDelete().then(res => {
+                                                        addContent(res);
+                                                        testRestaurantDelete().then(res => {
+                                                            addContent(res);
+                                                            hideLoader();
+                                                        });
+                                                    });
                                                 });
                                             });
                                         });

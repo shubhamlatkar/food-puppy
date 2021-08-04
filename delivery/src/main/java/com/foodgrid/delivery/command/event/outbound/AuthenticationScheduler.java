@@ -3,9 +3,9 @@ package com.foodgrid.delivery.command.event.outbound;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
+import com.foodgrid.common.security.component.DeletedUsers;
 import com.foodgrid.common.security.model.aggregate.User;
 import com.foodgrid.common.security.repository.UserRepository;
-import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -31,6 +32,9 @@ public class AuthenticationScheduler {
     @Value("${event.authentication}")
     private String authenticationEvent;
 
+    @Autowired
+    private DeletedUsers deletedUsers;
+
     @Scheduled(fixedDelay = 1000)
     public void send() {
         List<User> users = userRepository.findAll();
@@ -39,12 +43,14 @@ public class AuthenticationScheduler {
 
         List<UserAuthEventDTO> userList = new ArrayList<>();
         users.forEach(user -> {
-            if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime()) {
+            if (user.getMetadata().getLastUpdatedAt().getTime() > start.getTime() && user.getType().equals(UserTypes.DELIVERY))
                 userList.add(new UserToUserAuthEvent(user, UserTypes.DELIVERY).getUser());
-                if (user.getMetadata().getLastActivity().equals(UserActivities.DELETE))
-                    userRepository.delete(user);
-            }
         });
+
+        if (deletedUsers.getUsers() != null && Boolean.FALSE.equals(deletedUsers.getUsers().isEmpty())) {
+            deletedUsers.getUsers().forEach(user1 -> userList.add(new UserToUserAuthEvent(user1, UserTypes.DELIVERY).getUser()));
+            deletedUsers.setUsers(new HashSet<>());
+        }
 
         if (!userList.isEmpty()) {
             log.info("New activity: {}", userList);
