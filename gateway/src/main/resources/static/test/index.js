@@ -157,7 +157,7 @@ const testRestaurantDelete = () =>
 **/
 const testDeleteItem = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/restaurant/user/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
+        var url = build ? "/restaurant/api/v1/menu/item/" + itemId : "http://localhost:8082/api/v1/menu/item/" + itemId;
 
         var xhr = new XMLHttpRequest();
         xhr.open("DELETE", url);
@@ -393,7 +393,7 @@ const testUserLogout = () =>
 // User api for logout
 const testUserLogoutAll = () =>
     new Promise(function(resolve, reject) {
-        var url = build ? "/user/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
+        var url = build ? "/user/api/v1/logoutall" : "http://localhost:8081/api/v1/logoutall";
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
