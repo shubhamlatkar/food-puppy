@@ -12,8 +12,6 @@ git clone http://github.com/shubhamlatkar/foodgrid.git && cd foodgrid/ && docker
 
 ### Useful docker commands
 
-docker stop $(docker ps -a -q)
-
 1. Remove all images `docker image prune -a`.
 2. Stop all container `docker stop $(docker ps -a -q)`.
 3. Delete all stopped containers `docker rm $(docker ps -a -q)`.

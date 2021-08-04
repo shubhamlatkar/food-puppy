@@ -1,12 +1,12 @@
 package com.foodgrid.user.query.internal.service;
 
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
+import com.foodgrid.common.exception.exceptions.NotFoundException;
 import com.foodgrid.user.query.internal.model.aggregate.AddressQueryModel;
 import com.foodgrid.user.query.internal.payload.response.FindByUserId;
 import com.foodgrid.user.query.internal.repository.AddressQueryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,22 +40,22 @@ public class AddressQueryService {
         }
     }
 
-    public ResponseEntity<FindByUserId> getAddressByUserId(String userId) {
+    public FindByUserId getAddressByUserId(String userId) {
         try {
             var addresses = addressQueryRepository.findByUserId(userId).orElse(null);
             log.info("Get address query for user id:{}", userId);
-            return ResponseEntity.ok(new FindByUserId(userId, addresses));
+            return new FindByUserId(userId, addresses);
         } catch (Exception e) {
             throw new InternalServerErrorException("Internal err ");
         }
     }
 
-    public ResponseEntity<AddressQueryModel> getAddressById(String addressId) {
+    public AddressQueryModel getAddressById(String addressId) {
         var address = addressQueryRepository.findById(addressId).orElse(null);
         if (address == null) {
-            log.info("Get address query for address if: {}", addressId);
-            return ResponseEntity.ok(new AddressQueryModel());
+            throw new NotFoundException("Address not found for id: " + addressId);
         }
-        return ResponseEntity.ok(address);
+        log.info("Get address query for address id: {}", addressId);
+        return address;
     }
 }

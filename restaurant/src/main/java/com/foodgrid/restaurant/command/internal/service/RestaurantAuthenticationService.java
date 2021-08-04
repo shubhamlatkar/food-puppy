@@ -20,7 +20,7 @@ public class RestaurantAuthenticationService {
     }
 
     public GenericIdResponse deleteMe() {
-        log.info("Menu Command removed");
+        log.info("Menu Command remove invoked through delete user");
         menuCommandService.removeMenu();
         return authenticationService.delete();
     }

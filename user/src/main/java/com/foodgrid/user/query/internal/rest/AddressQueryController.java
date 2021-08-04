@@ -21,11 +21,11 @@ public class AddressQueryController {
 
     @GetMapping("/${endpoint.user.address}/user/{userId}")
     public ResponseEntity<FindByUserId> getAddressByUserId(@PathVariable String userId) {
-        return addressService.getAddressByUserId(userId);
+        return ResponseEntity.ok(addressService.getAddressByUserId(userId));
     }
 
     @GetMapping("/${endpoint.user.address}/{addressId}")
     public ResponseEntity<AddressQueryModel> getAddressById(@PathVariable String addressId) {
-        return addressService.getAddressById(addressId);
+        return ResponseEntity.ok(addressService.getAddressById(addressId));
     }
 }

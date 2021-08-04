@@ -9,6 +9,7 @@ import com.foodgrid.common.payload.dto.request.SignUp;
 import com.foodgrid.common.payload.dto.response.AuthenticationActionResponse;
 import com.foodgrid.common.payload.dto.response.GenericIdResponse;
 import com.foodgrid.common.payload.dto.response.JwtResponse;
+import com.foodgrid.common.security.component.DeletedUsers;
 import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.common.security.implementation.UserDetailsImplementation;
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
@@ -35,31 +36,35 @@ public class AuthenticationService {
     private final UserDetailsServiceImplementation userDetailsService;
     private final JwtTokenUtility jwtTokenUtility;
     private final UserSession userSession;
+    private final DeletedUsers deletedUsers;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, AuthenticationManager authenticationManager, UserDetailsServiceImplementation userDetailsService, JwtTokenUtility jwtTokenUtility, UserSession userSession) {
+    public AuthenticationService(UserRepository userRepository, AuthenticationManager authenticationManager, UserDetailsServiceImplementation userDetailsService, JwtTokenUtility jwtTokenUtility, UserSession userSession, DeletedUsers deletedUsers) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtility = jwtTokenUtility;
         this.userSession = userSession;
+        this.deletedUsers = deletedUsers;
     }
 
     public AuthenticationActionResponse signup(SignUp signUp, BindingResult result) {
         if (result.hasErrors())
             throw new InvalidDataException("Invalid data");
-        else if (Boolean.TRUE.equals(userDetailsService.saveUser(signUp)))
+        else if (Boolean.TRUE.equals(userDetailsService.saveUser(signUp))) {
+            log.info("Signup invoked");
             return new AuthenticationActionResponse(
                     UserActivities.SIGNUP,
                     true,
                     new Date(),
                     "User data saved"
             );
-        else
+        } else
             throw new InternalServerErrorException("Some internal error caught");
     }
 
     public AuthenticationActionResponse logOut() {
+        log.info("Logger out...");
         return new AuthenticationActionResponse(
                 UserActivities.LOGOUT,
                 true,
@@ -69,6 +74,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationActionResponse logoutAll() {
+        log.info("Logger out of all devices");
         return new AuthenticationActionResponse(
                 UserActivities.LOGOUT_ALL,
                 true,
@@ -96,11 +102,12 @@ public class AuthenticationService {
         final String jwtToken = jwtTokenUtility.generateToken(userDetails);
 
         userRepository.findByUsername(request.getUsername()).ifPresent(user -> userRepository.save(user.addToken(jwtToken)));
-
+        log.info("Login for user username: {}", request.getUsername());
         return new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getId());
     }
 
     public AuthenticationActionResponse tryAutoLogin() {
+        log.info("Auto login");
         return new AuthenticationActionResponse(
                 UserActivities.LOGIN,
                 true,
@@ -116,7 +123,12 @@ public class AuthenticationService {
 
     public GenericIdResponse delete() {
         userRepository.findById(userSession.getUserId()).ifPresentOrElse(
-                user -> userRepository.save(user.deleteActivity()),
+                user -> {
+                    userRepository.delete(user);
+                    user.deleteActivity();
+                    deletedUsers.addUser(user);
+                    log.info("Deleted user: {}", user.getUsername());
+                },
                 () -> {
                     throw new NotFoundException("User not found");
                 }
