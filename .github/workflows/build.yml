@@ -32,18 +32,23 @@ jobs:
 
       - name: Copy Common User
         run: cp -R common/src/main/java/com/foodgrid/common/ user/src/main/java/com/foodgrid && rm user/src/main/java/com/foodgrid/common/CommonApplication.java
+
       - name: Copy Common Restaurant
         run: cp -R common/src/main/java/com/foodgrid/common/ restaurant/src/main/java/com/foodgrid && rm restaurant/src/main/java/com/foodgrid/common/CommonApplication.java
+
       - name: Copy Common Accounts
         run: cp -R common/src/main/java/com/foodgrid/common/ accounts/src/main/java/com/foodgrid && rm accounts/src/main/java/com/foodgrid/common/CommonApplication.java
+
       - name: Copy Common Delivery
         run: cp -R common/src/main/java/com/foodgrid/common/ delivery/src/main/java/com/foodgrid && rm delivery/src/main/java/com/foodgrid/common/CommonApplication.java
+
       - name: Copy Common Notification
         run: cp -R common/src/main/java/com/foodgrid/common/ notification/src/main/java/com/foodgrid && rm notification/src/main/java/com/foodgrid/common/CommonApplication.java
+
       - name: Copy Common Order
         run: cp -R common/src/main/java/com/foodgrid/common/ order/src/main/java/com/foodgrid && rm order/src/main/java/com/foodgrid/common/CommonApplication.java
 
-      - name: Package All
+      - name: Install All Dependencies
         run: mvn install
 
       - name: Build and analyze Accounts
@@ -51,3 +56,51 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_ACCOUNTS }}
         run: cd accounts && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_accounts
+
+      - name: Build and analyze Configuration
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_CONFIGURATION }}
+        run: cd configuration && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_configuration
+
+      - name: Build and analyze Delivery
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_DELIVERY }}
+        run: cd delivery && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_delivery
+
+      - name: Build and analyze Eureka
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_EUREKA }}
+        run: cd eureka && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_eureka
+
+      - name: Build and analyze Gateway
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_GATEWAY }}
+        run: cd gateway && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_gateway
+
+      - name: Build and analyze Notification
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_NOTIFICATION }}
+        run: cd notification && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_notification
+
+      - name: Build and analyze order
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_ORDER }}
+        run: cd order && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_order
+
+      - name: Build and analyze Restaurant
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_RESTAURANT }}
+        run: cd restaurant && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_restaurant
+
+      - name: Build and analyze User
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_USER }}
+        run: cd user && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_user
