@@ -44,10 +44,10 @@ jobs:
         run: cp -R common/src/main/java/com/foodgrid/common/ order/src/main/java/com/foodgrid && rm order/src/main/java/com/foodgrid/common/CommonApplication.java
 
       - name: Package All
-        run: mvn package -DskipTests
+        run: mvn dependency:go-offline -B
 
       - name: Build and analyze Accounts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_ACCOUNTS }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_accounts
+        run: cd accounts && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_accounts
