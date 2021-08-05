@@ -44,7 +44,7 @@ jobs:
         run: cp -R common/src/main/java/com/foodgrid/common/ order/src/main/java/com/foodgrid && rm order/src/main/java/com/foodgrid/common/CommonApplication.java
 
       - name: Package All
-        run: mvn dependency:go-offline -B
+        run: mvn install
 
       - name: Build and analyze Accounts
         env:
