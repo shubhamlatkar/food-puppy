@@ -29,6 +29,7 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
       - name: Copy Common User
         run: cp -R common/src/main/java/com/foodgrid/common/ user/src/main/java/com/foodgrid && rm user/src/main/java/com/foodgrid/common/CommonApplication.java
       - name: Copy Common Restaurant
@@ -41,8 +42,9 @@ jobs:
         run: cp -R common/src/main/java/com/foodgrid/common/ notification/src/main/java/com/foodgrid && rm notification/src/main/java/com/foodgrid/common/CommonApplication.java
       - name: Copy Common Order
         run: cp -R common/src/main/java/com/foodgrid/common/ order/src/main/java/com/foodgrid && rm order/src/main/java/com/foodgrid/common/CommonApplication.java
-      - name: Build and analyze
+
+      - name: Build and analyze Accounts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_ACCOUNTS }}
+        run: cd accounts && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_accounts
