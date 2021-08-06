@@ -61,7 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_CONFIGURATION }}
-        run: cd configuration && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_configuration && ls -al target/
+        run: cd configuration && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_configuration
 
       - name: Build and analyze Delivery
         env:
