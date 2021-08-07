@@ -2,6 +2,7 @@ event:
   authentication: AUTHENTICATION
   user:
     address: USER-ADDRESS
+    cart: USER-CART
   restaurant:
     menu: RESTAURANT-MENU
 
