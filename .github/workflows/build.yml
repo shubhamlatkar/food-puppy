@@ -31,7 +31,10 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Install All Dependencies And Generate Jacoco Report
-        run: mvn clean install -DskipTests jacoco:prepare-agent test jacoco:report-aggregate
+        run: mvn clean install
+
+      - name: Test And Generate Jacoco Report
+        run:  mvn jacoco:prepare-agent test jacoco:report-aggregate
 
       - name: Build and analyze Accounts
         env:
@@ -79,10 +82,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_RESTAURANT }}
-        run: cd restaurant && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_restaurant
+        run: cd restaurant && mvn install -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_restaurant
 
       - name: Build and analyze User
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FOODGRID_USER }}
-        run: cd user && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_user
+        run: cd user && mvn install -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shubhamlatkar_foodgrid_user
