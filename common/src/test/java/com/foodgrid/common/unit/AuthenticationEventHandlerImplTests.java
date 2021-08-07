@@ -14,21 +14,16 @@ import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@DataMongoTest
 class AuthenticationEventHandlerImplTests {
 
     @Autowired
@@ -44,7 +39,7 @@ class AuthenticationEventHandlerImplTests {
     private RoleRepository roleRepository;
 
     @Test
-    void contextLoads() {
+    void testAuthenticationEventHandlerImplementationLoginMethod() {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         when(roleRepository.findByName("USER")).thenReturn(java.util.Optional.of(tempRole));
 
