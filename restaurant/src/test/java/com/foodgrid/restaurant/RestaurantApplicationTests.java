@@ -1,11 +1,10 @@
 package com.foodgrid.restaurant;
 
-import com.foodgrid.restaurant.command.internal.event.outbound.AuthenticationEventBroker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-@WebMvcTest(AuthenticationEventBroker.class)
+@AutoConfigureMockMvc
 class RestaurantApplicationTests {
 
     @Test

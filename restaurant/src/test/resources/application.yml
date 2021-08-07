@@ -40,6 +40,10 @@ endpoint:
   account:
     prefix: account
 
+eureka:
+  client:
+    enabled: false
+
 spring:
   profiles:
     active: TEST
