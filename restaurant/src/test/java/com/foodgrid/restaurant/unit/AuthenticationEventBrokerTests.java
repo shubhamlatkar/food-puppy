@@ -57,7 +57,7 @@ class AuthenticationEventBrokerTests {
         when(deletedUsers.getUsers())
                 .thenReturn(Set.of(tempUser));
 
-        authenticationEventBroker.send();
+//        authenticationEventBroker.send();
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
 }
