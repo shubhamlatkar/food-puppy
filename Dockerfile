@@ -81,20 +81,6 @@ RUN rm -r delivery/src/main/frontend
 COPY common/src common/src
 COPY common/pom.xml common/pom.xml
 
-COPY common/src/main/java/com/foodgrid/common user/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common restaurant/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common notification/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common accounts/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common order/src/main/java/com/foodgrid
-COPY common/src/main/java/com/foodgrid/common delivery/src/main/java/com/foodgrid
-
-RUN rm notification/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm user/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm restaurant/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm accounts/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm order/src/main/java/com/foodgrid/CommonApplication.java
-RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
-
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
