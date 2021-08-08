@@ -18,10 +18,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsMessagingTemplate;
 
+import javax.jms.Destination;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -43,6 +47,7 @@ class AuthenticationEventBrokerTests {
     @MockBean
     private UserRepository userRepository;
 
+
     @Test
     void testAuthenticationEventBrokerTestsSend() {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
@@ -57,7 +62,20 @@ class AuthenticationEventBrokerTests {
         when(deletedUsers.getUsers())
                 .thenReturn(Set.of(tempUser));
 
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            System.out.println("called with arguments: " + Arrays.toString(args));
+            return null;
+        }).when(jmsMessagingTemplate).convertAndSend((String) any(), (Object) any());
+
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            System.out.println("called with arguments: " + Arrays.toString(args));
+            return null;
+        }).when(jmsMessagingTemplate).convertAndSend((Destination) any(), (Object) any());
+
 //        authenticationEventBroker.send();
+
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
 }

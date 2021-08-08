@@ -46,7 +46,7 @@ eureka:
 
 spring:
   profiles:
-    active: TEST
+    active: test
   application:
     name: restaurant
   cloud:

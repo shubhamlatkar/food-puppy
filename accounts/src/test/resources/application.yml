@@ -1,0 +1,54 @@
+`event:
+   authentication: AUTHENTICATION
+   user:
+     address: USER-ADDRESS
+     cart: USER-CART
+   restaurant:
+     menu: RESTAURANT-MENU
+
+ endpoint:
+   service: api
+   version: v1
+   public: public
+   short: short
+   authentication:
+     login: login
+     logout: logmeout
+     signup: signup
+     logoutAll: logoutall
+     autoLogin: autoLogin
+     delete: delete
+   notification:
+     prefix: notification
+     user: user
+     restaurant: restaurant
+     delivery: delivery
+   user:
+     prefix: user
+     address: address
+     cart: cart
+     item: item
+     remove: remove
+   restaurant:
+     prefix: restaurant
+     menu: menu
+     item: item
+   delivery:
+     prefix: delivery
+   order:
+     prefix: order
+   account:
+     prefix: account
+
+ eureka:
+   client:
+     enabled: false
+
+ spring:
+   profiles:
+     active: test
+   application:
+     name: restaurant
+   cloud:
+     config:
+       uri: http://localhost:8888
