@@ -41,6 +41,10 @@ endpoint:
     prefix: account
 
 spring:
+  profiles:
+    active: TEST
+  application:
+    name: user
   cloud:
     config:
       uri: http://localhost:8888

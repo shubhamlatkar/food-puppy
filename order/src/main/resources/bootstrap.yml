@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: ${PROFILE}
+    active: ${PROFILE:test}
   application:
     name: order
   cloud:

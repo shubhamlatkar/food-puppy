@@ -1,4 +1,4 @@
-#### Stage 2: Build the frontend
+#### Stage 1: Build the frontend
 FROM node:10.24.1-alpine3.11 as ui
 
 WORKDIR /frontend
@@ -27,21 +27,17 @@ RUN npm i
 
 RUN npm run build
 
-
-#### Stage 1: Build the application
+#### Stage 2: Build the application
 FROM openjdk:16-jdk-alpine as build
 
-# Set the current working directory inside the image
 WORKDIR /app
 
 # Copy maven executable to the image
 COPY mvnw .
 COPY .mvn .mvn
 
-# Copy the pom.xml file
 COPY pom.xml .
 
-# Copy the project source
 COPY eureka/src eureka/src
 COPY eureka/pom.xml eureka/pom.xml
 
@@ -100,7 +96,6 @@ RUN rm delivery/src/main/java/com/foodgrid/CommonApplication.java
 # the pom.xml file has changed.
 RUN ./mvnw dependency:go-offline -B
 
-
 # Package the application
 RUN ./mvnw package -DskipTests
 
@@ -122,7 +117,7 @@ RUN mkdir -p order/target/dependency && (cd order/target/dependency; jar -xf ../
 
 RUN mkdir -p delivery/target/dependency && (cd delivery/target/dependency; jar -xf ../*.jar)
 
-#### Stage 2: A  docker image with command to run the configuration
+#### Stage 3: A  docker image with command to run the configuration
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as configuration
 
 ARG DEPENDENCY=/app/configuration/target/dependency
@@ -135,7 +130,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8888
 ENTRYPOINT ["/bin/sh", "-c", "sleep 30 && java -cp app:app/lib/* com.foodgrid.configuration.ConfigurationApplication"] configuration
 
-#### Stage 2: A  docker image with command to run the eureka
+#### Stage 4: A  docker image with command to run the eureka
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as eureka
 
 ARG DEPENDENCY=/app/eureka/target/dependency
@@ -148,7 +143,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8761
 ENTRYPOINT ["/bin/sh", "-c", "sleep 50 && java -cp app:app/lib/* com.foodgrid.eureka.EurekaApplication"] eureka
 
-#### Stage 2: A docker image with command to run the order
+#### Stage 5: A docker image with command to run the order
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as order
 
 ARG DEPENDENCY=/app/order/target/dependency
@@ -161,7 +156,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8084
 ENTRYPOINT ["/bin/sh","-c", "sleep 70 && java -cp app:app/lib/* com.foodgrid.order.OrderApplication"] order
 
-#### Stage 2: A docker image with command to run the accounts
+#### Stage 6: A docker image with command to run the accounts
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as accounts
 
 ARG DEPENDENCY=/app/accounts/target/dependency
@@ -174,7 +169,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8086
 ENTRYPOINT ["/bin/sh","-c", "sleep 80 && java -cp app:app/lib/* com.foodgrid.accounts.AccountsApplication"] accounts
 
-#### Stage 2: A docker image with command to run the notification
+#### Stage 7: A docker image with command to run the notification
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as notification
 
 ARG DEPENDENCY=/app/notification/target/dependency
@@ -187,7 +182,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8083
 ENTRYPOINT ["/bin/sh","-c", "sleep 90 && java -cp app:app/lib/* com.foodgrid.notification.NotificationApplication"] notification
 
-#### Stage 2: A  docker image with command to run the user
+#### Stage 8: A  docker image with command to run the user
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as user
 
 ARG DEPENDENCY=/app/user/target/dependency
@@ -203,7 +198,7 @@ EXPOSE 8081
 ENTRYPOINT ["/bin/sh", "-c", "sleep 120 && java -cp app:app/lib/* com.foodgrid.user.UserApplication"] user
 
 
-#### Stage 2: A docker image with command to run the restaurant
+#### Stage 9: A docker image with command to run the restaurant
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as restaurant
 
 ARG DEPENDENCY=/app/restaurant/target/dependency
@@ -216,7 +211,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8082
 ENTRYPOINT ["/bin/sh","-c", "sleep 130 && java -cp app:app/lib/* com.foodgrid.restaurant.RestaurantApplication"] restaurant
 
-#### Stage 2: A docker image with command to run the delivery
+#### Stage 10: A docker image with command to run the delivery
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as delivery
 
 ARG DEPENDENCY=/app/delivery/target/dependency
@@ -229,7 +224,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/
 EXPOSE 8085
 ENTRYPOINT ["/bin/sh","-c", "sleep 140 && java -cp app:app/lib/* com.foodgrid.delivery.DeliveryApplication"] delivery
 
-#### Stage 2: A  docker image with command to run the gateway
+#### Stage 11: A  docker image with command to run the gateway
 FROM mcr.microsoft.com/java/jre-headless:11-zulu-alpine as gateway
 
 ARG DEPENDENCY=/app/gateway/target/dependency

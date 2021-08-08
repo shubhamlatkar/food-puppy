@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -37,6 +38,7 @@ public class DeliveryApplication {
     private UserDetailsServiceImplementation userDetailsService;
 
     @Bean
+    @Profile("!test")
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
         return user -> {
             userDetailsService.initDatabase(mongoTemplate);
