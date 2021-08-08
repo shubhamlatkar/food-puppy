@@ -1,4 +1,4 @@
-`event:
+event:
    authentication: AUTHENTICATION
    user:
      address: USER-ADDRESS
