@@ -60,7 +60,7 @@ class UserDetailsServiceImplementationTests {
     @MockBean
     private DaoAuthenticationProvider aaoAuthenticationProvider;
 
-    @Autowired
+    @MockBean
     private MongoTemplate mongoTemplate;
 
     @Autowired
@@ -108,17 +108,5 @@ class UserDetailsServiceImplementationTests {
                 UserTypes.USER
         )));
 
-    }
-
-    @Test
-    void testUserDetailsServiceImplementationInitDatabase() {
-        doAnswer(invocationOnMock -> null)
-                .when(authorityRepository).saveAll(any());
-        doAnswer(invocationOnMock -> null)
-                .when(roleRepository).saveAll(any());
-        doAnswer(invocationOnMock -> null)
-                .when(jwtTokenUtility).setSecret(anyString());
-        userDetailsServiceImplementation.initDatabase(mongoTemplate);
-        Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
 }
