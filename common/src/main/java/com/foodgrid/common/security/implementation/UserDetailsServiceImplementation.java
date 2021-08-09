@@ -4,7 +4,6 @@ package com.foodgrid.common.security.implementation;
 import com.foodgrid.common.exception.exceptions.InternalServerErrorException;
 import com.foodgrid.common.exception.exceptions.InvalidDataException;
 import com.foodgrid.common.payload.dto.request.SignUp;
-import com.foodgrid.common.security.configuration.BeanConfiguration;
 import com.foodgrid.common.security.model.aggregate.Authority;
 import com.foodgrid.common.security.model.aggregate.Role;
 import com.foodgrid.common.security.model.aggregate.User;
@@ -23,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,7 +50,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private BeanConfiguration passwordConfig;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     @Qualifier("external")
@@ -101,7 +101,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
                         signUp.getUsername(),
                         signUp.getPhone(),
                         signUp.getEmail(),
-                        passwordConfig.passwordEncoder().encode(signUp.getPassword()),
+                        passwordEncoder.encode(signUp.getPassword()),
                         roles,
                         signUp.getType()
                 )
@@ -115,6 +115,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         ResponseEntity<String> response
                 = restTemplate.getForEntity(configUri + "/api/v1/secret/", String.class);
         jwtTokenUtility.setSecret(response.getBody());
+
 
         mongoTemplate.dropCollection(Authority.class);
         mongoTemplate.dropCollection(Role.class);
