@@ -20,8 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,12 +54,6 @@ class UserDetailsServiceImplementationTests {
 
     @MockBean
     private JwtTokenUtility jwtTokenUtility;
-
-    @MockBean
-    private DaoAuthenticationProvider aaoAuthenticationProvider;
-
-    @MockBean
-    private MongoTemplate mongoTemplate;
 
     @Autowired
     private UserDetailsServiceImplementation userDetailsServiceImplementation;
@@ -108,5 +100,18 @@ class UserDetailsServiceImplementationTests {
                 UserTypes.USER
         )));
 
+    }
+
+    @Test
+    void testUserDetailsServiceImplementationInitDatabase() {
+//        doAnswer(invocationOnMock -> null)
+//                .when(authorityRepository).saveAll(any());
+//        doAnswer(invocationOnMock -> null)
+//                .when(roleRepository).saveAll(any());
+//        doAnswer(invocationOnMock -> null)
+//                .when(jwtTokenUtility).setSecret(anyString());
+//        doAnswer(invocationOnMock -> null).when(mongoTemplate).dropCollection(anyString());
+//        userDetailsServiceImplementation.initDatabase(mongoTemplate);
+        Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
 }
