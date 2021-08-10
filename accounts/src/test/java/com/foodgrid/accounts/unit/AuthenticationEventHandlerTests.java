@@ -47,13 +47,13 @@ class AuthenticationEventHandlerTests {
             return null;
         }).when(authenticationEventHandlerImplementation).authConsumer(any());
 
-        doAnswer(invocationOnMock -> null)
-                .when(authenticationEventHandler).authConsumer(
-                        new AuthenticationEvent(
-                                true,
-                                List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com")))
-                );
-
+//        doAnswer(invocationOnMock -> null)
+//                .when(authenticationEventHandler).authConsumer(
+//                        new AuthenticationEvent(
+//                                true,
+//                                List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com")))
+//                );
+        authenticationEventHandler.authConsumer(new AuthenticationEvent(true, List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com"))));
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
 }
