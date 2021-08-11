@@ -20,10 +20,38 @@ import java.util.List;
 class UserToUserAuthEventTests {
 
     @Test
-    void testUserToUserAuthEventTests() {
+    void testUserToUserAuthEventTestsLogin() {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));
+        tempUser.setId("1");
+        tempUser.addToken("Test_token");
+        var userToUserAuthEvent = new UserToUserAuthEvent(tempUser, UserTypes.USER);
+        Assertions.assertNotNull(userToUserAuthEvent.getUser());
+    }
+
+    @Test
+    void testUserToUserAuthEventTestsLogout() {
+        var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
+        var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
+        tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGOUT));
+        var metaData = tempUser.getMetadata();
+        metaData.setLastDeletedToken("test_token");
+        tempUser.setMetadata(metaData);
+        tempUser.setId("1");
+        tempUser.addToken("Test_token");
+        var userToUserAuthEvent = new UserToUserAuthEvent(tempUser, UserTypes.USER);
+        Assertions.assertNotNull(userToUserAuthEvent.getUser());
+    }
+
+    @Test
+    void testUserToUserAuthEventTestsSignup() {
+        var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
+        var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
+        tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.SIGNUP));
+        var metaData = tempUser.getMetadata();
+        metaData.setLastDeletedToken("test_token");
+        tempUser.setMetadata(metaData);
         tempUser.setId("1");
         tempUser.addToken("Test_token");
         var userToUserAuthEvent = new UserToUserAuthEvent(tempUser, UserTypes.USER);

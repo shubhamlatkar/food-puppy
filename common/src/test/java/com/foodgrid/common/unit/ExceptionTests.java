@@ -31,9 +31,11 @@ class ExceptionTests {
     @Test
     void testNotFoundExceptionTests() {
         var exception = new NotFoundException("Test internal error", new Throwable());
+        var plainException = new NotFoundException();
         var exceptionMsg = new NotFoundException("Test msg");
         Assertions.assertEquals("Test internal error", exception.getMessage());
         Assertions.assertEquals("Test msg", exceptionMsg.getMessage());
+        Assertions.assertNotNull(plainException.toString());
     }
 
 }
