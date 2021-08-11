@@ -25,6 +25,13 @@ class UserDetailsImplementationTests {
         var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));
         tempUser.setId("1");
-        Assertions.assertNotNull(UserDetailsImplementation.build(tempUser));
+        var user = UserDetailsImplementation.build(tempUser);
+        Assertions.assertNotNull(user.toString());
+        Assertions.assertNotNull(user.getEmail());
+        Assertions.assertNotNull(user.getAuthorities());
+        Assertions.assertNotNull(user.getPassword());
+        Assertions.assertTrue(user.isAccountNonLocked());
+        Assertions.assertTrue(user.isCredentialsNonExpired());
+        Assertions.assertTrue(user.isEnabled());
     }
 }

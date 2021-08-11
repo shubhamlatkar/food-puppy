@@ -22,9 +22,13 @@ class SecurityAggregateTest {
     @Test
     void testAuthority() {
         var authority = new Authority("1", "test_authority");
+        var namedAuthority = new Authority("test-name");
+        namedAuthority.setId("2");
         Assertions.assertNotNull(authority.getName());
         Assertions.assertNotNull(authority.getId());
-        Assertions.assertNotNull(authority.toString());
+        Assertions.assertNotNull(namedAuthority.getName());
+        Assertions.assertNotNull(namedAuthority.getId());
+        Assertions.assertNotNull(namedAuthority.toString());
 
     }
 
@@ -45,12 +49,14 @@ class SecurityAggregateTest {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         var tempRoleTest = new Role("TEST", List.of(new Authority("1", "TEST_AUTH")));
         var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
+        var plainUser = new User();
+        plainUser.setId("2");
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));
         tempUser.setId("1");
         tempUser.addToken("TEST_TOKEN");
         tempUser.removeToken("TEST_TOKEN");
         tempUser.deleteActivity();
-
+        tempUser.addRole(tempRoleTest);
         tempUser.setEmail("test@test.com");
         tempUser.setPhone("0987654321");
         tempUser.setType(UserTypes.USER);
@@ -60,6 +66,7 @@ class SecurityAggregateTest {
         Assertions.assertNotNull(tempUser.getRoles());
         Assertions.assertNotNull(tempUser.getPhone());
         Assertions.assertNotNull(tempUser.getActiveTokens());
+        Assertions.assertNotNull(plainUser.getId());
     }
 
     @Test
