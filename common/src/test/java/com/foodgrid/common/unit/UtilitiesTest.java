@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.foodgrid.common.utility.Authorities.*;
+import static com.foodgrid.common.utility.CrudActions.*;
 import static com.foodgrid.common.utility.Roles.*;
 
 @SpringBootTest
@@ -17,12 +18,14 @@ class UtilitiesTest {
 
     @Test
     void testAuthorities() {
-        Assertions.assertNotNull(USER_READ.getValue());
-        Assertions.assertNotNull(RESTAURANT_READ.getValue());
-        Assertions.assertNotNull(RESTAURANT_WRITE.getValue());
-        Assertions.assertNotNull(USER_WRITE.getValue());
-        Assertions.assertNotNull(SERVICE_READ.getValue());
-        Assertions.assertNotNull(SERVICE_WRITE.getValue());
+
+        Assertions.assertEquals("service:read", SERVICE_READ.getValue());
+        Assertions.assertEquals("service:write", SERVICE_WRITE.getValue());
+        Assertions.assertEquals("restaurant:read", RESTAURANT_READ.getValue());
+        Assertions.assertEquals("restaurant:write", RESTAURANT_WRITE.getValue());
+        Assertions.assertEquals("user:write", USER_WRITE.getValue());
+        Assertions.assertEquals("user:read", USER_READ.getValue());
+
         Assertions.assertNotNull(Authorities.valueOf("SERVICE_WRITE"));
         Assertions.assertNotNull(Authorities.valueOf("SERVICE_READ"));
         Assertions.assertNotNull(Authorities.valueOf("USER_WRITE"));
@@ -33,7 +36,10 @@ class UtilitiesTest {
 
     @Test
     void testCrudActions() {
-        Assertions.assertNotNull(CrudActions.valueOf("DELETE"));
+        Assertions.assertEquals("DELETE", DELETE.name());
+        Assertions.assertEquals("READ", READ.name());
+        Assertions.assertEquals("ADD", ADD.name());
+        Assertions.assertEquals("UPDATE", UPDATE.name());
         Assertions.assertNotNull(CrudActions.valueOf("READ"));
         Assertions.assertNotNull(CrudActions.valueOf("DELETE"));
         Assertions.assertNotNull(CrudActions.valueOf("ADD"));
@@ -42,10 +48,10 @@ class UtilitiesTest {
 
     @Test
     void testRoles() {
-        Assertions.assertNotNull(ADMIN.name());
-        Assertions.assertNotNull(DELIVERY.name());
-        Assertions.assertNotNull(USER.name());
-        Assertions.assertNotNull(RESTAURANT.name());
+        Assertions.assertEquals("ADMIN", ADMIN.name());
+        Assertions.assertEquals("DELIVERY", DELIVERY.name());
+        Assertions.assertEquals("USER", USER.name());
+        Assertions.assertEquals("RESTAURANT", RESTAURANT.name());
         Assertions.assertNotNull(UserTypes.valueOf("RESTAURANT"));
         Assertions.assertNotNull(UserTypes.valueOf("USER"));
         Assertions.assertNotNull(UserTypes.valueOf("ADMIN"));
