@@ -10,6 +10,7 @@ import com.foodgrid.common.security.utility.JwtTokenUtility;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Setter
 public class RequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtility jwtTokenUtility;
