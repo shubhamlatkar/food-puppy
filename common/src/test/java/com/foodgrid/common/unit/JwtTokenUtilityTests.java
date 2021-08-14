@@ -8,7 +8,6 @@ import com.foodgrid.common.security.model.entity.UserMetadata;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
 import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-@Slf4j
 class JwtTokenUtilityTests {
 
     @Autowired

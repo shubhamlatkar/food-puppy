@@ -40,7 +40,6 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-@Slf4j
 class RequestFilterTests {
 
     @MockBean
@@ -113,7 +112,7 @@ class RequestFilterTests {
         try {
             testRequestFilter.doFilterInternal(new TestHttpRequest(), new TestHttpResponse(), new TestFilterChain());
         } catch (IOException | ServletException ioException) {
-            log.info("Io Exception");
+            ioException.printStackTrace();
         }
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
