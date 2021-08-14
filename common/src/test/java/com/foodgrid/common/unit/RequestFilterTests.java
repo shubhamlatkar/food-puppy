@@ -13,7 +13,6 @@ import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.security.utility.JwtTokenUtility;
 import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,7 +117,6 @@ class RequestFilterTests {
     }
 }
 
-@Slf4j
 class TestHttpRequest implements HttpServletRequest {
 
     @Override
@@ -467,12 +465,10 @@ class TestHttpRequest implements HttpServletRequest {
     }
 }
 
-@Slf4j
 class TestHttpResponse implements HttpServletResponse {
 
     @Override
     public void addCookie(Cookie cookie) {
-        log.info("Inside add cookie");
     }
 
     @Override
@@ -656,12 +652,10 @@ class TestHttpResponse implements HttpServletResponse {
     }
 }
 
-@Slf4j
 class TestFilterChain implements FilterChain {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
-        log.info("Inside custom doFilter");
     }
 }
 
