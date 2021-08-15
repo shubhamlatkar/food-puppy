@@ -25,7 +25,7 @@ class UtilitiesTest {
         Assertions.assertEquals("restaurant:write", RESTAURANT_WRITE.getValue());
         Assertions.assertEquals("user:write", USER_WRITE.getValue());
         Assertions.assertEquals("user:read", USER_READ.getValue());
-
+        Assertions.assertNotNull(Authorities.values());
         Assertions.assertNotNull(Authorities.valueOf("SERVICE_WRITE"));
         Assertions.assertNotNull(Authorities.valueOf("SERVICE_READ"));
         Assertions.assertNotNull(Authorities.valueOf("USER_WRITE"));
@@ -40,6 +40,7 @@ class UtilitiesTest {
         Assertions.assertEquals("READ", READ.name());
         Assertions.assertEquals("ADD", ADD.name());
         Assertions.assertEquals("UPDATE", UPDATE.name());
+        Assertions.assertNotNull(CrudActions.values());
         Assertions.assertNotNull(CrudActions.valueOf("READ"));
         Assertions.assertNotNull(CrudActions.valueOf("DELETE"));
         Assertions.assertNotNull(CrudActions.valueOf("ADD"));
@@ -52,6 +53,7 @@ class UtilitiesTest {
         Assertions.assertEquals("DELIVERY", DELIVERY.name());
         Assertions.assertEquals("USER", USER.name());
         Assertions.assertEquals("RESTAURANT", RESTAURANT.name());
+        Assertions.assertNotNull(UserTypes.values());
         Assertions.assertNotNull(UserTypes.valueOf("RESTAURANT"));
         Assertions.assertNotNull(UserTypes.valueOf("USER"));
         Assertions.assertNotNull(UserTypes.valueOf("ADMIN"));
