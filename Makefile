@@ -43,3 +43,8 @@ build :		## Build the application
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
 	docker rmi $$(docker images -q)
+
+	docker build -f ~/foodgrid/docker/alpine/services/Dockerfile --target configuration -t configuration:latest .
+    docker create -ti --name configuration configuration bash
+
+    rm -r ~/foodgrid/configuration
