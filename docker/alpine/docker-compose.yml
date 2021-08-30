@@ -1,0 +1,133 @@
+version: '3.7'
+
+services:
+
+  database:
+    image: mongo:latest
+    restart: always
+    container_name: database
+    networks:
+      - foodgrid
+
+  activemq:
+    image: webcenter/activemq
+    container_name: activemq
+    ports:
+      - 8161:8161
+    environment:
+      ACTIVEMQ_CONFIG_TOPICS_AUTHENTICATION: AUTHENTICATION
+      ACTIVEMQ_ENABLED_SCHEDULER: "true"
+      ACTIVEMQ_MIN_MEMORY: 512
+      ACTIVEMQ_MAX_MEMORY: 2048
+    networks:
+      - foodgrid
+
+  configuration:
+    image: configuration:latest
+    container_name: configuration
+    depends_on:
+      - database
+    restart: always
+    networks:
+      - foodgrid
+
+  eureka:
+    image: eureka:latest
+    container_name: eureka
+    depends_on:
+      - configuration
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  gateway:
+    image: gateway:latest
+    container_name: gateway
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  user:
+    image: user:latest
+    container_name: user
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  notification:
+    image: notification:latest
+    container_name: notification
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  restaurant:
+    image: restaurant:latest
+    container_name: restaurant
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  order:
+    image: order:latest
+    container_name: order
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  delivery:
+    image: delivery:latest
+    container_name: delivery
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+  accounts:
+    image: accounts:latest
+    container_name: accounts
+    depends_on:
+      - eureka
+      - database
+    environment:
+      PROFILE: docker
+    restart: always
+    networks:
+      - foodgrid
+
+networks:
+  foodgrid:
