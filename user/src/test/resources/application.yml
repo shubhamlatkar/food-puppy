@@ -48,3 +48,8 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
