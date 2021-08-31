@@ -1,4 +1,4 @@
-package com.foodgrid.user;
+package com.foodgrid.user.command;
 
 import com.foodgrid.user.command.internal.payload.dto.request.AddressRequest;
 import com.foodgrid.user.command.internal.payload.dto.response.AddressOperationSuccess;
