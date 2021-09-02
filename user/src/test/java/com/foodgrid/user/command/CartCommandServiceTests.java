@@ -17,9 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +36,7 @@ class CartCommandServiceTests {
     @MockBean
     private CartEventBroker cartEventBroker;
 
+
     @Autowired
     private CartCommandService cartCommandService;
 
@@ -44,13 +45,32 @@ class CartCommandServiceTests {
     void addItem() {
         var results = new BindingResults();
         when(userSession.getUserId()).thenReturn("1");
-        doAnswer(invocationOnMock -> java.util.Optional.of(new CartCommandModel("1", "1restaurantId", Set.of(new ItemCommandModel("1", "test", 12.1, 1)))))
+        var set = new HashSet<ItemCommandModel>();
+        set.add(new ItemCommandModel("1", "test", 12.1, 1));
+        doAnswer(invocationOnMock -> java.util.Optional.of(new CartCommandModel("1", "1restaurantId", set)))
                 .when(cartCommandRepository).findById(any());
         doAnswer(invocationOnMock -> null)
                 .when(cartEventBroker).sendCartEvent(any());
         doAnswer(invocationOnMock -> null)
                 .when(cartCommandRepository).delete(any());
         Assertions.assertNotNull(cartCommandService.addItem(new AddItemRequest("1", "1"), results));
+    }
+
+    @Test
+    @DisplayName("Tests addNewItem for non existing item cart method of CartCommandService")
+    void addNewItem() {
+        var results = new BindingResults();
+        when(userSession.getUserId()).thenReturn("1");
+        when(restService.getItemShort(anyString(), anyString())).thenReturn(new ItemCommandModel("1", "test", 12.23, 1));
+        var set = new HashSet<ItemCommandModel>();
+        set.add(new ItemCommandModel("1", "test", 12.1, 1));
+        doAnswer(invocationOnMock -> java.util.Optional.of(new CartCommandModel("1", "1restaurantId", set)))
+                .when(cartCommandRepository).findById(any());
+        doAnswer(invocationOnMock -> null)
+                .when(cartEventBroker).sendCartEvent(any());
+        doAnswer(invocationOnMock -> null)
+                .when(cartCommandRepository).delete(any());
+        Assertions.assertNotNull(cartCommandService.addItem(new AddItemRequest("1", "2"), results));
     }
 
     @Test
