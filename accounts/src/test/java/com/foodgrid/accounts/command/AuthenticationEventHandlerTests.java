@@ -1,4 +1,4 @@
-package com.foodgrid.accounts.unit;
+package com.foodgrid.accounts.command;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.event.service.AuthenticationEventHandler;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -41,18 +40,8 @@ class AuthenticationEventHandlerTests {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         when(roleRepository.findByName("USER")).thenReturn(java.util.Optional.of(tempRole));
 
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            System.out.println("called with arguments: " + Arrays.toString(args));
-            return null;
-        }).when(authenticationEventHandlerImplementation).authConsumer(any());
+        doAnswer(invocation -> null).when(authenticationEventHandlerImplementation).authConsumer(any());
 
-//        doAnswer(invocationOnMock -> null)
-//                .when(authenticationEventHandler).authConsumer(
-//                        new AuthenticationEvent(
-//                                true,
-//                                List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com")))
-//                );
         authenticationEventHandler.authConsumer(new AuthenticationEvent(true, List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com"))));
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
