@@ -8,7 +8,6 @@ import {
 import "./styles.scss";
 import Banner from "./components/Banner";
 import Dashboard from "./components/Dashboard";
-import axios from "axios";
 import Loader from "./components/Loader";
 
 const App = () => {
@@ -18,14 +17,14 @@ const App = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios({
-        url: "/user/api/v1/login",
+    fetch( "/user/api/v1/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        data: JSON.stringify({ username: "testUser", password: "test" })
+        body: JSON.stringify({ username: "testUser", password: "test" })
     })
+      .then((res) => res.json())
       .then((res) => {
             console.log("success", res.data);
            setUser({ ...res.data });
