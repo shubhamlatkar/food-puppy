@@ -1,18 +1,17 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const Dashboard = (props) => {
   const [user, setUser] = useState({});
   const [notification, setNotification] = useState([]);
   useEffect(() => {
-    axios({
-      url: "/delivery/api/v1/login",
+    fetch("/delivery/api/v1/login",{
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      data: JSON.stringify({ username: "testDelivery", password: "test" })
+      body: JSON.stringify({ username: "testDelivery", password: "test" })
     })
+      .then((res) => res.json())
       .then((res) => {
         console.log("success", res.data);
         setUser({ ...res.data });

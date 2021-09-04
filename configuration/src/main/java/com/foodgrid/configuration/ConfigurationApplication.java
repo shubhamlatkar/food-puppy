@@ -4,14 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import java.security.SecureRandom;
+import java.util.Base64;
 
 @SpringBootApplication
 @EnableConfigServer
@@ -21,23 +22,16 @@ public class ConfigurationApplication {
         SpringApplication.run(ConfigurationApplication.class, args);
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
     @Autowired
     private SecretKey secretKey;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Bean
     CommandLineRunner initData() {
         return secret -> {
-            ResponseEntity<String> response
-                    = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
-            secretKey.setSecret(response.getBody());
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            byte[] salt = new byte[500];
+            sr.nextBytes(salt);
+            secretKey.setSecret(Base64.getEncoder().encodeToString(salt));
         };
     }
 

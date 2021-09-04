@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const Dashboard = (props) => {
@@ -6,14 +5,14 @@ const Dashboard = (props) => {
   const [notification, setNotification] = useState([]);
 
   useEffect(() => {
-    axios({
-      url: "/restaurant/api/v1/login",
+    fetch("/restaurant/api/v1/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      data: JSON.stringify({ username: "testRestaurant", password: "test" })
+      body: JSON.stringify({ username: "testRestaurant", password: "test" })
     })
+      .then((res) => res.json())
       .then((res) => {
         console.log("success", res.data);
         setUser({ ...res.data });
