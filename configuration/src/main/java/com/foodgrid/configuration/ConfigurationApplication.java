@@ -26,7 +26,6 @@ public class ConfigurationApplication {
     @Autowired
     private SecretKey secretKey;
 
-    @Autowired
     private final Random random = new Random();
 
     @Bean

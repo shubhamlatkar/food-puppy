@@ -36,4 +36,12 @@ class ConfigurationApplicationTests {
         doAnswer(invocationOnMock -> null).when(secretKey).setSecret(any());
         Assertions.assertNotNull(configurationApplication.getSecret());
     }
+
+    @Test
+    @DisplayName("Tests main method of ConfigurationApplication")
+    void main() {
+        var args = new String[]{"1"};
+        ConfigurationApplication.main(args);
+        Assertions.assertNotNull(args);
+    }
 }
