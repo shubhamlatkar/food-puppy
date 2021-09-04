@@ -14,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -60,11 +58,24 @@ class JwtTokenUtilityTests {
                 tempUser.getEmail(),
                 tempUser.getId()
         );
-        ResponseEntity<String> response
-                = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
-        var secret = response.getBody();
+//        ResponseEntity<String> response
+//                = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
+//        var secret = response.getBody();
 
-        jwtTokenUtility.setSecret(secret);
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 500;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        String secretString = Base64.getEncoder().encodeToString(generatedString.getBytes(StandardCharsets.UTF_8));
+
+        jwtTokenUtility.setSecret(secretString);
 
         var token = jwtTokenUtility.generateToken(userDetails);
 

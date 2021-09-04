@@ -1,9 +1,10 @@
-package com.foodgrid.restaurant.unit;
+package com.foodgrid.restaurant.command;
 
 import com.foodgrid.common.security.component.DeletedUsers;
 import com.foodgrid.common.security.model.aggregate.Authority;
 import com.foodgrid.common.security.model.aggregate.Role;
 import com.foodgrid.common.security.model.aggregate.User;
+import com.foodgrid.common.security.model.entity.TokenData;
 import com.foodgrid.common.security.model.entity.UserMetadata;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.security.repository.UserRepository;
@@ -18,14 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsMessagingTemplate;
 
-import javax.jms.Destination;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -55,6 +52,7 @@ class AuthenticationEventBrokerTests {
 
         var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));
+        tempUser.setActiveTokens(List.of(new TokenData("test", new Date())));
         tempUser.setId("1");
         when(userRepository.findAll())
                 .thenReturn(List.of(tempUser));
@@ -62,19 +60,8 @@ class AuthenticationEventBrokerTests {
         when(deletedUsers.getUsers())
                 .thenReturn(Set.of(tempUser));
 
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            System.out.println("called with arguments: " + Arrays.toString(args));
-            return null;
-        }).when(jmsMessagingTemplate).convertAndSend((String) any(), (Object) any());
 
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            System.out.println("called with arguments: " + Arrays.toString(args));
-            return null;
-        }).when(jmsMessagingTemplate).convertAndSend((Destination) any(), (Object) any());
-
-//        authenticationEventBroker.send();
+        authenticationEventBroker.send();
 
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }
