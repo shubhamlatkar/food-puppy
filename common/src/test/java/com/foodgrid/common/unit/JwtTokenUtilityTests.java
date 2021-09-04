@@ -18,8 +18,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -34,7 +38,7 @@ class JwtTokenUtilityTests {
     private RestTemplate restTemplate;
 
     @Test
-    void testJwtTokenUtilityTests() {
+    void testJwtTokenUtilityTests() throws NoSuchAlgorithmException {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));
@@ -62,20 +66,24 @@ class JwtTokenUtilityTests {
 //                = restTemplate.getForEntity("https://keygen.io/api.php?name=sha512", String.class);
 //        var secret = response.getBody();
 
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 500;
-        Random random = new Random();
+//        int leftLimit = 48; // numeral '0'
+//        int rightLimit = 122; // letter 'z'
+//        int targetStringLength = 500;
+//        Random random = new Random();
+//
+//        String generatedString = random.ints(leftLimit, rightLimit + 1)
+//                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+//                .limit(targetStringLength)
+//                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+//                .toString();
+//
+//        String secretString = Base64.getEncoder().encodeToString(generatedString.getBytes(StandardCharsets.UTF_8));
 
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[500];
+        sr.nextBytes(salt);
 
-        String secretString = Base64.getEncoder().encodeToString(generatedString.getBytes(StandardCharsets.UTF_8));
-
-        jwtTokenUtility.setSecret(secretString);
+        jwtTokenUtility.setSecret(Base64.getEncoder().encodeToString(salt));
 
         var token = jwtTokenUtility.generateToken(userDetails);
 
