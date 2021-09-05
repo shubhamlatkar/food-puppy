@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {RestService.class})
 @AutoConfigureWebTestClient
 class RestServiceTests {
 

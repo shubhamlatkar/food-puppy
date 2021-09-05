@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {EventBroker.class})
 @AutoConfigureWebTestClient
 class EventBrokerQueryTests {
     @MockBean

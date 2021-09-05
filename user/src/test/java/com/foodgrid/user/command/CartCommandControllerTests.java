@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {CartCommandController.class})
 @AutoConfigureWebTestClient
 class CartCommandControllerTests {
 
