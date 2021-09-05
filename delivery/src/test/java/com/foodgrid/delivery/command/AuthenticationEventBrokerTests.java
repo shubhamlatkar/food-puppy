@@ -16,19 +16,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsMessagingTemplate;
 
+import javax.jms.Topic;
 import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationEventBroker.class})
 @AutoConfigureWebTestClient
 class AuthenticationEventBrokerTests {
+
+    @MockBean
+    @Qualifier("authenticationTopic")
+    private Topic authenticationTopic;
+
     @MockBean
     private JmsMessagingTemplate jmsMessagingTemplate;
 

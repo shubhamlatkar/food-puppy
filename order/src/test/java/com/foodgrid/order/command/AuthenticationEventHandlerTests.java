@@ -9,7 +9,6 @@ import com.foodgrid.common.security.model.aggregate.Role;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
-import com.foodgrid.order.TestApplicationConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = TestApplicationConfiguration.class)
+@SpringBootTest(classes = {AuthenticationEventHandler.class})
 class AuthenticationEventHandlerTests {
     @Autowired
     private AuthenticationEventHandler authenticationEventHandler;
