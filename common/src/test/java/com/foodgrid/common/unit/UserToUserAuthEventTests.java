@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = {UserToUserAuthEvent.class, User.class,Role.class})
 @AutoConfigureWebTestClient
 class UserToUserAuthEventTests {
 

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
 
-@SpringBootTest
+@SpringBootTest(classes = {LogIn.class, SignUp.class})
 @AutoConfigureWebTestClient
 class RequestModelTests {
 

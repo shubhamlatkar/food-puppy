@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {UserDetailsServiceImplementation.class})
 @AutoConfigureWebTestClient
 class UserDetailsServiceImplementationTests {
 
