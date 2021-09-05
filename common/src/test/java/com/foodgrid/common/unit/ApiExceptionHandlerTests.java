@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@SpringBootTest
+@SpringBootTest(classes = {ApiExceptionHandler.class})
 @AutoConfigureWebTestClient
 class ApiExceptionHandlerTests {
     @Test

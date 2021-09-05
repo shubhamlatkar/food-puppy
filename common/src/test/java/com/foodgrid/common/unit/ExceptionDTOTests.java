@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
-@SpringBootTest
+@SpringBootTest(classes = {ApiExceptionDTO.class, BaseExceptionDTO.class, InternalErrorExceptionDTO.class, MappingNotFoundExceptionDTO.class, NotFoundDTO.class})
 @AutoConfigureWebTestClient
 class ExceptionDTOTests {
 

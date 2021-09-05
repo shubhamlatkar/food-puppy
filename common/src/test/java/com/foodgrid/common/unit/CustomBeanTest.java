@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = {UserSession.class, DeletedUsers.class})
 @AutoConfigureWebTestClient
 class CustomBeanTest {
 

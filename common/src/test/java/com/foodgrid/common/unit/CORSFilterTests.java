@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {CORSFilter.class})
 @AutoConfigureWebTestClient
 class CORSFilterTests {
 
