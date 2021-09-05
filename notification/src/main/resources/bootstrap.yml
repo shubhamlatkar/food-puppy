@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: ${PROFILE}
+    active: ${PROFILE:development}
   application:
     name: notification
   cloud:

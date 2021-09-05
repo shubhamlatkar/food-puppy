@@ -2,6 +2,7 @@ package com.foodgrid.order;
 
 
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/${endpoint.service}/${endpoint.version}")
+@Slf4j
 public class OrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderApplication.class, args);
@@ -37,7 +39,13 @@ public class OrderApplication {
 
     @Bean("initData")
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
-        return user -> userDetailsService.initDatabase(mongoTemplate);
+        return user -> {
+            try {
+                userDetailsService.initDatabase(mongoTemplate);
+            } catch (Exception e) {
+                log.error("Mongo DB not available");
+            }
+        };
     }
 
     @GetMapping("/")
