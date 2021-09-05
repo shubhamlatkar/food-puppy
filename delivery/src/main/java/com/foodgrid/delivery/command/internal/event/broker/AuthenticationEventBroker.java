@@ -1,4 +1,4 @@
-package com.foodgrid.delivery.command.event.outbound;
+package com.foodgrid.delivery.command.internal.event.broker;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.payload.dco.UserToUserAuthEvent;
@@ -9,11 +9,12 @@ import com.foodgrid.common.security.repository.UserRepository;
 import com.foodgrid.common.utility.UserTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Topic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class AuthenticationScheduler {
+public class AuthenticationEventBroker {
 
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
@@ -29,8 +30,9 @@ public class AuthenticationScheduler {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${event.authentication}")
-    private String authenticationEvent;
+    @Autowired
+    @Qualifier("authenticationTopic")
+    private Topic authenticationTopic;
 
     @Autowired
     private DeletedUsers deletedUsers;
@@ -54,7 +56,7 @@ public class AuthenticationScheduler {
 
         if (!userList.isEmpty()) {
             log.info("New activity: {}", userList);
-            this.jmsMessagingTemplate.convertAndSend(authenticationEvent, new AuthenticationEvent(true, userList));
+            this.jmsMessagingTemplate.convertAndSend(authenticationTopic, new AuthenticationEvent(true, userList));
         }
     }
 }

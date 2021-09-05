@@ -1,6 +1,7 @@
 package com.foodgrid.accounts;
 
 import com.foodgrid.common.security.implementation.UserDetailsServiceImplementation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableMongoRepositories("com.foodgrid")
 @EntityScan("com.foodgrid")
 @RequestMapping("/${endpoint.service}/${endpoint.version}")
+@Slf4j
 public class AccountsApplication {
 
     public static void main(String[] args) {
@@ -37,9 +38,14 @@ public class AccountsApplication {
     private UserDetailsServiceImplementation userDetailsService;
 
     @Bean
-    @Profile("!test")
     CommandLineRunner initData(MongoTemplate mongoTemplate) {
-        return user -> userDetailsService.initDatabase(mongoTemplate);
+        return user -> {
+            try {
+                userDetailsService.initDatabase(mongoTemplate);
+            } catch (Exception e) {
+                log.error("Mongo DB not available");
+            }
+        };
     }
 
     @GetMapping("/")
