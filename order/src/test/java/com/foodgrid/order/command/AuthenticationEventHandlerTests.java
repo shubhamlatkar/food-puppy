@@ -1,4 +1,4 @@
-package com.foodgrid.accounts.unit;
+package com.foodgrid.order.command;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.event.service.AuthenticationEventHandler;
@@ -12,21 +12,17 @@ import com.foodgrid.common.utility.UserTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@AutoConfigureWebTestClient
+@SpringBootTest(classes = {AuthenticationEventHandler.class})
 class AuthenticationEventHandlerTests {
-
     @Autowired
     private AuthenticationEventHandler authenticationEventHandler;
 
@@ -41,18 +37,8 @@ class AuthenticationEventHandlerTests {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         when(roleRepository.findByName("USER")).thenReturn(java.util.Optional.of(tempRole));
 
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            System.out.println("called with arguments: " + Arrays.toString(args));
-            return null;
-        }).when(authenticationEventHandlerImplementation).authConsumer(any());
+        doAnswer(invocation -> null).when(authenticationEventHandlerImplementation).authConsumer(any());
 
-//        doAnswer(invocationOnMock -> null)
-//                .when(authenticationEventHandler).authConsumer(
-//                        new AuthenticationEvent(
-//                                true,
-//                                List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com")))
-//                );
         authenticationEventHandler.authConsumer(new AuthenticationEvent(true, List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "token", "USER", "1234567890", "test@test.com"))));
         Assertions.assertNotNull(roleRepository.findByName("USER"));
     }

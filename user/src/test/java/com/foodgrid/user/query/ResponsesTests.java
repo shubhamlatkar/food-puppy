@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @AutoConfigureWebTestClient
 class ResponsesTests {
+
     @Test
     @DisplayName("Tests AddressNotFoundResponse ")
     void addressNotFoundResponse() {

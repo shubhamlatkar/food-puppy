@@ -19,7 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 
-@SpringBootTest
+@SpringBootTest(classes = {MenuQueryController.class})
 @AutoConfigureWebTestClient
 class MenuQueryControllerTests {
 

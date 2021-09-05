@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
 
-@SpringBootTest
+@SpringBootTest(classes = {AddressCommandModel.class})
 @AutoConfigureWebTestClient
 class CommandAggregateTests {
 

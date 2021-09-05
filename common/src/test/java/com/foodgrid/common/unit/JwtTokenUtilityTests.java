@@ -11,12 +11,10 @@ import com.foodgrid.common.utility.UserTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -26,16 +24,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@SpringBootTest
+@SpringBootTest(classes = {JwtTokenUtility.class})
 @AutoConfigureWebTestClient
 class JwtTokenUtilityTests {
 
     @Autowired
     private JwtTokenUtility jwtTokenUtility;
-
-    @Autowired
-    @Qualifier("external")
-    private RestTemplate restTemplate;
+    
 
     @Test
     void testJwtTokenUtilityTests() throws NoSuchAlgorithmException {

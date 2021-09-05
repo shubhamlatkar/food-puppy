@@ -39,7 +39,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationService.class})
 @AutoConfigureWebTestClient
 class AuthenticationServiceTests {
 

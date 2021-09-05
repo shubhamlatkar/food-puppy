@@ -32,7 +32,7 @@ public class MenuQueryController {
     }
 
     @GetMapping("/${endpoint.public}/${endpoint.restaurant.menu}/${endpoint.restaurant.item}")
-    public ResponseEntity<ItemQueryModel> getItemByRestaurantIdAndItemId( @RequestParam("restaurantId") String restaurantId, @RequestParam("itemId") String itemId) {
+    public ResponseEntity<ItemQueryModel> getItemByRestaurantIdAndItemId(@RequestParam("restaurantId") String restaurantId, @RequestParam("itemId") String itemId) {
         return ResponseEntity.ok(menuQueryService.getItemByRestaurantIdAndItemId(restaurantId, itemId));
     }
 

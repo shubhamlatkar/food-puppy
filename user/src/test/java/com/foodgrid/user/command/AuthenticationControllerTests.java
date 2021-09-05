@@ -27,7 +27,7 @@ import java.util.HashSet;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationController.class})
 @AutoConfigureWebTestClient
 class AuthenticationControllerTests {
 

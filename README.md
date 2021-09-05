@@ -10,6 +10,11 @@
 git clone http://github.com/shubhamlatkar/foodgrid.git && cd foodgrid/ && docker-compose up
 ```
 
+### To run with makefile
+```
+git clone https://github.com/shubhamlatkar/foodgrid && cd foodgrid && git checkout develop && make start
+```
+
 ### Useful docker commands
 
 1. Remove all images `docker image prune -a`.

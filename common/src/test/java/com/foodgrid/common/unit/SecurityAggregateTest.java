@@ -12,10 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = {Authority.class, Role.class, User.class, TokenData.class, UserMetadata.class})
 @AutoConfigureWebTestClient
 class SecurityAggregateTest {
 
@@ -48,7 +49,9 @@ class SecurityAggregateTest {
     void testUser() {
         var tempRole = new Role("USER", List.of(new Authority("1", "TEST_AUTH")));
         var tempRoleTest = new Role("TEST", List.of(new Authority("1", "TEST_AUTH")));
-        var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", List.of(tempRole), UserTypes.USER);
+        var list = new ArrayList<Role>();
+        list.add(tempRole);
+        var tempUser = new User("test_username", "1234567890", "testemail@email.com", "test_pass", list, UserTypes.USER);
         var plainUser = new User();
         plainUser.setId("2");
         tempUser.setMetadata(new UserMetadata(new Date(), new Date(), UserActivities.LOGIN));

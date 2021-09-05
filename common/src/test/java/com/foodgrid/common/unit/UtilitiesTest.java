@@ -18,7 +18,6 @@ class UtilitiesTest {
 
     @Test
     void testAuthorities() {
-
         Assertions.assertEquals("service:read", SERVICE_READ.getValue());
         Assertions.assertEquals("service:write", SERVICE_WRITE.getValue());
         Assertions.assertEquals("restaurant:read", RESTAURANT_READ.getValue());

@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
 
-@SpringBootTest
+@SpringBootTest(classes = {CartQueryModel.class})
 @AutoConfigureWebTestClient
 class QueryModelTests {
     @Test
