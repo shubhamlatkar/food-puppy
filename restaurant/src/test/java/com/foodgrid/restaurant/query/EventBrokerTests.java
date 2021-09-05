@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {EventBroker.class})
 @AutoConfigureWebTestClient
 class EventBrokerTests {
 
@@ -25,7 +25,7 @@ class EventBrokerTests {
 
     @MockBean
     private UserSession userSession;
-    
+
     @Autowired
     private EventBroker eventBroker;
 

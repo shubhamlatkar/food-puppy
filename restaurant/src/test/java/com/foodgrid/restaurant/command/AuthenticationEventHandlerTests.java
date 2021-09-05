@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationEventHandler.class})
 @AutoConfigureWebTestClient
 class AuthenticationEventHandlerTests {
 
@@ -38,7 +38,7 @@ class AuthenticationEventHandlerTests {
     @DisplayName("Tests authConsumer method of AuthenticationEventHandler")
     void authConsumer() {
         when(userSession.getUserId()).thenReturn("1");
-            var event = new AuthenticationEvent(true, List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "test", "RESTAURANT", "1234567890", "test@test.com")));
+        var event = new AuthenticationEvent(true, List.of(new UserAuthEventDTO(UserTypes.USER, "1", "test", "test", UserActivities.LOGIN, "test", "RESTAURANT", "1234567890", "test@test.com")));
         doAnswer(invocationOnMock -> null).when(authenticationEventHandlerImplementation).authConsumer(any());
         authenticationEventHandler.authConsumer(event);
         Assertions.assertNotNull(userSession.getUserId());

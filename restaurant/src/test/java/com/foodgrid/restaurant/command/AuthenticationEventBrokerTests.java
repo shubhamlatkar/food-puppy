@@ -14,18 +14,20 @@ import com.foodgrid.restaurant.command.internal.event.outbound.AuthenticationEve
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsMessagingTemplate;
 
+import javax.jms.Topic;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationEventBroker.class})
 @AutoConfigureWebTestClient
 class AuthenticationEventBrokerTests {
 
@@ -37,6 +39,10 @@ class AuthenticationEventBrokerTests {
 
     @MockBean
     private RoleRepository roleRepository;
+
+    @MockBean
+    @Qualifier("authenticationTopic")
+    private Topic authenticationTopic;
 
     @MockBean
     private DeletedUsers deletedUsers;

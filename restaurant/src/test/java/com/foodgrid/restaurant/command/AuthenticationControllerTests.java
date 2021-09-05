@@ -32,7 +32,7 @@ import java.util.*;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {AuthenticationController.class})
 @AutoConfigureWebTestClient
 class AuthenticationControllerTests {
 

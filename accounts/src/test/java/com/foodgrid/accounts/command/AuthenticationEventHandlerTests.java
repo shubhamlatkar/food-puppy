@@ -1,6 +1,5 @@
 package com.foodgrid.accounts.command;
 
-import com.foodgrid.accounts.TestApplicationConfiguration;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
 import com.foodgrid.common.event.service.AuthenticationEventHandler;
 import com.foodgrid.common.event.service.AuthenticationEventHandlerImplementation;
@@ -13,6 +12,7 @@ import com.foodgrid.common.utility.UserTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -22,7 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = TestApplicationConfiguration.class)
+@SpringBootTest(classes = {AuthenticationEventHandler.class})
+@AutoConfigureWebTestClient
 class AuthenticationEventHandlerTests {
 
     @Autowired
