@@ -16,8 +16,6 @@ const Dashboard = (props) => {
       xhr.onreadystatechange = function() {
           if (xhr.readyState === 4) {
               var data = JSON.parse(xhr.responseText);
-              token = data.token;
-              id = data.id;
               console.log("testUserLogin", xhr.status, data);
               console.log("success", data);
               setUser({ ...data });
