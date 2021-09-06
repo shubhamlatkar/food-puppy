@@ -1,5 +1,7 @@
 package com.foodgrid.notification.query;
 
+import com.foodgrid.notification.command.model.aggregate.DeliveryNotification;
+import com.foodgrid.notification.command.model.aggregate.RestaurantNotification;
 import com.foodgrid.notification.command.model.aggregate.UserNotification;
 import com.foodgrid.notification.command.repository.DeliveryNotificationRepository;
 import com.foodgrid.notification.command.repository.RestaurantNotificationRepository;
@@ -42,15 +44,22 @@ class NotificationResourceTests {
     @Test
     @DisplayName("Tests restaurant type of getUserNotifications method of NotificationResource")
     void getUserNotificationsRestaurantType() {
-        doAnswer(invocationOnMock -> Flux.just(new UserNotification("1", "test", "1"))).when(restaurantNotificationRepository).findByHostId(anyString());
+        doAnswer(invocationOnMock -> Flux.just(new RestaurantNotification("1", "test", "1"))).when(restaurantNotificationRepository).findByHostId(anyString());
         Assertions.assertNotNull(notificationResource.getUserNotifications("restaurant", "1"));
     }
 
     @Test
     @DisplayName("Tests delivery type of getUserNotifications method of NotificationResource")
     void getUserNotificationsDeliveryType() {
-        doAnswer(invocationOnMock -> Flux.just(new UserNotification("1", "test", "1"))).when(deliveryNotificationRepository).findByHostId(anyString());
+        doAnswer(invocationOnMock -> Flux.just(new DeliveryNotification("1", "test", "1"))).when(deliveryNotificationRepository).findByHostId(anyString());
         Assertions.assertNotNull(notificationResource.getUserNotifications("delivery", "1"));
+    }
+
+    @Test
+    @DisplayName("Tests default type of getUserNotifications method of NotificationResource")
+    void getUserNotificationsDefault() {
+        doAnswer(invocationOnMock -> Flux.just(new UserNotification("1", "test", "1"))).when(userNotificationRepository).findByHostId(anyString());
+        Assertions.assertNotNull(notificationResource.getUserNotifications("test", "1"));
     }
 
 }

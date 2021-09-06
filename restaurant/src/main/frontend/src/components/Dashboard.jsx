@@ -5,29 +5,35 @@ const Dashboard = (props) => {
   const [notification, setNotification] = useState([]);
 
   useEffect(() => {
-    fetch("/restaurant/api/v1/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username: "testRestaurant", password: "test" })
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("success", res.data);
-        setUser({ ...res.data });
-        let source = null;
-        source = new EventSource(
-          "/notification/api/v1/notification/restaurant/" + res.data.id
-        );
-        source.addEventListener("notification", function (event) {
-          var data = event.data;
-          console.log("Event data : ", data);
-          setNotification([...notification, data]);
-        });
-        source.onerror = (err) => console.log("Error", err);
-      })
-      .catch((err) => console.log("error", err));
+    var url ="/restaurant/api/v1/login";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+          var data = JSON.parse(xhr.responseText);
+          console.log("testRestaurantLogin", xhr.status, data);
+          setUser({ ...data });
+          let source = null;
+          source = new EventSource(
+            "/notification/api/v1/notification/restaurant/" + data.id
+          );
+          source.addEventListener("notification", function (event) {
+            var data = event.data;
+            console.log("Event data : ", data);
+            setNotification([...notification, data]);
+          });
+          source.onerror = (err) => console.log("Error", err);
+      }
+    };
+    var data = `{
+      "username":"testRestaurant",
+      "password":"test"
+    }`;
+    xhr.send(data);
   }, []);
 
   return (

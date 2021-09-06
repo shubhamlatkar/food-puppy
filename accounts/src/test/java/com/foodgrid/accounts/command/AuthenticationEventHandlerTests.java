@@ -1,7 +1,7 @@
 package com.foodgrid.accounts.command;
 
+import com.foodgrid.accounts.command.external.event.handler.AuthenticationEventHandler;
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.event.service.AuthenticationEventHandler;
 import com.foodgrid.common.event.service.AuthenticationEventHandlerImplementation;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.security.model.aggregate.Authority;
