@@ -1,12 +1,12 @@
 package com.foodgrid.restaurant.command;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.event.service.AuthenticationEventHandler;
 import com.foodgrid.common.event.service.AuthenticationEventHandlerImplementation;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.security.component.UserSession;
 import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
+import com.foodgrid.restaurant.command.external.event.handler.AuthenticationEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package com.foodgrid.order.command;
 
 import com.foodgrid.common.event.outbound.AuthenticationEvent;
-import com.foodgrid.common.event.service.AuthenticationEventHandler;
 import com.foodgrid.common.event.service.AuthenticationEventHandlerImplementation;
 import com.foodgrid.common.payload.dto.event.UserAuthEventDTO;
 import com.foodgrid.common.security.model.aggregate.Authority;
@@ -9,6 +8,7 @@ import com.foodgrid.common.security.model.aggregate.Role;
 import com.foodgrid.common.security.repository.RoleRepository;
 import com.foodgrid.common.utility.UserActivities;
 import com.foodgrid.common.utility.UserTypes;
+import com.foodgrid.order.command.event.handler.AuthenticationEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
