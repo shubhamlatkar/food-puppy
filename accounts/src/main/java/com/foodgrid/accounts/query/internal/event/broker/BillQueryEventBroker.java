@@ -17,7 +17,7 @@ public class BillQueryEventBroker {
     }
 
     @JmsListener(destination = "${event.accounts.bill}")
-    public void addressBroker(BillEventDTO bill) {
+    public void billEventBroker(BillEventDTO bill) {
         billEventhandler.consumeEvent(bill);
     }
 }

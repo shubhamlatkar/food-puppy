@@ -40,30 +40,30 @@ public class BillEventHandler {
         }
     }
 
-    public void generateBill(BillEventDTO billEventDTO) {
+    private void generateBill(BillEventDTO billEventDTO) {
         var bill = new BillQueryModel(billEventDTO);
         billQueryRepository.save(bill);
         log.info("Bill query generated bill: {}", billEventDTO);
     }
 
-    public void updateBill(BillEventDTO billEventDTO) {
+    private void updateBill(BillEventDTO billEventDTO) {
         billQueryRepository.save(new BillQueryModel(billEventDTO));
         log.info("Bill query updated bill: {}", billEventDTO);
     }
 
-    public void deleteBill(BillEventDTO billEventDTO) {
+    private void deleteBill(BillEventDTO billEventDTO) {
         billQueryRepository.deleteById(billEventDTO.getId());
         log.info("Bill query generated bill: {}", billEventDTO);
     }
 
-    public void addItem(BillEventDTO billEventDTO) {
+    private void addItem(BillEventDTO billEventDTO) {
         var bill = billQueryRepository.findById(billEventDTO.getId()).orElse(null);
         assert bill != null;
         billQueryRepository.save(bill.addItem(billEventDTO.getItem()));
         log.info("Bill query added item to bill: {}", billEventDTO);
     }
 
-    public void removeItem(BillEventDTO billEventDTO) {
+    private void removeItem(BillEventDTO billEventDTO) {
         var bill = billQueryRepository.findById(billEventDTO.getId()).orElse(null);
         assert bill != null;
         billQueryRepository.save(bill.removeItem(billEventDTO.getItem()));
