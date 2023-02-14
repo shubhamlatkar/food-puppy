@@ -4,6 +4,8 @@
 
 [![CodeQL](https://github.com/shubhamlatkar/foodgrid/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/shubhamlatkar/foodgrid/actions/workflows/codeql-analysis.yml)
 
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/organizations/shubhamlatkar/projects)
+
 # food-grid
 
 ## Food Delivery App
