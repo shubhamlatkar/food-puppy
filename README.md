@@ -1,5 +1,9 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/shubhamlatkar/foodgrid)
 
+[![Build](https://github.com/shubhamlatkar/foodgrid/actions/workflows/build.yml/badge.svg)](https://github.com/shubhamlatkar/foodgrid/actions/workflows/build.yml)
+
+[![CodeQL](https://github.com/shubhamlatkar/foodgrid/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/shubhamlatkar/foodgrid/actions/workflows/codeql-analysis.yml)
+
 # food-grid
 
 ## Food Delivery App
